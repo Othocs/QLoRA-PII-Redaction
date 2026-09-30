@@ -1,0 +1,23 @@
+# OpenMed privacy-filter-multilingual-v2 categories -> our label. It has no
+# passport / driver licence / ID card / tax number classes; unlisted -> OTHER.
+model_id: OpenMed/privacy-filter-multilingual-v2
+map:
+  FIRSTNAME: GIVENNAME
+  MIDDLENAME: GIVENNAME
+  LASTNAME: SURNAME
+  PREFIX: TITLE
+  AGE: AGE
+  SEX: SEX
+  GENDER: GENDER
+  DATE: DATE
+  DATEOFBIRTH: DATE
+  EMAIL: EMAIL
+  PHONE: TELEPHONENUM
+  STREET: STREET
+  BUILDINGNUMBER: BUILDINGNUM
+  CITY: CITY
+  ZIPCODE: ZIPCODE
+  SSN: SOCIALNUM
+  CREDITCARD: CREDITCARDNUMBER
+  IBAN: IBAN
+  IPADDRESS: IPADDRESS

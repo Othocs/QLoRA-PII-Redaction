@@ -1,0 +1,113 @@
+{
+  "extract": {
+    "train": {
+      "rows": 143515,
+      "rows_dropped_offset_mismatch": 0,
+      "dropped_examples": [],
+      "rows_per_region": {
+        "CA": 36077,
+        "GB": 35830,
+        "IN": 35821,
+        "US": 35787
+      },
+      "spans_per_label": {
+        "DATE": 131298,
+        "GIVENNAME": 131043,
+        "SURNAME": 112635,
+        "EMAIL": 80329,
+        "CITY": 75414,
+        "TITLE": 74336,
+        "TELEPHONENUM": 58702,
+        "STREET": 53565,
+        "AGE": 53337,
+        "BUILDINGNUM": 51061,
+        "ZIPCODE": 46350,
+        "IDCARDNUM": 35147,
+        "CREDITCARDNUMBER": 32490,
+        "DRIVERLICENSENUM": 30544,
+        "GENDER": 29646,
+        "TAXNUM": 26625,
+        "SOCIALNUM": 24050,
+        "PASSPORTNUM": 21837,
+        "SEX": 20970
+      },
+      "text_len_chars_p50_p95_max": [
+        282,
+        876,
+        1200
+      ]
+    },
+    "validation": {
+      "rows": 35904,
+      "rows_dropped_offset_mismatch": 0,
+      "dropped_examples": [],
+      "rows_per_region": {
+        "US": 9027,
+        "IN": 9008,
+        "CA": 8996,
+        "GB": 8873
+      },
+      "spans_per_label": {
+        "GIVENNAME": 32892,
+        "DATE": 32803,
+        "SURNAME": 28106,
+        "EMAIL": 20113,
+        "CITY": 18913,
+        "TITLE": 18516,
+        "TELEPHONENUM": 14726,
+        "AGE": 13365,
+        "STREET": 13335,
+        "BUILDINGNUM": 12726,
+        "ZIPCODE": 11524,
+        "IDCARDNUM": 8844,
+        "CREDITCARDNUMBER": 7994,
+        "DRIVERLICENSENUM": 7578,
+        "GENDER": 7557,
+        "TAXNUM": 6610,
+        "SOCIALNUM": 5936,
+        "PASSPORTNUM": 5462,
+        "SEX": 5268
+      },
+      "text_len_chars_p50_p95_max": [
+        280,
+        876,
+        1200
+      ]
+    }
+  },
+  "split": {
+    "holdout_regions": [
+      "IN"
+    ],
+    "sizes": {
+      "train_50k": 50000,
+      "train_2k": 2000,
+      "train_10k": 10000,
+      "dev": 2000,
+      "test_id": 5000,
+      "test_holdout_regions": 2000
+    },
+    "dedup": {
+      "dev": {
+        "kept": 2000,
+        "dropped_near_duplicate_of_train": 3,
+        "drop_rate": 0.0015
+      },
+      "test_id": {
+        "kept": 5000,
+        "dropped_near_duplicate_of_train": 10,
+        "drop_rate": 0.002
+      },
+      "test_holdout_regions": {
+        "kept": 2000,
+        "dropped_near_duplicate_of_train": 0,
+        "drop_rate": 0.0
+      }
+    },
+    "train_pool_rows_per_region": {
+      "CA": 16750,
+      "GB": 16634,
+      "US": 16616
+    }
+  }
+}

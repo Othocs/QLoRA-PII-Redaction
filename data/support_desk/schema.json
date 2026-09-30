@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Support-desk message",
+  "type": "object",
+  "required": ["id", "text", "spans", "meta"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^sd-[0-9]{4}$"},
+    "text": {"type": "string", "minLength": 1},
+    "spans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "text"],
+        "properties": {
+          "label": {"enum": ["GIVENNAME", "SURNAME", "TITLE", "AGE", "SEX", "GENDER", "DATE", "EMAIL", "TELEPHONENUM", "STREET", "BUILDINGNUM", "CITY", "ZIPCODE", "IDCARDNUM", "PASSPORTNUM", "DRIVERLICENSENUM", "SOCIALNUM", "TAXNUM", "CREDITCARDNUMBER", "IBAN", "IPADDRESS"]},
+          "text": {"type": "string"},
+          "start": {"type": "integer", "minimum": 0},
+          "end": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": ["source", "channel"],
+      "properties": {
+        "source": {"const": "support_desk"},
+        "channel": {"enum": ["chat", "email", "agent_note"]},
+        "keep": {"type": "array", "items": {"type": "string"}},
+        "note": {"type": "string"}
+      }
+    }
+  }
+}

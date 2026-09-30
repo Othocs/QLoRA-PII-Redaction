@@ -1,0 +1,7 @@
+# Week 4: keep coarse attributes for analytics, pseudonymize identities.
+default: pseudonymize
+labels:
+  CITY: keep
+  AGE: keep
+  GENDER: keep
+  SEX: keep

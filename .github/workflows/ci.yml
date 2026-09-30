@@ -1,0 +1,28 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      PII_SPACY_MODEL: en_core_web_sm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      # Presidio only: no torch / GLiNER in CI.
+      - name: Install
+        run: uv sync --extra data --extra presidio --extra serve
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+      - name: Tests (includes the Presidio eval smoke test)
+        run: uv run pytest -q
+      - name: Eval smoke run on the fixture
+        run: uv run python -m eval.run_eval --systems presidio --testsets fixture --out /tmp/results

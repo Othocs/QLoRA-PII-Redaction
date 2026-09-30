@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Data: raw downloads and generated splits are rebuilt by `make data`
+data/raw/
+data/processed/*.jsonl
+
+# Experiment outputs
+results/runs/
+wandb/
+mlruns/
+outputs/
+checkpoints/
+
+# Misc
+.DS_Store
+.env

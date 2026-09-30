@@ -1,0 +1,30 @@
+# English-only splits of Ai4Privacy OpenPII 1M (CC-BY-4.0, "Ai4Privacy / Ai Suisse SA").
+# Run `make data`; `extract` writes data/processed/stats.json, which is what
+# holdout_regions was chosen from.
+
+repo_id: ai4privacy/pii-masking-openpii-1m
+raw_dir: data/raw
+processed_dir: data/processed
+language: en
+seed: 13
+
+# English regions removed from every training / dev / in-distribution split and
+# tested separately (test_holdout_regions). stats.json shows only four English
+# regions, near-equal in size (CA, GB, IN, US ~36k train rows each). IN is held
+# out: its names, +91 phone numbers, 6-digit PIN codes and PAN/Aadhaar-style IDs
+# differ most from the other three, so it is the most informative shift test.
+holdout_regions: [IN]
+
+sizes:
+  train_pool: 50000
+  train_nested: [2000, 10000]   # prefixes of the same stratified order as train_pool
+  dev: 2000
+  test_id: 5000
+  test_holdout_regions: 2000
+
+# Near-duplicate removal: MinHash over word n-grams of the masked text
+# (every PII value replaced by its [LABEL]), so template reuse is what matches.
+minhash:
+  num_perm: 128
+  threshold: 0.8
+  ngram: 5

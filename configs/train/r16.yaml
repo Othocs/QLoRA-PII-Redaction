@@ -1,0 +1,15 @@
+# Week 2: first LoRA run. Keys are read by training/train_lora.py (not written yet).
+base_model: Qwen/Qwen3-1.7B    # check the current release and its licence before training
+train_file: data/processed/train_10k.jsonl
+eval_file: data/processed/dev.jsonl
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules: all-linear
+quantization: nf4           # 4-bit QLoRA, bf16 compute
+learning_rate: 2.0e-4
+epochs: 1
+max_seq_length: 1024
+completion_only_loss: true
+seed: 13

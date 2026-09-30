@@ -1,0 +1,56 @@
+# GLiNER is zero-shot: we pass natural-language prompts and map each back to our
+# label. Prompts follow each model's own training vocabulary where known.
+# Thresholds follow the model cards' evaluation setting (0.3).
+models:
+  gliner_knowledgator:
+    model_id: knowledgator/gliner-pii-base-v1.0
+    threshold: 0.3
+    prompts:
+      first name: GIVENNAME
+      last name: SURNAME
+      personal title: TITLE
+      age: AGE
+      sex: SEX
+      gender: GENDER
+      date: DATE
+      dob: DATE
+      email address: EMAIL
+      phone number: TELEPHONENUM
+      location street: STREET
+      building number: BUILDINGNUM
+      location city: CITY
+      location zip: ZIPCODE
+      id card number: IDCARDNUM
+      passport number: PASSPORTNUM
+      driver license: DRIVERLICENSENUM
+      ssn: SOCIALNUM
+      tax identification number: TAXNUM
+      credit card: CREDITCARDNUMBER
+      ip address: IPADDRESS
+      bank account: IBAN
+  gliner_nvidia:
+    model_id: nvidia/gliner-PII
+    threshold: 0.3
+    prompts:
+      first_name: GIVENNAME
+      last_name: SURNAME
+      title: TITLE
+      age: AGE
+      sex: SEX
+      gender: GENDER
+      date: DATE
+      date_of_birth: DATE
+      email: EMAIL
+      phone_number: TELEPHONENUM
+      street_address: STREET
+      building_number: BUILDINGNUM
+      city: CITY
+      postcode: ZIPCODE
+      national_id: IDCARDNUM
+      passport_number: PASSPORTNUM
+      certificate_license_number: DRIVERLICENSENUM
+      ssn: SOCIALNUM
+      tax_id: TAXNUM
+      credit_debit_card: CREDITCARDNUMBER
+      ipv4: IPADDRESS
+      account_number: IBAN

@@ -1,0 +1,25 @@
+# Presidio entity type -> our label. PERSON has no first/last split, so it goes to
+# the NAME bucket: counts for leakage, never matches a gold label in strict F1.
+# Anything not listed becomes OTHER.
+language: en
+spacy_model: en_core_web_lg   # CI overrides with en_core_web_sm
+score_threshold: 0.35
+map:
+  PERSON: NAME
+  EMAIL_ADDRESS: EMAIL
+  PHONE_NUMBER: TELEPHONENUM
+  DATE_TIME: DATE
+  LOCATION: OTHER            # city / street / country are not separated
+  CREDIT_CARD: CREDITCARDNUMBER
+  US_SSN: SOCIALNUM
+  UK_NHS: SOCIALNUM
+  US_PASSPORT: PASSPORTNUM
+  US_DRIVER_LICENSE: DRIVERLICENSENUM
+  US_ITIN: TAXNUM
+  US_BANK_NUMBER: OTHER
+  IBAN_CODE: IBAN
+  IP_ADDRESS: IPADDRESS
+  NRP: OTHER
+  URL: OTHER
+  MEDICAL_LICENSE: OTHER
+  CRYPTO: OTHER

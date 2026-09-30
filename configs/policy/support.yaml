@@ -1,0 +1,6 @@
+# Week 4: per-label actions for the support policy (read by src/pii_gateway/policy.py).
+# Actions: mask | pseudonymize | hash | keep
+default: mask
+labels:
+  CITY: keep          # useful for routing and analytics; alone it isn't identifying
+  DATE: mask          # open question: mask only birthdates? (see the plan's week 1 questions)
