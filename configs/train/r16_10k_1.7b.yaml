@@ -15,7 +15,7 @@ learning_rate: 2.0e-4
 epochs: 1
 batch_size: 16
 grad_accum: 1
-max_seq_length: 1024
+max_seq_length: 1536        # longest train example is ~1,040 tokens; never truncate answers
 completion_only_loss: true
 seed: 13
 gpu_price_per_hour: null       # filled in on the pod for run_info.json cost

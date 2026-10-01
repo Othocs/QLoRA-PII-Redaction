@@ -116,6 +116,7 @@ def main() -> None:
             model=cfg["base_model"] if not torch.cuda.is_available() else _load_model(cfg),
             args=sft_cfg,
             train_dataset=train_ds.select(range(2)),
+            eval_dataset=eval_ds.select(range(2)) if eval_ds is not None else None,
             processing_class=tok,
             peft_config=_lora(cfg, LoraConfig),
         )
@@ -125,7 +126,8 @@ def main() -> None:
         print("=== full example ===")
         print(tok.decode(ids))
         print("=== tokens with loss ===")
-        print(tok.decode([i for i, m in zip(ids, mask, strict=True) if m]))
+        print(repr(tok.decode([i for i, m in zip(ids, mask, strict=True) if m])))
+        print(f"eos_token={tok.eos_token!r} pad_token={tok.pad_token!r}")
         return
 
     model = (

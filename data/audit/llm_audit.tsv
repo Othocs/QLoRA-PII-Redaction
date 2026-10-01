@@ -1,0 +1,496 @@
+# LLM-assisted audit (Claude), to be spot-checked by a human. One line per non-default span.
+# Spans not listed are verdict "ok". doc = index in audit_sample.jsonl (##N in the review view).
+# verdict: wrong_label | not_pii | bad_boundary | ok (ok lines only carry a note tag)
+# note tags: event_date (a date of an event/deadline/message, not of the person),
+#            place (address/city of a business, venue or region, not the person's own),
+#            injected (value dropped into a sentence where it makes no sense), group (aggregate/statistic)
+# MISSED lines list PII the gold labels missed: doc<TAB>MISSED<TAB>LABEL: value
+#doc	span	verdict	correct_label	note
+0	7	ok		place
+0	8	ok		place
+0	9	ok		place
+0	10	ok		place
+1	5	not_pii		group: "accommodate all F and age groups"
+2	2	ok		event_date
+2	6	wrong_label	OTHER	injected: called a certification number
+2	7	wrong_label	OTHER	injected: called a certification number
+2	10	ok		event_date
+2	11	ok		event_date
+5	12	ok		event_date
+6	6	wrong_label	OTHER	user ID labelled IDCARDNUM
+7	0	ok		place
+7	1	ok		place
+7	2	ok		event_date
+9	0	ok		event_date
+9	2	ok		event_date
+9	5	not_pii		money amount ("$4448...") labelled CREDITCARDNUMBER
+9	6	ok		event_date
+9	8	ok		event_date
+10	4	not_pii		group: model variable "borrower age (9)"
+10	5	not_pii		group: model variable "gender (Genderqueer)"
+10	6	ok		place
+10	7	ok		place
+11	3	ok		place
+11	4	ok		place
+11	5	ok		place
+11	6	ok		place
+11	9	ok		event_date
+12	1	ok		event_date
+12	2	ok		place
+12	3	ok		place
+14	3	not_pii		part of an organisation name ("Scarborough Astrophysics Institute")
+14	4	ok		event_date
+16	10	ok		event_date
+16	11	ok		event_date
+17	2	ok		event_date
+17	3	ok		place
+17	4	ok		place
+17	5	ok		place
+17	8	ok		event_date
+18	2	not_pii		group: eligibility threshold "born after"
+18	3	not_pii		group: eligibility threshold "under 68"
+19	3	ok		event_date
+19	4	not_pii		group: "patients around 86 years"
+19	7	ok		place
+19	8	ok		place
+21	0	ok		event_date
+21	3	not_pii		percentage ("2%") labelled AGE
+22	7	ok		event_date
+23	3	ok		event_date
+23	4	ok		injected
+23	6	ok		place
+23	7	ok		place
+23	8	ok		place
+23	9	ok		place
+24	8	bad_boundary		trailing space included
+25	0	ok		place
+25	1	ok		event_date
+25	2	bad_boundary		two postcodes in one span
+26	3	ok		event_date
+26	4	not_pii		group: "average age 60"
+26	5	not_pii		group: "gender distribution Not specified"
+26	6	not_pii		database identifier, not a person's ID
+30	3	ok		event_date
+30	6	ok		place
+30	7	ok		place
+30	8	ok		place
+30	9	ok		place
+32	0	not_pii		group: experimental variable "age 74"
+32	1	not_pii		group: experimental variable "gender Not specified"
+34	2	not_pii		company tax number
+34	4	ok		place
+35	3	ok		event_date
+37	1	ok		place
+37	2	ok		place
+37	3	ok		event_date
+38	5	ok		place
+38	6	ok		place
+38	7	ok		place
+39	2	wrong_label	OTHER	injected: a vehicle's identifier labelled DRIVERLICENSENUM
+39	3	not_pii		injected: "historical ... repair logs"
+39	4	ok		place
+39	5	ok		event_date
+40	2	ok		event_date
+40	4	wrong_label	OTHER	insurance policy number labelled SOCIALNUM
+41	4	ok		event_date
+41	5	ok		place
+41	6	ok		place
+41	7	ok		place
+41	8	bad_boundary		two postcodes in one span (and a clinic address)
+42	3	ok		place
+42	4	ok		place
+42	6	not_pii		group: "average age 49"
+42	7	not_pii		group: "gender ratio (F)"
+43	2	ok		event_date
+44	15	ok		event_date
+45	3	ok		place
+45	4	ok		event_date
+45	6	not_pii		group: "participants ranging from 38 to 15"
+45	7	not_pii		group: "participants ranging from 38 to 15"
+49	3	ok		event_date
+50	0	ok		place
+50	1	ok		injected
+50	2	not_pii		injected: "ensure proper 68702.63793 compliance"
+51	3	bad_boundary		two postcodes in one span
+51	4	ok		event_date
+51	5	not_pii		percentage ("increased by 81 %") labelled AGE
+51	8	ok		event_date
+51	MISSED		TITLE: Dr.
+52	0	ok		event_date
+52	1	ok		place
+52	5	ok		injected
+53	3	ok		event_date
+53	4	ok		place
+53	5	ok		place
+53	6	ok		place
+54	1	ok		injected
+54	2	ok		injected
+55	2	ok		event_date
+55	3	not_pii		measurement ("603 x 781 cm") labelled BUILDINGNUM
+55	4	not_pii		measurement ("603 x 781 cm") labelled BUILDINGNUM
+55	7	ok		event_date
+56	0	wrong_label	OTHER	reservation number labelled IDCARDNUM
+56	1	ok		place
+56	2	ok		place
+57	0	not_pii		group: "Bigender analysts"
+57	1	ok		injected
+59	0	ok		event_date
+59	1	ok		event_date
+59	2	not_pii		money amount ("total funds collected: $...") labelled CREDITCARDNUMBER
+59	3	not_pii		money amount ("average contribution: $...") labelled CREDITCARDNUMBER
+59	4	ok		place
+60	2	bad_boundary		three postcodes in one span
+61	0	ok		event_date
+61	6	ok		place
+61	7	ok		injected
+61	8	ok		injected
+61	9	ok		injected
+63	3	not_pii		part of a park name ("Scotch Village National Park")
+63	4	ok		event_date
+64	3	ok		place
+64	5	not_pii		"credit line of ..." (amount) labelled CREDITCARDNUMBER
+64	8	ok		event_date
+65	3	ok		event_date
+65	MISSED		TITLE: Dr.
+66	3	not_pii		money amount ("rent of £...") labelled CREDITCARDNUMBER
+66	4	not_pii		money amount ("deposit of £...") labelled CREDITCARDNUMBER
+67	3	ok		event_date
+69	0	ok		event_date
+69	1	not_pii		group: "employees aged 7"
+69	4	ok		place
+69	5	not_pii		injected: "a slightly higher ... fee structure"
+71	14	not_pii		money amount ("net present value of $...") labelled CREDITCARDNUMBER
+71	15	not_pii		regulation reference labelled TAXNUM
+71	16	ok		injected
+71	17	ok		place
+72	3	ok		event_date
+73	3	ok		event_date
+73	7	wrong_label	OTHER	employee ID labelled IDCARDNUM
+74	4	ok		event_date
+74	5	not_pii		equipment model ID labelled CREDITCARDNUMBER
+74	6	not_pii		equipment serial number labelled PASSPORTNUM
+74	9	ok		event_date
+75	0	ok		event_date
+76	2	ok		event_date
+76	6	ok		injected
+76	7	ok		injected
+78	3	ok		event_date
+80	13	ok		event_date
+81	6	ok		event_date
+81	7	ok		place
+81	8	ok		place
+81	9	ok		place
+81	10	ok		place
+82	1	ok		injected
+82	2	ok		place
+83	12	not_pii		years of investment experience labelled AGE
+83	13	ok		event_date
+84	3	not_pii		"64 years of experience" labelled AGE
+84	4	ok		event_date
+84	5	ok		place
+85	3	ok		event_date
+85	6	ok		place
+88	9	ok		event_date
+89	5	ok		event_date
+89	6	not_pii		group: "travelers aged 13 or older"
+90	3	ok		event_date
+90	4	ok		place
+90	6	ok		injected
+90	7	ok		injected
+91	0	ok		event_date
+91	4	ok		place
+91	5	ok		place
+91	6	ok		place
+91	7	ok		place
+93	3	not_pii		duration ("41-year milestone") labelled AGE
+93	4	ok		event_date
+93	5	ok		place
+93	6	ok		place
+93	7	ok		place
+93	8	ok		place
+93	11	ok		event_date
+94	0	not_pii		statistic ("average handling time of 50 minutes") labelled AGE
+94	1	not_pii		statistic ("satisfaction score of Male out of 5") labelled GENDER
+94	8	ok		injected
+94	9	ok		event_date
+97	3	ok		event_date
+97	4	ok		place
+97	5	ok		place
+97	6	ok		place
+97	7	bad_boundary		two postcodes in one span (office address)
+97	10	ok		event_date
+97	13	not_pii		regulation reference labelled TAXNUM
+98	3	ok		event_date
+98	4	not_pii		amount ("60 million of preferred shares") labelled AGE
+98	10	ok		place
+98	11	ok		place
+98	12	ok		place
+98	13	ok		place
+99	0	ok		event_date
+99	1	ok		place
+100	3	ok		event_date
+100	9	ok		event_date
+101	3	ok		event_date
+101	4	ok		place
+102	6	bad_boundary		three postcodes in one span
+102	7	ok		event_date
+102	8	ok		event_date
+102	9	not_pii		money amount ("coverage up to £...") labelled CREDITCARDNUMBER
+103	0	ok		event_date
+103	10	ok		event_date
+103	12	ok		place
+103	13	ok		place
+103	14	ok		place
+103	15	ok		place
+103	18	ok		event_date
+104	2	ok		injected
+104	3	ok		event_date
+105	3	ok		event_date
+105	4	not_pii		money amount ("transactions over ...") labelled CREDITCARDNUMBER
+106	0	ok		injected
+107	3	ok		event_date
+107	4	ok		place
+107	5	ok		place
+107	6	ok		place
+107	7	ok		place
+108	3	ok		place
+108	4	ok		place
+108	5	ok		place
+108	6	ok		place
+108	7	not_pii		group: "your current 1 and Transgender demographics data"
+108	8	not_pii		group: "your current 1 and Transgender demographics data"
+108	9	ok		injected
+108	10	ok		injected
+110	1	not_pii		money amount ("covers up to ... per month") labelled CREDITCARDNUMBER
+110	2	not_pii		budget code labelled TAXNUM
+112	5	not_pii		injected: "the relevant ... regulations"
+112	6	not_pii		injected: "the relevant ... regulations"
+114	1	not_pii		injected: "as the new Mrs of our fitness brand"
+114	2	not_pii		part of a brand name ("Brikho Fitness")
+114	4	ok		event_date
+114	6	ok		place
+114	7	ok		place
+114	8	ok		place
+114	9	ok		place
+114	10	not_pii		group: "appeals to 52-year-olds"
+114	11	not_pii		group: "respecting all Two-spirit identities"
+115	0	ok		event_date
+116	4	not_pii		group: "each player's 0 and Male"
+116	5	not_pii		group: "each player's 0 and Male"
+118	3	ok		event_date
+119	2	not_pii		group: "patients aged 16"
+120	7	ok		place
+121	4	ok		event_date
+122	4	not_pii		injected: "new ... regulations"
+124	3	ok		event_date
+124	4	ok		place
+124	5	ok		place
+124	6	ok		place
+124	8	ok		event_date
+125	3	not_pii		group: "policies governing 78 and Male data"
+125	4	not_pii		group: "policies governing 78 and Male data"
+125	5	ok		injected
+125	6	ok		injected
+125	7	ok		event_date
+125	8	ok		injected
+125	9	ok		injected
+128	2	ok		event_date
+130	1	ok		event_date
+131	7	not_pii		injected: "the quiet dignity of O existence"
+131	8	ok		event_date
+131	9	ok		injected
+131	10	ok		injected
+131	11	ok		place
+132	0	ok		event_date
+132	1	ok		place
+132	2	ok		place
+133	0	ok		event_date
+133	3	ok		place
+133	4	ok		place
+133	5	not_pii		"the specimen's passport number" (a plant sample)
+134	1	wrong_label	OTHER	case number labelled IDCARDNUM
+135	3	ok		event_date
+135	5	wrong_label	OTHER	employee ID labelled IDCARDNUM
+136	0	ok		place
+136	1	ok		place
+136	2	ok		place
+139	0	not_pii		group: "individuals aged 31 and older"
+139	5	ok		place
+139	6	ok		place
+139	7	ok		place
+140	1	ok		place
+140	2	ok		place
+140	3	ok		place
+140	4	ok		place
+143	1	ok		injected
+143	2	not_pii		measurement ("772-inch keyboard") labelled BUILDINGNUM
+143	3	not_pii		injected: "on the Vazquez Road side" of a desk
+145	0	ok		event_date
+145	3	ok		place
+145	4	ok		place
+145	5	ok		event_date
+145	6	ok		event_date
+145	7	not_pii		group: "an average 10 of 24"
+145	8	not_pii		group: "an average 10 of 24"
+145	9	not_pii		group: "self-reported Bigender of Androgynous"
+145	10	not_pii		group: "self-reported Bigender of Androgynous"
+145	11	not_pii		dataset identifier labelled IDCARDNUM
+146	0	ok		event_date
+146	10	ok		place
+146	11	ok		place
+146	13	wrong_label	OTHER	land title record labelled IDCARDNUM
+146	14	not_pii		money amount ("pilot fund of ...") labelled CREDITCARDNUMBER
+146	15	ok		event_date
+146	16	not_pii		company tax number
+147	6	ok		event_date
+148	0	ok		event_date
+148	1	ok		place
+149	3	ok		event_date
+149	4	ok		place
+149	5	ok		place
+149	6	ok		place
+149	7	ok		place
+149	10	not_pii		group: "participants should be at least 3 years old"
+150	5	ok		event_date
+151	0	ok		event_date
+151	10	ok		injected
+151	11	not_pii		group: "treatment plans considering age 62 and gender Agender"
+151	12	not_pii		group: "treatment plans considering age 62 and gender Agender"
+151	13	ok		event_date
+152	0	ok		event_date
+152	2	not_pii		injected: "handled the L8J entries"
+152	3	wrong_label	OTHER	employee IDs labelled SOCIALNUM
+152	4	not_pii		statistic ("variance dropped to 7") labelled AGE
+153	0	ok		event_date
+153	1	ok		place
+153	2	ok		place
+153	3	ok		place
+153	4	not_pii		group: "residents aged 70 and above"
+154	2	ok		event_date
+155	0	ok		injected
+155	1	ok		injected
+156	2	ok		event_date
+156	3	ok		place
+156	4	ok		place
+156	5	ok		place
+156	6	ok		place
+156	7	not_pii		count ("Number of individuals: 30") labelled AGE
+157	6	ok		event_date
+157	7	not_pii		air-quality station ID labelled DRIVERLICENSENUM
+157	8	not_pii		health advisory code labelled CREDITCARDNUMBER
+158	0	ok		place
+158	1	not_pii		percentage ("earn 38% more") labelled AGE
+159	0	ok		place
+159	5	ok		injected
+160	3	ok		place
+160	4	ok		event_date
+161	2	not_pii		"over 55 years of experience" labelled AGE
+161	3	ok		place
+161	4	ok		place
+161	5	ok		place
+161	6	ok		place
+161	7	ok		injected
+162	2	ok		place
+162	3	ok		event_date
+162	4	ok		place
+162	5	ok		place
+162	MISSED		TITLE: Dr.
+163	0	ok		event_date
+163	2	ok		event_date
+163	5	ok		injected
+163	6	ok		injected
+163	8	ok		event_date
+164	1	ok		event_date
+164	2	ok		place
+165	0	ok		event_date
+165	1	ok		place
+165	2	not_pii		group: "seniors aged 85 and above"
+165	3	ok		place
+165	4	ok		place
+165	5	ok		place
+168	6	bad_boundary		two postcodes in one span
+168	9	ok		event_date
+168	10	ok		place
+169	0	not_pii		money amount ("Funding of ...") labelled CREDITCARDNUMBER
+169	1	ok		injected
+169	2	ok		injected
+170	2	ok		event_date
+171	2	ok		event_date
+171	3	ok		place
+172	3	ok		event_date
+172	4	ok		place
+172	5	ok		place
+172	6	ok		place
+172	7	ok		place
+173	3	ok		place
+173	4	ok		place
+173	5	ok		place
+173	6	ok		place
+173	7	not_pii		construction date of a house ("built in ...") labelled DATE
+173	8	not_pii		age of a floor ("70-year-old hardwood floor") labelled AGE
+174	3	ok		place
+174	4	ok		place
+174	5	ok		place
+174	6	ok		place
+174	7	ok		event_date
+175	1	ok		event_date
+175	2	ok		place
+175	3	ok		place
+179	4	not_pii		group: "consumers aged 29–16"
+179	5	not_pii		group: "consumers aged 29–16"
+179	6	not_pii		money amount ("a ... balance over $...") labelled CREDITCARDNUMBER
+179	7	not_pii		money amount ("a ... balance over $...") labelled CREDITCARDNUMBER
+179	8	not_pii		group: "when their ... is not linked"
+180	0	ok		place
+180	2	ok		event_date
+181	0	not_pii		group: eligibility threshold "staff born after"
+181	3	ok		event_date
+182	0	ok		injected
+182	4	ok		event_date
+183	0	ok		event_date
+184	4	ok		place
+184	5	ok		place
+184	8	not_pii		fictional villain's age in a statistical model
+184	9	not_pii		group: "the binary categories of Male and Non-binary"
+184	10	not_pii		group: "the binary categories of Male and Non-binary"
+185	5	wrong_label	OTHER	trust registration number labelled DRIVERLICENSENUM
+185	6	not_pii		injected: "the latest 03/17/2023 regulations"
+186	0	ok		event_date
+187	MISSED		TITLE: Dr.
+188	2	ok		event_date
+188	3	ok		place
+188	4	ok		place
+188	5	ok		place
+188	6	ok		place
+189	3	ok		event_date
+189	7	ok		place
+190	0	not_pii		software version ("version 1964-10-25") labelled DATE
+190	1	not_pii		field name ("matching of the ... and ... fields")
+190	2	not_pii		field name ("matching of the ... and ... fields")
+190	3	ok		place
+190	4	ok		place
+190	5	not_pii		group: "individuals aged 74 to 53"
+190	6	not_pii		group: "individuals aged 74 to 53"
+190	7	not_pii		group: "mismatched F or Genderfluid identifiers"
+190	8	not_pii		group: "mismatched F or Genderfluid identifiers"
+190	9	ok		injected
+191	0	ok		event_date
+191	2	ok		place
+191	3	ok		place
+191	4	ok		place
+191	5	bad_boundary		two postcodes in one span
+192	2	ok		injected
+194	0	not_pii		money amount ("a reimbursement of ...") labelled CREDITCARDNUMBER
+194	1	ok		injected
+195	6	ok		event_date
+195	7	ok		place
+195	8	ok		place
+195	9	ok		place
+195	10	ok		place
+197	0	ok		place
+198	5	not_pii		percentage ("annual percentage rate of 17%") labelled AGE
+198	6	not_pii		percentage ("promotional rate of 31%") labelled AGE
+198	7	not_pii		group: "customers with a tax identification number of ..."
+198	9	ok		event_date
+199	4	ok		event_date
+199	6	wrong_label	OTHER	booking reference labelled TAXNUM
