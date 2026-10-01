@@ -10,3 +10,70 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | GLiNER-PII (NVIDIA) | dev | 200 | 4.6 | 51.5 | 6.9 | 0.701 | 0.953 | 2179 | 7763 | Darwin arm64 |
 | LoRA r16, 10k (Qwen3-1.7B) | dev | 2000 | 0.7 | 13.6 | 0.4 | 0.938 | 0.994 | 4717 | 7909 | Linux x86_64 |
 | Presidio | dev | 200 | 33.6 | 89.0 | 22.4 | 0.232 | 0.721 | 42 | 65 | Darwin arm64 |
+| Base LLM, zero-shot | gretel_en | 1000 | 62.0 | 87.9 | 38.4 | 0.138 | 0.508 | 1616 | 10752 | Linux x86_64 |
+| GLiNER-PII (Knowledgator) | gretel_en | 1000 | 46.7 | 84.9 | 44.3 | 0.207 | 0.576 | 22 | 55 | Linux x86_64 |
+| GLiNER-PII (NVIDIA) | gretel_en | 1000 | 25.5 | 83.9 | 35.7 | 0.208 | 0.730 | 50 | 118 | Linux x86_64 |
+| LoRA r16, 10k (Qwen3-1.7B) | gretel_en | 1000 | 44.1 | 84.8 | 46.4 | 0.134 | 0.520 | 1251 | 13187 | Linux x86_64 |
+| OpenMed privacy filter v2 | gretel_en | 1000 | 29.2 | 83.2 | 34.4 | 0.148 | 0.659 | 162 | 496 | Linux x86_64 |
+| Presidio | gretel_en | 1000 | 29.0 | 75.6 | 58.5 | 0.351 | 0.600 | 27 | 57 | Linux x86_64 |
+| Base LLM, zero-shot | gretel_xx | 2629 | 65.5 | 86.7 | 47.5 | 0.105 | 0.449 | 959 | 8800 | Linux x86_64 |
+| GLiNER-PII (Knowledgator) | gretel_xx | 2629 | 44.9 | 82.6 | 59.8 | 0.128 | 0.502 | 22 | 43 | Linux x86_64 |
+| GLiNER-PII (NVIDIA) | gretel_xx | 2629 | 29.5 | 82.3 | 37.2 | 0.164 | 0.694 | 57 | 101 | Linux x86_64 |
+| LoRA r16, 10k (Qwen3-1.7B) | gretel_xx | 2629 | 45.0 | 84.6 | 52.5 | 0.105 | 0.488 | 1310 | 6209 | Linux x86_64 |
+| OpenMed privacy filter v2 | gretel_xx | 2629 | 39.1 | 85.1 | 36.1 | 0.093 | 0.620 | 181 | 488 | Linux x86_64 |
+| Base LLM, zero-shot | nemotron | 3000 | 39.4 | 66.4 | 17.9 | 0.592 | 0.672 | 1603 | 5444 | Linux x86_64 |
+| GLiNER-PII (Knowledgator) | nemotron | 3000 | 15.0 | 31.9 | 15.6 | 0.756 | 0.818 | 25 | 56 | Linux x86_64 |
+| GLiNER-PII (NVIDIA) | nemotron | 3000 | 6.2 | 12.6 | 13.4 | 0.851 | 0.928 | 54 | 133 | Linux x86_64 |
+| LoRA r16, 10k (Qwen3-1.7B) | nemotron | 3000 | 21.7 | 44.2 | 5.1 | 0.740 | 0.820 | 1829 | 5844 | Linux x86_64 |
+| OpenMed privacy filter v2 | nemotron | 3000 | 2.4 | 7.9 | 7.0 | 0.864 | 0.942 | 254 | 694 | Linux x86_64 |
+| Presidio | nemotron | 3000 | 13.9 | 41.9 | 33.0 | 0.402 | 0.746 | 32 | 53 | Linux x86_64 |
+| Base LLM, zero-shot | openpii_xx | 3000 | 51.3 | 93.6 | 4.6 | 0.436 | 0.652 | 1836 | 12341 | Linux x86_64 |
+| GLiNER-PII (Knowledgator) | openpii_xx | 3000 | 11.9 | 62.7 | 18.3 | 0.538 | 0.872 | 47 | 105 | Linux x86_64 |
+| GLiNER-PII (NVIDIA) | openpii_xx | 3000 | 8.4 | 57.2 | 6.6 | 0.644 | 0.943 | 126 | 301 | Linux x86_64 |
+| LoRA r16, 10k (Qwen3-1.7B) | openpii_xx | 3000 | 2.4 | 24.9 | 1.6 | 0.856 | 0.983 | 4322 | 6709 | Linux x86_64 |
+| OpenMed privacy filter v2 | openpii_xx | 3000 | 3.0 | 40.4 | 1.2 | 0.632 | 0.981 | 583 | 1146 | Linux x86_64 |
+| Base LLM, zero-shot | tab | 127 | 82.7 | 100.0 | 11.2 | 0.165 | 0.363 | 893 | 1886 | Linux x86_64 |
+| GLiNER-PII (Knowledgator) | tab | 127 | 58.1 | 100.0 | 40.4 | 0.352 | 0.472 | 19 | 22 | Linux x86_64 |
+| GLiNER-PII (NVIDIA) | tab | 127 | 19.3 | 100.0 | 17.6 | 0.484 | 0.858 | 43 | 51 | Linux x86_64 |
+| LoRA r16, 10k (Qwen3-1.7B) | tab | 127 | 23.2 | 100.0 | 3.0 | 0.449 | 0.879 | 929 | 1571 | Linux x86_64 |
+| OpenMed privacy filter v2 | tab | 127 | 14.9 | 100.0 | 6.8 | 0.402 | 0.897 | 128 | 160 | Linux x86_64 |
+| Presidio | tab | 127 | 11.2 | 100.0 | 34.1 | 0.494 | 0.699 | 24 | 29 | Linux x86_64 |
+| Base LLM, zero-shot | test_holdout_regions | 2000 | 46.8 | 92.5 | 3.3 | 0.481 | 0.704 | 1615 | 4881 | Linux x86_64 |
+| GLiNER-PII (Knowledgator) | test_holdout_regions | 2000 | 12.7 | 64.6 | 11.1 | 0.628 | 0.903 | 49 | 109 | Linux x86_64 |
+| GLiNER-PII (NVIDIA) | test_holdout_regions | 2000 | 6.3 | 53.3 | 5.7 | 0.703 | 0.949 | 121 | 293 | Linux x86_64 |
+| LoRA r16, 10k (Qwen3-1.7B) | test_holdout_regions | 2000 | 0.9 | 15.2 | 0.4 | 0.932 | 0.993 | 4162 | 8591 | Linux x86_64 |
+| OpenMed privacy filter v2 | test_holdout_regions | 2000 | 0.8 | 27.5 | 1.4 | 0.657 | 0.987 | 587 | 1150 | Linux x86_64 |
+| Presidio | test_holdout_regions | 2000 | 35.7 | 89.9 | 19.0 | 0.223 | 0.709 | 43 | 72 | Linux x86_64 |
+
+## Out-of-distribution leakage (%)
+
+Each cell is leakage / partial F1; n/a means not run (Presidio is English-only here).
+
+| System | OpenPII, region IN | Nemotron-PII | TAB (real ECHR) | Gretel EN | Gretel non-EN | OpenPII non-EN |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Base LLM, zero-shot | 46.8 / 0.70 | 39.4 / 0.67 | 82.7 / 0.36 | 62.0 / 0.51 | 65.5 / 0.45 | 51.3 / 0.65 |
+| GLiNER-PII (Knowledgator) | 12.7 / 0.90 | 15.0 / 0.82 | 58.1 / 0.47 | 46.7 / 0.58 | 44.9 / 0.50 | 11.9 / 0.87 |
+| GLiNER-PII (NVIDIA) | 6.3 / 0.95 | 6.2 / 0.93 | 19.3 / 0.86 | 25.5 / 0.73 | 29.5 / 0.69 | 8.4 / 0.94 |
+| LoRA r16, 10k (Qwen3-1.7B) | 0.9 / 0.99 | 21.7 / 0.82 | 23.2 / 0.88 | 44.1 / 0.52 | 45.0 / 0.49 | 2.4 / 0.98 |
+| OpenMed privacy filter v2 | 0.8 / 0.99 | 2.4 / 0.94 | 14.9 / 0.90 | 29.2 / 0.66 | 39.1 / 0.62 | 3.0 / 0.98 |
+| Presidio | 35.7 / 0.71 | 13.9 / 0.75 | 11.2 / 0.70 | 29.0 / 0.60 | n/a | n/a |
+
+### Gretel non-EN: leakage (%) by language
+
+| System | de | es | fr | it | nl | sv |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Base LLM, zero-shot | 65.5 | 66.7 | 61.4 | 66.0 | 66.7 | 66.0 |
+| GLiNER-PII (Knowledgator) | 44.4 | 42.3 | 37.7 | 46.3 | 52.2 | 44.9 |
+| GLiNER-PII (NVIDIA) | 29.1 | 31.4 | 20.5 | 26.0 | 35.9 | 31.8 |
+| LoRA r16, 10k (Qwen3-1.7B) | 45.0 | 46.0 | 36.9 | 43.4 | 50.2 | 46.3 |
+| OpenMed privacy filter v2 | 33.1 | 48.1 | 27.0 | 33.0 | 49.4 | 40.3 |
+
+### OpenPII non-EN: leakage (%) by language
+
+| System | bg | de | es | fr | it | nl |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Base LLM, zero-shot | 55.5 | 51.5 | 50.0 | 47.8 | 47.5 | 55.9 |
+| GLiNER-PII (Knowledgator) | 13.7 | 11.4 | 12.6 | 10.7 | 12.1 | 10.5 |
+| GLiNER-PII (NVIDIA) | 15.1 | 8.3 | 5.4 | 7.1 | 7.5 | 6.7 |
+| LoRA r16, 10k (Qwen3-1.7B) | 5.2 | 1.9 | 1.8 | 1.3 | 1.9 | 2.2 |
+| OpenMed privacy filter v2 | 1.6 | 3.0 | 4.1 | 2.7 | 2.6 | 3.9 |

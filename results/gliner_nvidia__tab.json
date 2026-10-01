@@ -1,0 +1,250 @@
+{
+  "system": "gliner_nvidia",
+  "detector": "gliner_nvidia",
+  "adapter": null,
+  "testset": "tab",
+  "n_examples": 127,
+  "limit": null,
+  "metrics": {
+    "docs": 127,
+    "n_gold_spans": 4063,
+    "n_pred_spans": 4984,
+    "leakage_chars": 0.19294983383446748,
+    "leakage_docs": 1.0,
+    "over_redaction": 0.17554814590279882,
+    "strict": {
+      "precision": 0.4390048154093098,
+      "recall": 0.5385183362047749,
+      "f1": 0.4836962529015143
+    },
+    "partial": {
+      "precision": 0.8497191011235955,
+      "recall": 0.866847157272951,
+      "f1": 0.8581976765377596
+    },
+    "per_label": {
+      "AGE": {
+        "n_gold": 0,
+        "n_pred": 41,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "BUILDINGNUM": {
+        "n_gold": 0,
+        "n_pred": 1,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "CITY": {
+        "n_gold": 0,
+        "n_pred": 247,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "CODE": {
+        "n_gold": 322,
+        "n_pred": 0,
+        "leakage_chars": 0.8157159952134024,
+        "partial_recall": 0.18944099378881987,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "DATE": {
+        "n_gold": 2488,
+        "n_pred": 2337,
+        "leakage_chars": 0.09690683113727688,
+        "partial_recall": 0.917604501607717,
+        "strict": {
+          "precision": 0.9362430466409927,
+          "recall": 0.8794212218649518,
+          "f1": 0.9069430051813471
+        }
+      },
+      "GENDER": {
+        "n_gold": 0,
+        "n_pred": 2,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "GIVENNAME": {
+        "n_gold": 0,
+        "n_pred": 662,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "IDCARDNUM": {
+        "n_gold": 0,
+        "n_pred": 59,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "LOC": {
+        "n_gold": 295,
+        "n_pred": 0,
+        "leakage_chars": 0.3087012156110045,
+        "partial_recall": 0.823728813559322,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "NAME": {
+        "n_gold": 958,
+        "n_pred": 0,
+        "leakage_chars": 0.28347378277153557,
+        "partial_recall": 0.975991649269311,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "SEX": {
+        "n_gold": 0,
+        "n_pred": 31,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "SOCIALNUM": {
+        "n_gold": 0,
+        "n_pred": 6,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "STREET": {
+        "n_gold": 0,
+        "n_pred": 6,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "SURNAME": {
+        "n_gold": 0,
+        "n_pred": 932,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "TAXNUM": {
+        "n_gold": 0,
+        "n_pred": 2,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "TITLE": {
+        "n_gold": 0,
+        "n_pred": 656,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "ZIPCODE": {
+        "n_gold": 0,
+        "n_pred": 2,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      }
+    },
+    "per_language": {
+      "en": {
+        "docs": 127,
+        "leakage_chars": 0.19294983383446748,
+        "leakage_docs": 1.0,
+        "over_redaction": 0.17554814590279882,
+        "strict": {
+          "precision": 0.4390048154093098,
+          "recall": 0.5385183362047749,
+          "f1": 0.4836962529015143
+        },
+        "partial": {
+          "precision": 0.8497191011235955,
+          "recall": 0.866847157272951,
+          "f1": 0.8581976765377596
+        }
+      }
+    }
+  },
+  "latency": {
+    "p50_ms_per_1k_chars": 42.76825073586127,
+    "p95_ms_per_1k_chars": 51.17898776252891,
+    "chars_per_sec": 23386.656082570516,
+    "n_errors": 0,
+    "errors": []
+  },
+  "env": {
+    "device": "cuda",
+    "platform": "Linux x86_64",
+    "processor": "x86_64",
+    "python": "3.12.3",
+    "git_sha": "b831474",
+    "model_load_s": 12.51,
+    "peak_rss_mb": 4303.9,
+    "timestamp": "2026-10-01T12:27:10+00:00"
+  }
+}

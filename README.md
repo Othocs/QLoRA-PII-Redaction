@@ -15,14 +15,14 @@ Headline metric: **leakage**, the share of gold PII characters left unmasked (lo
 <!-- RESULTS_TABLE:BEGIN -->
 | System | Leakage, OpenPII (%) | Leakage, held-out region IN (%) | Leakage, Nemotron-PII (%) | Leakage, support desk (%) | Strict F1, support desk | p95 latency CPU (ms / 1k chars) | Cost ($ / 1M chars) |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Presidio |  |  |  |  |  | 65 |  |
-| GLiNER-PII (Knowledgator) |  |  |  |  |  | 725 |  |
-| GLiNER-PII (NVIDIA) |  |  |  |  |  | 7763 |  |
-| OpenMed privacy filter v2 |  |  |  |  |  |  |  |
-| Base LLM, zero-shot |  |  |  |  |  |  |  |
-| Your LoRA model |  |  |  |  |  |  |  |
+| Presidio |  | 35.7 | 13.9 |  |  | 65 |  |
+| GLiNER-PII (Knowledgator) |  | 12.7 | 15.0 |  |  | 725 |  |
+| GLiNER-PII (NVIDIA) |  | 6.3 | 6.2 |  |  | 7763 |  |
+| OpenMed privacy filter v2 |  | 0.8 | 2.4 |  |  |  |  |
+| Base LLM, zero-shot |  | 46.8 | 39.4 |  |  |  |  |
+| Your LoRA model |  | 0.9 | 21.7 |  |  |  |  |
 | Your LoRA model + validators |  |  |  |  |  |  |  |
-| LoRA r16, 10k (Qwen3-1.7B) |  |  |  |  |  |  |  |
+| LoRA r16, 10k (Qwen3-1.7B) |  | 0.9 | 21.7 |  |  |  |  |
 <!-- RESULTS_TABLE:END -->
 
 ### First LoRA run (week 2, OpenPII dev, in-distribution)
@@ -48,6 +48,29 @@ All five systems below are scored on the same first 200 dev examples. The two LL
 - A strict F1 of 0.94 sits right at the label-noise ceiling. The [audit](data/audit/AUDIT.md) found 8.9% of gold spans wrong, mostly AGE and CREDITCARDNUMBER, so the model has learned those mistakes too.
 - **Latency is the LLM's weak point.** p50 is about 4.7 s per 1,000 characters for a single request on an A40 (batched throughput: 10.8k chars/s). GLiNER takes 0.3–2 s on a laptop CPU. Week 4 measures this properly.
 - Zero-shot reached only 97.2% valid JSON despite constrained decoding, probably from long repetitive outputs hitting the 1,024-token limit. This is to be checked.
+
+### Out-of-distribution tests (week 3)
+
+The same LoRA model (trained only on English OpenPII from the CA, GB and US regions) and every baseline were run on six sets the model never trained on. Each cell is leakage in % (lower is better). Partial F1, per-language and per-label results are in [`results/SUMMARY.md`](results/SUMMARY.md).
+
+| System | OpenPII, region IN | OpenPII, 6 other languages | Nemotron-PII | TAB (real court cases) | Gretel EN | Gretel, 6 other languages |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Presidio | 35.7 | n/a | 13.9 | **11.2** | 29.0 | n/a |
+| GLiNER-PII (Knowledgator) | 12.7 | 11.9 | 15.0 | 58.1 | 46.7 | 44.9 |
+| GLiNER-PII (NVIDIA) | 6.3 | 8.4 | 6.2 ¹ | 19.3 | **25.5** | **29.5** |
+| OpenMed privacy filter v2 | **0.8** ² | 3.0 ² | **2.4** | 14.9 | 29.2 | 39.1 |
+| Qwen3-1.7B, zero-shot | 46.8 | 51.3 | 39.4 | 82.7 | 62.0 | 65.5 |
+| **Qwen3-1.7B + LoRA (r16, 10k)** | 0.9 | **2.4** | 21.7 | 23.2 | 44.1 | 45.0 |
+
+¹ NVIDIA's GLiNER was trained on Nemotron-PII. ² OpenMed was trained partly on OpenPII.
+
+**What it shows:**
+- **Same generator, new region or language: LoRA is as good as the best baseline.** It was trained on English only but leaks 1.3–2.2% in French, German, Spanish, Italian and Dutch, and 5.2% in Bulgarian, which uses Cyrillic script.
+- **Different generator or real text: LoRA falls behind NVIDIA's GLiNER and OpenMed.** On Nemotron it misses 40% of first names, against about 1% for GLiNER. It also misses ordinary English names, full addresses written in one piece, and date formats OpenPII never uses ("Jan-21"). It has learned OpenPII's style more than the task.
+- **Fine-tuning still helps everywhere**: it cuts zero-shot leakage by 30–98%.
+- **Presidio wins on the real court cases (TAB).** Its rules for names and dates hold up on real legal text, though it over-redacts a lot (34%).
+- **Caveat under investigation:** on the new datasets, 9–18% of the values LoRA returned couldn't be found verbatim in the text and were dropped by the strict alignment step (0.2% on OpenPII dev). Valid JSON was also 96–99% rather than 100%, probably from hitting the output-length limit on long documents. Part of LoRA's OOD leakage may be a pipeline effect rather than a model gap; the next step is to log raw outputs and check.
+- **Label mappings:** see `configs/labels/eval/`. Labels outside our scope (company, IBAN, time, and so on) are ignored, so they count neither as leaks nor as over-redaction.
 
 Caveats:
 - OpenMed's privacy filter was trained partly on OpenPII, so its OpenPII score is a ceiling, not a fair fight.
