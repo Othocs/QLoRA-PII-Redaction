@@ -122,7 +122,10 @@ def main() -> None:
         )
         row = trainer.train_dataset[0]
         ids = row["input_ids"]
-        mask = row.get("completion_mask") or row.get("assistant_masks") or [1] * len(ids)
+        if "labels" in row:  # TRL >= 1.x: prompt positions are -100
+            mask = [int(lab != -100) for lab in row["labels"]]
+        else:
+            mask = row.get("completion_mask") or row.get("assistant_masks") or [1] * len(ids)
         print("=== full example ===")
         print(tok.decode(ids))
         print("=== tokens with loss ===")
