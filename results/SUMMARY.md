@@ -6,22 +6,29 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | System | Test set | N | Leakage chars % | Docs leaking % | Over-redaction % | Strict F1 | Partial F1 | p50 ms | p95 ms | Platform |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Base LLM, zero-shot | dev | 2000 | 45.2 | 93.0 | 3.3 | 0.482 | 0.706 | 2020 | 5361 | Linux x86_64 |
+| diagB_chunk1200_tok2048 | dev | 2000 | 0.7 | 13.7 | 0.4 | 0.938 | 0.994 |  |  | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | dev | 200 | 11.7 | 57.0 | 11.5 | 0.641 | 0.897 | 321 | 725 | Darwin arm64 |
 | GLiNER-PII (NVIDIA) | dev | 200 | 4.6 | 51.5 | 6.9 | 0.701 | 0.953 | 2179 | 7763 | Darwin arm64 |
 | LoRA r16, 10k (Qwen3-1.7B) | dev | 2000 | 0.7 | 13.6 | 0.4 | 0.938 | 0.994 | 4717 | 7909 | Linux x86_64 |
 | Presidio | dev | 200 | 33.6 | 89.0 | 22.4 | 0.232 | 0.721 | 42 | 65 | Darwin arm64 |
 | Base LLM, zero-shot | gretel_en | 1000 | 62.0 | 87.9 | 38.4 | 0.138 | 0.508 | 1616 | 10752 | Linux x86_64 |
+| diagA_chunk2000_tok1024 | gretel_en | 1000 | 44.1 | 85.1 | 46.6 | 0.135 | 0.522 |  |  | Linux x86_64 |
+| diagB_chunk1200_tok2048 | gretel_en | 1000 | 40.5 | 84.9 | 47.0 | 0.135 | 0.534 |  |  | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | gretel_en | 1000 | 46.7 | 84.9 | 44.3 | 0.207 | 0.576 | 22 | 55 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | gretel_en | 1000 | 25.5 | 83.9 | 35.7 | 0.208 | 0.730 | 50 | 118 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | gretel_en | 1000 | 44.1 | 84.8 | 46.4 | 0.134 | 0.520 | 1251 | 13187 | Linux x86_64 |
 | OpenMed privacy filter v2 | gretel_en | 1000 | 29.2 | 83.2 | 34.4 | 0.148 | 0.659 | 162 | 496 | Linux x86_64 |
 | Presidio | gretel_en | 1000 | 29.0 | 75.6 | 58.5 | 0.351 | 0.600 | 27 | 57 | Linux x86_64 |
 | Base LLM, zero-shot | gretel_xx | 2629 | 65.5 | 86.7 | 47.5 | 0.105 | 0.449 | 959 | 8800 | Linux x86_64 |
+| diagA_chunk2000_tok1024 | gretel_xx | 2629 | 44.9 | 84.5 | 52.9 | 0.104 | 0.486 |  |  | Linux x86_64 |
+| diagB_chunk1200_tok2048 | gretel_xx | 2629 | 42.4 | 84.4 | 54.4 | 0.102 | 0.484 |  |  | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | gretel_xx | 2629 | 44.9 | 82.6 | 59.8 | 0.128 | 0.502 | 22 | 43 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | gretel_xx | 2629 | 29.5 | 82.3 | 37.2 | 0.164 | 0.694 | 57 | 101 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | gretel_xx | 2629 | 45.0 | 84.6 | 52.5 | 0.105 | 0.488 | 1310 | 6209 | Linux x86_64 |
 | OpenMed privacy filter v2 | gretel_xx | 2629 | 39.1 | 85.1 | 36.1 | 0.093 | 0.620 | 181 | 488 | Linux x86_64 |
 | Base LLM, zero-shot | nemotron | 3000 | 39.4 | 66.4 | 17.9 | 0.592 | 0.672 | 1603 | 5444 | Linux x86_64 |
+| diagA_chunk2000_tok1024 | nemotron | 3000 | 21.8 | 44.4 | 5.1 | 0.738 | 0.821 |  |  | Linux x86_64 |
+| diagB_chunk1200_tok2048 | nemotron | 3000 | 18.8 | 41.9 | 6.1 | 0.740 | 0.824 |  |  | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | nemotron | 3000 | 15.0 | 31.9 | 15.6 | 0.756 | 0.818 | 25 | 56 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | nemotron | 3000 | 6.2 | 12.6 | 13.4 | 0.851 | 0.928 | 54 | 133 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | nemotron | 3000 | 21.7 | 44.2 | 5.1 | 0.740 | 0.820 | 1829 | 5844 | Linux x86_64 |
@@ -33,6 +40,8 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | LoRA r16, 10k (Qwen3-1.7B) | openpii_xx | 3000 | 2.4 | 24.9 | 1.6 | 0.856 | 0.983 | 4322 | 6709 | Linux x86_64 |
 | OpenMed privacy filter v2 | openpii_xx | 3000 | 3.0 | 40.4 | 1.2 | 0.632 | 0.981 | 583 | 1146 | Linux x86_64 |
 | Base LLM, zero-shot | tab | 127 | 82.7 | 100.0 | 11.2 | 0.165 | 0.363 | 893 | 1886 | Linux x86_64 |
+| diagA_chunk2000_tok1024 | tab | 127 | 22.8 | 100.0 | 2.9 | 0.449 | 0.882 |  |  | Linux x86_64 |
+| diagB_chunk1200_tok2048 | tab | 127 | 19.0 | 100.0 | 3.1 | 0.450 | 0.906 |  |  | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | tab | 127 | 58.1 | 100.0 | 40.4 | 0.352 | 0.472 | 19 | 22 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | tab | 127 | 19.3 | 100.0 | 17.6 | 0.484 | 0.858 | 43 | 51 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | tab | 127 | 23.2 | 100.0 | 3.0 | 0.449 | 0.879 | 929 | 1571 | Linux x86_64 |
@@ -52,6 +61,8 @@ Each cell is leakage / partial F1; n/a means not run (Presidio is English-only h
 | System | OpenPII, region IN | Nemotron-PII | TAB (real ECHR) | Gretel EN | Gretel non-EN | OpenPII non-EN |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Base LLM, zero-shot | 46.8 / 0.70 | 39.4 / 0.67 | 82.7 / 0.36 | 62.0 / 0.51 | 65.5 / 0.45 | 51.3 / 0.65 |
+| diagA_chunk2000_tok1024 | n/a | 21.8 / 0.82 | 22.8 / 0.88 | 44.1 / 0.52 | 44.9 / 0.49 | n/a |
+| diagB_chunk1200_tok2048 | n/a | 18.8 / 0.82 | 19.0 / 0.91 | 40.5 / 0.53 | 42.4 / 0.48 | n/a |
 | GLiNER-PII (Knowledgator) | 12.7 / 0.90 | 15.0 / 0.82 | 58.1 / 0.47 | 46.7 / 0.58 | 44.9 / 0.50 | 11.9 / 0.87 |
 | GLiNER-PII (NVIDIA) | 6.3 / 0.95 | 6.2 / 0.93 | 19.3 / 0.86 | 25.5 / 0.73 | 29.5 / 0.69 | 8.4 / 0.94 |
 | LoRA r16, 10k (Qwen3-1.7B) | 0.9 / 0.99 | 21.7 / 0.82 | 23.2 / 0.88 | 44.1 / 0.52 | 45.0 / 0.49 | 2.4 / 0.98 |
@@ -63,6 +74,8 @@ Each cell is leakage / partial F1; n/a means not run (Presidio is English-only h
 | System | de | es | fr | it | nl | sv |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Base LLM, zero-shot | 65.5 | 66.7 | 61.4 | 66.0 | 66.7 | 66.0 |
+| diagA_chunk2000_tok1024 | 45.1 | 45.7 | 36.7 | 44.0 | 50.0 | 45.8 |
+| diagB_chunk1200_tok2048 | 42.7 | 43.1 | 34.6 | 41.0 | 47.1 | 43.6 |
 | GLiNER-PII (Knowledgator) | 44.4 | 42.3 | 37.7 | 46.3 | 52.2 | 44.9 |
 | GLiNER-PII (NVIDIA) | 29.1 | 31.4 | 20.5 | 26.0 | 35.9 | 31.8 |
 | LoRA r16, 10k (Qwen3-1.7B) | 45.0 | 46.0 | 36.9 | 43.4 | 50.2 | 46.3 |

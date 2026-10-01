@@ -215,9 +215,9 @@ class LLMDetector:
         adapter: str | None = None,
         backend: str = "vllm",
         name: str = "llm",
-        max_new_tokens: int = 1024,
-        max_chars: int = 2000,
-        overlap: int = 200,
+        max_new_tokens: int = 2048,
+        max_chars: int = 1200,  # training documents are <= 1,200 chars
+        overlap: int = 150,
         constrained: bool = True,
         device: str | None = None,
         max_model_len: int = 4096,

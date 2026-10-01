@@ -69,7 +69,11 @@ The same LoRA model (trained only on English OpenPII from the CA, GB and US regi
 - **Different generator or real text: LoRA falls behind NVIDIA's GLiNER and OpenMed.** On Nemotron it misses 40% of first names, against about 1% for GLiNER. It also misses ordinary English names, full addresses written in one piece, and date formats OpenPII never uses ("Jan-21"). It has learned OpenPII's style more than the task.
 - **Fine-tuning still helps everywhere**: it cuts zero-shot leakage by 30–98%.
 - **Presidio wins on the real court cases (TAB).** Its rules for names and dates hold up on real legal text, though it over-redacts a lot (34%).
-- **Caveat under investigation:** on the new datasets, 9–18% of the values LoRA returned couldn't be found verbatim in the text and were dropped by the strict alignment step (0.2% on OpenPII dev). Valid JSON was also 96–99% rather than 100%, probably from hitting the output-length limit on long documents. Part of LoRA's OOD leakage may be a pipeline effect rather than a model gap; the next step is to log raw outputs and check.
+- **Diagnostic (raw outputs logged, then re-scored offline):** the LoRA model's out-of-distribution gap is mostly the model, not the pipeline.
+  - **Alignment isn't the cause.** Loose matching (case, whitespace, quotes) recovers under 1% of dropped values. The dropped values are **invented**: on 1–5% of chunks the model loops, repeating a made-up value (one card number 14 times, "98A" as AGE), until it hits the output limit. Alignment correctly discards these, but real PII after the loop is lost.
+  - **Chunk size matters a little.** Splitting inputs into 1,200-character chunks (the training length) instead of 2,000 lowers leakage by 3–4 points on every OOD set: Nemotron 18.8%, TAB 19.0%, Gretel EN 40.5%, Gretel non-EN 42.4%. Dev is unchanged at 0.7%. This is now the default.
+  - **Over-redaction of about 50% on Gretel finance documents** comes from the training-label noise the audit found: amounts and codes get tagged AGE or CREDITCARDNUMBER, as in OpenPII.
+  - **Takeaway:** more varied, cleaner training data is the lever, not decoding tricks. The OOD table above uses the earlier 2,000-character setting; `results/diagB_*` holds the 1,200-character runs.
 - **Label mappings:** see `configs/labels/eval/`. Labels outside our scope (company, IBAN, time, and so on) are ignored, so they count neither as leaks nor as over-redaction.
 
 Caveats:

@@ -1,0 +1,269 @@
+{
+  "system": "diagA_chunk2000_tok1024",
+  "detector": "lora",
+  "adapter": "outputs/r16_10k_1.7b",
+  "detector_config": {
+    "base_model": "Qwen/Qwen3-1.7B",
+    "adapter": "outputs/r16_10k_1.7b",
+    "max_new_tokens": 1024,
+    "max_chars": 2000,
+    "overlap": 200,
+    "constrained": true,
+    "fuzzy_align": true
+  },
+  "testset": "tab",
+  "n_examples": 127,
+  "limit": null,
+  "metrics": {
+    "docs": 127,
+    "n_gold_spans": 4063,
+    "n_pred_spans": 4577,
+    "leakage_chars": 0.22762699794271246,
+    "leakage_docs": 1.0,
+    "over_redaction": 0.028731343283582088,
+    "strict": {
+      "precision": 0.4236399388245576,
+      "recall": 0.4772335712527689,
+      "f1": 0.4488425925925927
+    },
+    "partial": {
+      "precision": 0.9584880926370986,
+      "recall": 0.817622446468127,
+      "f1": 0.8824691503799293
+    },
+    "per_label": {
+      "AGE": {
+        "n_gold": 0,
+        "n_pred": 63,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "BUILDINGNUM": {
+        "n_gold": 0,
+        "n_pred": 30,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "CITY": {
+        "n_gold": 0,
+        "n_pred": 185,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "CODE": {
+        "n_gold": 322,
+        "n_pred": 0,
+        "leakage_chars": 0.18508177104108497,
+        "partial_recall": 0.8322981366459627,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "DATE": {
+        "n_gold": 2488,
+        "n_pred": 2064,
+        "leakage_chars": 0.19234962464567174,
+        "partial_recall": 0.8147106109324759,
+        "strict": {
+          "precision": 0.939437984496124,
+          "recall": 0.7793408360128617,
+          "f1": 0.851933216168717
+        }
+      },
+      "DRIVERLICENSENUM": {
+        "n_gold": 0,
+        "n_pred": 4,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "GENDER": {
+        "n_gold": 0,
+        "n_pred": 6,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "GIVENNAME": {
+        "n_gold": 0,
+        "n_pred": 808,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "IDCARDNUM": {
+        "n_gold": 0,
+        "n_pred": 18,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "LOC": {
+        "n_gold": 295,
+        "n_pred": 0,
+        "leakage_chars": 0.46705054382597566,
+        "partial_recall": 0.6203389830508474,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "NAME": {
+        "n_gold": 958,
+        "n_pred": 0,
+        "leakage_chars": 0.26591760299625467,
+        "partial_recall": 0.8810020876826722,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "SEX": {
+        "n_gold": 0,
+        "n_pred": 8,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "STREET": {
+        "n_gold": 0,
+        "n_pred": 18,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "SURNAME": {
+        "n_gold": 0,
+        "n_pred": 592,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "TAXNUM": {
+        "n_gold": 0,
+        "n_pred": 211,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "TITLE": {
+        "n_gold": 0,
+        "n_pred": 552,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "ZIPCODE": {
+        "n_gold": 0,
+        "n_pred": 18,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      }
+    },
+    "per_language": {
+      "en": {
+        "docs": 127,
+        "leakage_chars": 0.22762699794271246,
+        "leakage_docs": 1.0,
+        "over_redaction": 0.028731343283582088,
+        "strict": {
+          "precision": 0.4236399388245576,
+          "recall": 0.4772335712527689,
+          "f1": 0.4488425925925927
+        },
+        "partial": {
+          "precision": 0.9584880926370986,
+          "recall": 0.817622446468127,
+          "f1": 0.8824691503799293
+        }
+      }
+    },
+    "llm_output": {
+      "outputs": 401,
+      "valid_json": 389,
+      "truncated": 12,
+      "items": 6090,
+      "dropped_items": 645,
+      "valid_json_rate": 0.970074812967581
+    }
+  },
+  "latency": {
+    "p50_ms_per_1k_chars": null,
+    "p95_ms_per_1k_chars": null,
+    "latency_sample": 0,
+    "chars_per_sec": 15229.074971522734,
+    "batched": true,
+    "n_errors": 0,
+    "errors": []
+  },
+  "env": {
+    "device": "default",
+    "platform": "Linux x86_64",
+    "processor": "x86_64",
+    "python": "3.12.3",
+    "git_sha": "975a05b",
+    "model_load_s": 158.38,
+    "peak_rss_mb": 1546.9,
+    "timestamp": "2026-10-01T14:47:26+00:00"
+  }
+}
