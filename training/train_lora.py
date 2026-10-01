@@ -38,7 +38,10 @@ def make_dataset(path: str, tokenizer, limit: int | None = None):
     from datasets import Dataset
 
     rows = [
-        {"prompt": prompt_text(tokenizer, ex.text), "completion": format_completion(ex.text, ex.spans)}
+        {
+            "prompt": prompt_text(tokenizer, ex.text),
+            "completion": format_completion(ex.text, ex.spans),
+        }
         for ex in read_examples(path, limit)
     ]
     return Dataset.from_list(rows)
@@ -76,8 +79,14 @@ def main() -> None:
         else None
     )
 
-    lens = [len(tok(r["prompt"] + r["completion"])["input_ids"]) for r in train_ds.select(range(min(500, len(train_ds))))]
-    print(f"train examples: {len(train_ds)}; tokens/example (first 500): mean {sum(lens) / len(lens):.0f}, max {max(lens)}")
+    lens = [
+        len(tok(r["prompt"] + r["completion"])["input_ids"])
+        for r in train_ds.select(range(min(500, len(train_ds))))
+    ]
+    print(
+        f"train examples: {len(train_ds)}; tokens/example (first 500): "
+        f"mean {sum(lens) / len(lens):.0f}, max {max(lens)}"
+    )
 
     sft_cfg = SFTConfig(
         output_dir=str(out_dir),
@@ -119,7 +128,11 @@ def main() -> None:
         print(tok.decode([i for i, m in zip(ids, mask, strict=True) if m]))
         return
 
-    model = _load_model(cfg) if torch.cuda.is_available() else AutoModelForCausalLM.from_pretrained(cfg["base_model"])
+    model = (
+        _load_model(cfg)
+        if torch.cuda.is_available()
+        else AutoModelForCausalLM.from_pretrained(cfg["base_model"])
+    )
     trainer = SFTTrainer(
         model=model,
         args=sft_cfg,
@@ -145,7 +158,9 @@ def main() -> None:
     info = {
         "config": cfg,
         "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else platform.processor(),
-        "peak_vram_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2) if torch.cuda.is_available() else None,
+        "peak_vram_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2)
+        if torch.cuda.is_available()
+        else None,
         "wall_clock_min": round(wall / 60, 2),
         "train_tokens": n_tokens * (epochs or 1),
         "tokens_per_sec": round(n_tokens * (epochs or 1) / wall) if epochs else None,
@@ -159,7 +174,9 @@ def main() -> None:
     if cfg.get("gpu_price_per_hour"):
         info["cost_usd"] = round(cfg["gpu_price_per_hour"] * wall / 3600, 2)
     (out_dir / "run_info.json").write_text(json.dumps(info, indent=2, default=str) + "\n")
-    print(json.dumps({k: v for k, v in info.items() if k not in ("log_history", "config")}, indent=2))
+    print(
+        json.dumps({k: v for k, v in info.items() if k not in ("log_history", "config")}, indent=2)
+    )
 
 
 def _lora(cfg: dict, LoraConfig):

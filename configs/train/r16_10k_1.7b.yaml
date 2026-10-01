@@ -1,0 +1,21 @@
+# Week 2, first run: Qwen3-1.7B, r=16, all linear layers, 10k examples, 1 epoch.
+base_model: Qwen/Qwen3-1.7B
+train_file: data/processed/train_10k.jsonl
+eval_file: data/processed/dev.jsonl
+eval_limit: 200            # loss on 200 dev examples every eval_steps
+eval_steps: 100
+output_dir: outputs/r16_10k_1.7b
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules: all-linear   # or "attention" for q/k/v/o only
+quantization: nf4              # 4-bit QLoRA, bf16 compute
+learning_rate: 2.0e-4
+epochs: 1
+batch_size: 16
+grad_accum: 1
+max_seq_length: 1024
+completion_only_loss: true
+seed: 13
+gpu_price_per_hour: null       # filled in on the pod for run_info.json cost

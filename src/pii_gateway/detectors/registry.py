@@ -54,11 +54,33 @@ def _openmed(**kw) -> Detector:
     )
 
 
+DEFAULT_BASE_MODEL = "Qwen/Qwen3-1.7B"
+
+
+def _llm(with_adapter: bool) -> Callable[..., Detector]:
+    def build(**kw) -> Detector:
+        from pii_gateway.detectors.llm import LLMDetector
+
+        adapter = kw.get("adapter")
+        if with_adapter and not adapter:
+            raise ValueError("system 'lora' needs --adapter <path to the trained adapter>")
+        return LLMDetector(
+            base_model=kw.get("base_model") or DEFAULT_BASE_MODEL,
+            adapter=adapter if with_adapter else None,
+            backend=kw.get("backend") or "vllm",
+            name="lora" if with_adapter else "base_llm",
+        )
+
+    return build
+
+
 SYSTEMS: dict[str, Callable[..., Detector]] = {
     "presidio": _presidio,
     "gliner_knowledgator": _gliner("gliner_knowledgator"),
     "gliner_nvidia": _gliner("gliner_nvidia"),
     "openmed": _openmed,
+    "base_llm": _llm(with_adapter=False),
+    "lora": _llm(with_adapter=True),
 }
 
 

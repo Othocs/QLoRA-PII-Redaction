@@ -276,7 +276,9 @@ class LLMDetector:
         out = []
         for text, spans in zip(texts, per_text, strict=True):
             merged = merge_overlapping(spans)
-            out.append([Span(s.start, s.end, s.label, text[s.start : s.end], self.name) for s in merged])
+            out.append(
+                [Span(s.start, s.end, s.label, text[s.start : s.end], self.name) for s in merged]
+            )
         return out
 
     def detect(self, text: str) -> list[Span]:

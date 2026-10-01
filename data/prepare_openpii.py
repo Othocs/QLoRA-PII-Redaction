@@ -116,8 +116,10 @@ def extract(cfg: dict) -> dict:
             from huggingface_hub import hf_hub_download
 
             print(f"downloading {rel} ...", file=sys.stderr)
-            hf_hub_download(cfg["repo_id"], rel, repo_type="dataset", local_dir=raw_dir.parent)
-            (raw_dir.parent / rel).rename(raw)
+            tmp = raw_dir / "_hf"
+            got = hf_hub_download(cfg["repo_id"], rel, repo_type="dataset", local_dir=tmp)
+            raw_dir.mkdir(parents=True, exist_ok=True)
+            Path(got).rename(raw)
         acc = _ExtractStats()
         out = out_dir / f"openpii_{cfg['language']}_{split}.jsonl"
         write_examples(out, acc.scan(iter_raw(raw, cfg["language"])))

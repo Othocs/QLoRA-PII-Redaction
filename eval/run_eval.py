@@ -57,6 +57,33 @@ def load_testset(name_or_path: str, limit: int | None) -> tuple[str, list[Exampl
     return name, list(read_examples(path, limit))
 
 
+def run_batched(
+    det, examples: list[Example], latency_sample: int
+) -> tuple[dict[str, list[Span]], dict]:
+    """Detectors with detect_batch (the LLM): one batched pass for the predictions,
+    then single-document calls on a sample to measure per-request latency."""
+    t0 = time.perf_counter()
+    outs = det.detect_batch([ex.text for ex in examples])
+    total_s = time.perf_counter() - t0
+    preds = {ex.id: spans for ex, spans in zip(examples, outs, strict=True)}
+    ms_per_1k = []
+    for ex in examples[:latency_sample]:
+        t1 = time.perf_counter()
+        det.detect(ex.text)
+        ms_per_1k.append((time.perf_counter() - t1) * 1e6 / max(1, len(ex.text)))
+    total_chars = sum(len(ex.text) for ex in examples)
+    latency = {
+        "p50_ms_per_1k_chars": float(np.percentile(ms_per_1k, 50)) if ms_per_1k else None,
+        "p95_ms_per_1k_chars": float(np.percentile(ms_per_1k, 95)) if ms_per_1k else None,
+        "latency_sample": len(ms_per_1k),
+        "chars_per_sec": total_chars / total_s if total_s else None,
+        "batched": True,
+        "n_errors": 0,
+        "errors": [],
+    }
+    return preds, latency
+
+
 def run_one(det: Detector, examples: list[Example]) -> tuple[dict[str, list[Span]], dict]:
     if examples:  # warm-up: first call pays for lazy init / graph compilation
         det.detect(examples[0].text)
@@ -95,6 +122,13 @@ def main(argv: list[str] | None = None) -> list[Path]:
         "--device", default=None, help="cpu | mps | cuda (default: each detector's own)"
     )
     ap.add_argument("--spacy-model", default=None, help="override Presidio's spaCy model")
+    ap.add_argument("--base-model", default=None, help="LLM systems: base model id")
+    ap.add_argument("--adapter", default=None, help="system 'lora': path to the LoRA adapter")
+    ap.add_argument("--backend", default=None, help="LLM systems: vllm (default) | hf")
+    ap.add_argument(
+        "--tag", default=None, help="name results by this tag instead of the system name"
+    )
+    ap.add_argument("--latency-sample", type=int, default=50)
     args = ap.parse_args(argv)
 
     out = Path(args.out)
@@ -102,18 +136,34 @@ def main(argv: list[str] | None = None) -> list[Path]:
     testsets = [load_testset(t.strip(), args.limit) for t in args.testsets.split(",") if t.strip()]
     written = []
     for sys_name in [s.strip() for s in args.systems.split(",") if s.strip()]:
-        kw = {
-            k: v for k, v in {"device": args.device, "spacy_model": args.spacy_model}.items() if v
+        opts = {
+            "device": args.device,
+            "spacy_model": args.spacy_model,
+            "base_model": args.base_model,
+            "adapter": args.adapter,
+            "backend": args.backend,
         }
+        kw = {k: v for k, v in opts.items() if v}
+        result_name = args.tag or sys_name
         t0 = time.perf_counter()
         det = build(sys_name, **kw)
         load_s = time.perf_counter() - t0
         for ts_name, examples in testsets:
-            print(f"[{sys_name}] {ts_name}: {len(examples)} examples ...", file=sys.stderr)
-            preds, latency = run_one(det, examples)
+            print(f"[{result_name}] {ts_name}: {len(examples)} examples ...", file=sys.stderr)
+            if hasattr(det, "detect_batch"):
+                preds, latency = run_batched(det, examples, args.latency_sample)
+            else:
+                preds, latency = run_one(det, examples)
             metrics = aggregate(examples, preds)
+            if hasattr(det, "stats"):  # LLM: format reliability
+                st = dict(det.stats)
+                st["valid_json_rate"] = st["valid_json"] / st["outputs"] if st["outputs"] else None
+                metrics["llm_output"] = st
+                det.stats = {k: 0 for k in det.stats}
             result = {
-                "system": sys_name,
+                "system": result_name,
+                "detector": sys_name,
+                "adapter": args.adapter,
                 "testset": ts_name,
                 "n_examples": len(examples),
                 "limit": args.limit,
@@ -130,9 +180,10 @@ def main(argv: list[str] | None = None) -> list[Path]:
                     "timestamp": datetime.now(UTC).isoformat(timespec="seconds"),
                 },
             }
-            path = out / f"{sys_name}__{ts_name}.json"
+            path = out / f"{result_name}__{ts_name}.json"
             path.write_text(json.dumps(result, indent=2) + "\n")
-            with open(out / "runs" / f"{sys_name}__{ts_name}.jsonl", "w", encoding="utf-8") as f:
+            run_path = out / "runs" / f"{result_name}__{ts_name}.jsonl"
+            with open(run_path, "w", encoding="utf-8") as f:
                 for ex in examples:
                     spans = [s.to_dict(full=True) for s in preds.get(ex.id, [])]
                     f.write(json.dumps({"id": ex.id, "pred": spans}, ensure_ascii=False) + "\n")
