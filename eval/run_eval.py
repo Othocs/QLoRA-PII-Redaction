@@ -66,11 +66,14 @@ def run_batched(
     outs = det.detect_batch([ex.text for ex in examples])
     total_s = time.perf_counter() - t0
     preds = {ex.id: spans for ex, spans in zip(examples, outs, strict=True)}
+    stats = dict(det.stats) if hasattr(det, "stats") else None
     ms_per_1k = []
     for ex in examples[:latency_sample]:
         t1 = time.perf_counter()
         det.detect(ex.text)
         ms_per_1k.append((time.perf_counter() - t1) * 1e6 / max(1, len(ex.text)))
+    if stats is not None:  # format stats should describe the batched pass only
+        det.stats = stats
     total_chars = sum(len(ex.text) for ex in examples)
     latency = {
         "p50_ms_per_1k_chars": float(np.percentile(ms_per_1k, 50)) if ms_per_1k else None,
