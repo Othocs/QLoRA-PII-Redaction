@@ -75,6 +75,10 @@ def summary_md(res: dict[tuple[str, str], dict]) -> str:
         )
     lines += ood_tables(res)
     lines += ablation_table(res)
+    sweeps = sorted(Path("results/sweeps").glob("*.md")) if Path("results/sweeps").exists() else []
+    if sweeps:
+        lines += ["", "# Hyperparameter sweeps (eval/select.py)", ""]
+        lines += [p.read_text().rstrip() + "\n" for p in sweeps]
     return "\n".join(lines) + "\n"
 
 

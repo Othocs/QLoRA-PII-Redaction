@@ -14,6 +14,7 @@ to `output_dir`.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
 import os
 import platform
@@ -28,8 +29,29 @@ from pii_gateway.spans import read_examples
 ATTENTION_ONLY = ["q_proj", "k_proj", "v_proj", "o_proj"]
 
 
-def load_cfg(path: str) -> dict:
-    cfg = yaml.safe_load(Path(path).read_text())
+def apply_overrides(cfg: dict, sets: list[str]) -> dict:
+    """Apply `key=value` overrides; dotted keys reach nested dicts (`lora.r=32`).
+    Values are parsed as YAML, so `1e-4` is a float and `[q_proj, v_proj]` a list."""
+    for item in sets:
+        key, sep, raw = item.partition("=")
+        if not sep or not key:
+            raise ValueError(f"override {item!r} is not key=value")
+        *parents, leaf = key.split(".")
+        node = cfg
+        for p in parents:
+            node = node.setdefault(p, {})
+            if not isinstance(node, dict):
+                raise ValueError(f"override {item!r}: {p!r} is not a section")
+        value = yaml.safe_load(raw)
+        if isinstance(value, str):  # YAML reads "1e-4" as a string; accept plain numbers too
+            with contextlib.suppress(ValueError):
+                value = float(value)
+        node[leaf] = value
+    return cfg
+
+
+def load_cfg(path: str, sets: list[str] | None = None) -> dict:
+    cfg = apply_overrides(yaml.safe_load(Path(path).read_text()), sets or [])
     cfg.setdefault("output_dir", f"outputs/{Path(path).stem}")
     return cfg
 
@@ -59,9 +81,18 @@ def main() -> None:
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--max-steps", type=int, default=-1)
     ap.add_argument("--output-dir", default=None)
+    ap.add_argument(
+        "--set",
+        nargs="*",
+        default=[],
+        metavar="KEY=VALUE",
+        help="override config values, e.g. --set learning_rate=1e-4 lora.r=32 seed=7",
+    )
     args = ap.parse_args()
 
-    cfg = load_cfg(args.config)
+    cfg = load_cfg(args.config, args.set)
+    if args.set:
+        print(f"overrides: {args.set}")
     out_dir = Path(args.output_dir or cfg["output_dir"])
 
     import torch
@@ -126,6 +157,12 @@ def main() -> None:
             mask = [int(lab != -100) for lab in row["labels"]]
         else:
             mask = row.get("completion_mask") or row.get("assistant_masks") or [1] * len(ids)
+        lc = cfg["lora"]
+        print(
+            f"lr={sft_cfg.learning_rate} r={lc['r']} alpha={lc.get('alpha')} "
+            f"dropout={lc.get('dropout')} batch={sft_cfg.per_device_train_batch_size}"
+            f"x{sft_cfg.gradient_accumulation_steps} modules={lc.get('target_modules')}"
+        )
         print("=== full example ===")
         print(tok.decode(ids))
         print("=== tokens with loss ===")
@@ -162,6 +199,7 @@ def main() -> None:
     epochs = cfg.get("epochs", 1) if args.max_steps < 0 else None
     info = {
         "config": cfg,
+        "overrides": args.set,
         "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else platform.processor(),
         "peak_vram_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2)
         if torch.cuda.is_available()
