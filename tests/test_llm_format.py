@@ -85,3 +85,28 @@ def test_align_never_reuses_an_occurrence():
 def test_schema_restricts_labels():
     schema = output_schema()
     assert schema["items"]["properties"]["label"]["enum"] == list(MODEL_LABELS)
+
+
+def test_fuzzy_alignment_recovers_case_whitespace_and_quotes():
+    text = "Contact  John\nSmith at JOHN@EXAMPLE.COM or 'Acme Ltd'."
+    items = [
+        {"label": "GIVENNAME", "text": "John Smith"},  # newline/double space in the source
+        {"label": "EMAIL", "text": "john@example.com"},  # case differs
+        {"label": "SURNAME", "text": '"Smith"'},  # model added quotes
+    ]
+    strict, n_strict = align_spans(text, items, fuzzy=False)
+    assert n_strict == 3 and strict == []
+    drops: list[dict] = []
+    spans, n = align_spans(text, items, drops=drops)
+    got = {(s.label, text[s.start : s.end]) for s in spans}
+    assert ("GIVENNAME", "John\nSmith") in got  # span covers the source text, not the model's copy
+    assert ("EMAIL", "JOHN@EXAMPLE.COM") in got
+    assert n == 1 and drops == [{"label": "SURNAME", "text": '"Smith"', "reason": "not_found"}]
+
+
+def test_drop_reasons():
+    drops: list[dict] = []
+    align_spans(
+        "abc", [{"label": "X", "text": "abc"}, {"label": "EMAIL", "text": " "}], drops=drops
+    )
+    assert [d["reason"] for d in drops] == ["unknown_label", "empty"]

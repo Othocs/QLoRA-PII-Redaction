@@ -106,14 +106,34 @@ def parse_output(raw: str) -> Parsed:
     return Parsed(items, valid_json=False)
 
 
+_STRIP = " \t\n\r\"'`.,;:()[]{}<>"
+
+
+def _loose_pattern(val: str) -> re.Pattern | None:
+    """Case-insensitive pattern for `val` where any whitespace run matches any whitespace."""
+    tokens = val.split()
+    if not tokens:
+        return None
+    return re.compile(r"\s+".join(re.escape(t) for t in tokens), re.IGNORECASE)
+
+
 def align_spans(
-    text: str, items: Sequence[dict], labels: Sequence[str] = MODEL_LABELS, source: str = "llm"
+    text: str,
+    items: Sequence[dict],
+    labels: Sequence[str] = MODEL_LABELS,
+    source: str = "llm",
+    fuzzy: bool = True,
+    drops: list[dict] | None = None,
 ) -> tuple[list[Span], int]:
     """Locate each returned value in `text`, left to right. Returns (spans, n_dropped).
 
     A value is searched from the end of the previous match first; if it isn't there
     (the model listed values out of order), the first occurrence that doesn't overlap
-    an earlier match is used. Values not found verbatim, or with unknown labels, are dropped.
+    an earlier match is used. With `fuzzy`, a value not found verbatim is retried with
+    surrounding quotes/punctuation stripped, ignoring case and treating any whitespace
+    run as equal; the span always covers the source text, never the model's copy.
+    Values still not found, or with unknown labels, are dropped (and appended to
+    `drops` with a reason when given).
     """
     spans: list[Span] = []
     used: list[tuple[int, int]] = []
@@ -122,27 +142,60 @@ def align_spans(
     def free(a: int, b: int) -> bool:
         return all(b <= u0 or a >= u1 for u0, u1 in used)
 
+    def search(find) -> tuple[int, int] | None:
+        """`find(start)` -> (a, b) or None. Prefer from the cursor, else first free match."""
+        hit = find(cursor)
+        if hit and free(*hit):
+            return hit
+        start = 0
+        while (hit := find(start)) is not None:
+            if free(*hit):
+                return hit
+            start = hit[0] + 1
+        return None
+
+    def exact(val: str):
+        def find(start: int):
+            i = text.find(val, start)
+            return (i, i + len(val)) if i != -1 else None
+
+        return find
+
+    def loose(pat: re.Pattern):
+        def find(start: int):
+            m = pat.search(text, start)
+            return (m.start(), m.end()) if m else None
+
+        return find
+
     for it in items:
         val, label = it.get("text", ""), it.get("label", "")
-        if not val or not val.strip() or label not in labels:
+        reason = None
+        if not val or not val.strip():
+            reason = "empty"
+        elif label not in labels:
+            reason = "unknown_label"
+        hit = None
+        if reason is None:
+            hit = search(exact(val))
+            if hit is None and fuzzy:
+                core = val.strip(_STRIP)
+                if core and core != val:
+                    hit = search(exact(core))
+                pat = _loose_pattern(core or val)
+                if hit is None and pat is not None:
+                    hit = search(loose(pat))
+            if hit is None:
+                reason = "not_found"
+        if reason is not None:
             dropped += 1
+            if drops is not None:
+                drops.append({"label": label, "text": val, "reason": reason})
             continue
-        pos = text.find(val, cursor)
-        if pos == -1 or not free(pos, pos + len(val)):
-            pos = -1
-            start = 0
-            while (i := text.find(val, start)) != -1:
-                if free(i, i + len(val)):
-                    pos = i
-                    break
-                start = i + 1
-        if pos == -1:
-            dropped += 1
-            continue
-        end = pos + len(val)
-        spans.append(Span(pos, end, label, val, source))
-        used.append((pos, end))
-        cursor = max(cursor, end)
+        a, b = hit
+        spans.append(Span(a, b, label, text[a:b], source))
+        used.append((a, b))
+        cursor = max(cursor, b)
     return sorted(spans, key=lambda s: (s.start, s.end)), dropped
 
 
@@ -169,12 +222,31 @@ class LLMDetector:
         device: str | None = None,
         max_model_len: int = 4096,
         gpu_memory_utilization: float = 0.85,
+        fuzzy_align: bool = True,
+        log_raw: bool = False,
     ):
         self.name = name
+        self.fuzzy_align, self.log_raw = fuzzy_align, log_raw
+        self.raw_log: list[dict] = []  # one entry per chunk when log_raw
+        self.config = {
+            "base_model": base_model,
+            "adapter": adapter,
+            "max_new_tokens": max_new_tokens,
+            "max_chars": max_chars,
+            "overlap": overlap,
+            "constrained": constrained,
+            "fuzzy_align": fuzzy_align,
+        }
         self.base_model, self.adapter, self.backend = base_model, adapter, backend
         self.max_new_tokens, self.max_chars, self.overlap = max_new_tokens, max_chars, overlap
         self.constrained = constrained
-        self.stats = {"outputs": 0, "valid_json": 0, "items": 0, "dropped_items": 0}
+        self.stats = {
+            "outputs": 0,
+            "valid_json": 0,
+            "truncated": 0,
+            "items": 0,
+            "dropped_items": 0,
+        }
         if backend == "vllm":
             self._init_vllm(max_model_len, gpu_memory_utilization)
         elif backend == "hf":
@@ -239,12 +311,13 @@ class LLMDetector:
             model = PeftModel.from_pretrained(model, self.adapter)
         self.model = model.to(self.device).eval()
 
-    def _generate(self, prompts: list[str]) -> list[str]:
+    def _generate(self, prompts: list[str]) -> list[tuple[str, bool]]:
+        """Returns (text, hit_token_limit) per prompt."""
         if self.backend == "vllm":
             outs = self.llm.generate(
                 prompts, self.sampling, lora_request=self.lora_request, use_tqdm=False
             )
-            return [o.outputs[0].text for o in outs]
+            return [(o.outputs[0].text, o.outputs[0].finish_reason == "length") for o in outs]
         import torch
 
         res = []
@@ -256,7 +329,11 @@ class LLMDetector:
                     **batch, max_new_tokens=self.max_new_tokens, do_sample=False
                 )
             new = gen[:, batch["input_ids"].shape[1] :]
-            res.extend(self.tokenizer.batch_decode(new, skip_special_tokens=True))
+            for row, txt in zip(
+                new, self.tokenizer.batch_decode(new, skip_special_tokens=True), strict=True
+            ):
+                eos = self.tokenizer.eos_token_id
+                res.append((txt, eos not in row.tolist()))
         return res
 
     # -- public API
@@ -268,13 +345,29 @@ class LLMDetector:
                 jobs.append((ti, off, chunk))
         raws = self._generate([prompt_text(self.tokenizer, c) for _, _, c in jobs])
         per_text: list[list[Span]] = [[] for _ in texts]
-        for (ti, off, chunk), raw in zip(jobs, raws, strict=True):
+        for (ti, off, chunk), (raw, truncated) in zip(jobs, raws, strict=True):
             parsed = parse_output(raw)
-            spans, dropped = align_spans(chunk, parsed.items, source=self.name)
+            drops: list[dict] | None = [] if self.log_raw else None
+            spans, dropped = align_spans(
+                chunk, parsed.items, source=self.name, fuzzy=self.fuzzy_align, drops=drops
+            )
             self.stats["outputs"] += 1
             self.stats["valid_json"] += int(parsed.valid_json)
+            self.stats["truncated"] += int(truncated)
             self.stats["items"] += len(parsed.items)
             self.stats["dropped_items"] += dropped
+            if self.log_raw:
+                self.raw_log.append(
+                    {
+                        "text_index": ti,
+                        "offset": off,
+                        "chunk_len": len(chunk),
+                        "raw": raw,
+                        "valid_json": parsed.valid_json,
+                        "truncated": truncated,
+                        "dropped": drops,
+                    }
+                )
             per_text[ti].extend(
                 Span(s.start + off, s.end + off, s.label, source=s.source) for s in spans
             )

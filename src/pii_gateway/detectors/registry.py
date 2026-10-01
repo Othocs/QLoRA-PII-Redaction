@@ -70,6 +70,11 @@ def _llm(with_adapter: bool) -> Callable[..., Detector]:
             backend=kw.get("backend") or "vllm",
             name="lora" if with_adapter else "base_llm",
             gpu_memory_utilization=float(os.environ.get("PII_VLLM_GPU_UTIL", "0.85")),
+            # diagnostics / ablations without code changes
+            max_chars=int(os.environ.get("PII_LLM_MAX_CHARS", "2000")),
+            max_new_tokens=int(os.environ.get("PII_LLM_MAX_NEW_TOKENS", "1024")),
+            fuzzy_align=os.environ.get("PII_LLM_ALIGN", "fuzzy") != "strict",
+            log_raw=os.environ.get("PII_LLM_LOG_RAW", "0") == "1",
         )
 
     return build

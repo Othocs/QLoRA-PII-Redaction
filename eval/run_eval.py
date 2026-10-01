@@ -73,13 +73,16 @@ def run_batched(
     total_s = time.perf_counter() - t0
     preds = {ex.id: spans for ex, spans in zip(examples, outs, strict=True)}
     stats = dict(det.stats) if hasattr(det, "stats") else None
+    raw_log = list(getattr(det, "raw_log", []))
     ms_per_1k = []
     for ex in examples[:latency_sample]:
         t1 = time.perf_counter()
         det.detect(ex.text)
         ms_per_1k.append((time.perf_counter() - t1) * 1e6 / max(1, len(ex.text)))
-    if stats is not None:  # format stats should describe the batched pass only
+    if stats is not None:  # format stats and raw log describe the batched pass only
         det.stats = stats
+    if hasattr(det, "raw_log"):
+        det.raw_log = raw_log
     total_chars = sum(len(ex.text) for ex in examples)
     latency = {
         "p50_ms_per_1k_chars": float(np.percentile(ms_per_1k, 50)) if ms_per_1k else None,
@@ -164,6 +167,12 @@ def main(argv: list[str] | None = None) -> list[Path]:
             else:
                 preds, latency = run_one(det, examples)
             metrics = aggregate(examples, preds)
+            if getattr(det, "log_raw", False):  # LLM diagnostics: raw outputs per chunk
+                with open(out / "runs" / f"{result_name}__{ts_name}.raw.jsonl", "w") as f:
+                    for entry in det.raw_log:
+                        entry["id"] = examples[entry.pop("text_index")].id
+                        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+                det.raw_log = []
             if hasattr(det, "stats"):  # LLM: format reliability
                 st = dict(det.stats)
                 st["valid_json_rate"] = st["valid_json"] / st["outputs"] if st["outputs"] else None
@@ -173,6 +182,7 @@ def main(argv: list[str] | None = None) -> list[Path]:
                 "system": result_name,
                 "detector": sys_name,
                 "adapter": args.adapter,
+                "detector_config": getattr(det, "config", None),
                 "testset": ts_name,
                 "n_examples": len(examples),
                 "limit": args.limit,
