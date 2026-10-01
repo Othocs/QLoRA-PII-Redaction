@@ -18,6 +18,10 @@ SYSTEM_NAMES = {
     "lora": "Your LoRA model",
     "lora_validators": "Your LoRA model + validators",
     "lora_r16_10k_1.7b": "LoRA r16, 10k (Qwen3-1.7B)",
+    "m0_openpii10k": "M0 OpenPII 10k",
+    "m1_clean10k": "M1 cleaned OpenPII 10k",
+    "m2_mix10k": "M2 cleaned OpenPII 5k + Nemotron 5k",
+    "m3_mix20k": "M3 cleaned OpenPII 10k + Nemotron 10k",
 }
 # The adapter shown as "Your LoRA model" in the README table (results are tagged per run).
 README_LORA_TAG = "lora_r16_10k_1.7b"
@@ -70,6 +74,7 @@ def summary_md(res: dict[tuple[str, str], dict]) -> str:
             f"{r['env']['platform']} |"
         )
     lines += ood_tables(res)
+    lines += ablation_table(res)
     return "\n".join(lines) + "\n"
 
 
@@ -117,6 +122,46 @@ def ood_tables(res: dict[tuple[str, str], dict]) -> list[str]:
             per = r["metrics"].get("per_language", {})
             cells = [_pct(per[lang]["leakage_chars"]) if lang in per else "" for lang in langs]
             out.append(f"| {SYSTEM_NAMES.get(system, system)} | " + " | ".join(cells) + " |")
+    return out
+
+
+ABLATION = ["m0_openpii10k", "m1_clean10k", "m2_mix10k", "m3_mix20k"]
+ABLATION_SETS = [
+    ("dev", "OpenPII dev"),
+    ("gretel_dev", "Gretel dev (selection)"),
+    ("test_holdout_regions", "OpenPII IN"),
+    ("openpii_xx", "OpenPII non-EN"),
+    ("nemotron", "Nemotron ¹"),
+    ("tab", "TAB"),
+    ("gretel_en", "Gretel EN"),
+    ("gretel_xx", "Gretel non-EN"),
+]
+
+
+def ablation_table(res: dict[tuple[str, str], dict]) -> list[str]:
+    """Week 3 part B: same model and recipe, different training data."""
+    rows = [m for m in ABLATION if any((m, ts) in res for ts, _ in ABLATION_SETS)]
+    if not rows:
+        return []
+    out = [
+        "",
+        "## Training-data ablation (leakage % / over-redaction %)",
+        "",
+        "Qwen3-1.7B, QLoRA r=16, 1 epoch; only the training data differs. ¹ Nemotron train is "
+        "in M2/M3's training data, so Nemotron test is in-distribution for them.",
+        "",
+        "| Model | " + " | ".join(label for _, label in ABLATION_SETS) + " |",
+        "| --- |" + " ---: |" * len(ABLATION_SETS),
+    ]
+    for m in rows:
+        cells = []
+        for ts, _ in ABLATION_SETS:
+            r = res.get((m, ts))
+            mm = r["metrics"] if r else None
+            cells.append(
+                f"{_pct(mm['leakage_chars'])} / {_pct(mm['over_redaction'])}" if mm else ""
+            )
+        out.append(f"| {SYSTEM_NAMES.get(m, m)} | " + " | ".join(cells) + " |")
     return out
 
 

@@ -1,0 +1,21 @@
+# Week 3 part B, M2 cleaned OpenPII 5k + Nemotron train 5k. Only train_file/output_dir differ from r16_10k_1.7b.yaml.
+base_model: Qwen/Qwen3-1.7B
+train_file: data/processed/train_mix_10k.jsonl
+eval_file: data/processed/dev.jsonl
+eval_limit: 200            # loss on 200 dev examples every eval_steps
+eval_steps: 100
+output_dir: outputs/m2_mix10k
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules: all-linear   # or "attention" for q/k/v/o only
+quantization: nf4              # 4-bit QLoRA, bf16 compute
+learning_rate: 2.0e-4
+epochs: 1
+batch_size: 16
+grad_accum: 1
+max_seq_length: 1536        # longest train example is ~1,040 tokens; never truncate answers
+completion_only_loss: true
+seed: 13
+gpu_price_per_hour: 0.49       # RunPod A40 secure, for run_info.json cost

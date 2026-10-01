@@ -23,6 +23,10 @@ Headline metric: **leakage**, the share of gold PII characters left unmasked (lo
 | Your LoRA model |  | 0.9 | 21.7 |  |  |  |  |
 | Your LoRA model + validators |  |  |  |  |  |  |  |
 | LoRA r16, 10k (Qwen3-1.7B) |  | 0.9 | 21.7 |  |  |  |  |
+| M0 OpenPII 10k |  |  |  |  |  |  |  |
+| M1 cleaned OpenPII 10k |  |  |  |  |  |  |  |
+| M2 cleaned OpenPII 5k + Nemotron 5k |  |  |  |  |  |  |  |
+| M3 cleaned OpenPII 10k + Nemotron 10k |  |  |  |  |  |  |  |
 <!-- RESULTS_TABLE:END -->
 
 ### First LoRA run (week 2, OpenPII dev, in-distribution)

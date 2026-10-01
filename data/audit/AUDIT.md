@@ -82,6 +82,25 @@ The rubric separates **errors** from **policy**:
   - Drop training examples whose AGE or CREDITCARDNUMBER spans follow money or percent cues.
   - Compare both as an ablation.
 
+## Cleaning rules (week 3, part B)
+
+`data/clean_labels.py` turns the audit's noise patterns into four context rules:
+- `money_as_card`: a CREDITCARDNUMBER right after a currency sign or an amount word.
+- `age_not_a_person`: an AGE that's a percentage, duration, range or group threshold.
+- `group_attribute`: GENDER or SEX describing a group.
+- `reference_not_id`: a number followed by "regulations", "compliance", "entries" and the like.
+
+A training example is **dropped**, never relabelled, if any of its spans is flagged.
+
+| Check | Result |
+| --- | --- |
+| Against the 1,490 audited spans | precision **1.00** (61/61); recall 0.67 on the noisy AGE / CREDITCARDNUMBER / GENDER / SEX / TAXNUM spans |
+| 40 random flags from unseen training docs, before tightening | 36–37 of 40 correct |
+| 40 fresh random flags after tightening | 40 of 40 correct |
+| Effect on `train_50k` | 6,034 examples dropped (12%), 43,966 kept |
+
+The audit sample was used to write the rules, so its precision is optimistic. The unseen samples are the honest check. Two fixes came from them: "fee payable via ⟦card⟧" is no longer flagged, and "aged" only counts as a group cue after a plural noun. Both cases are in `tests/test_clean_labels.py`.
+
 ## Results
 
 <!-- RESULTS:BEGIN -->

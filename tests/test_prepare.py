@@ -101,3 +101,17 @@ def test_build_splits(cfg):
 def test_real_fixture_reads():
     exs = list(read_examples(FIX / "openpii_sample.jsonl"))
     assert len(exs) == 20
+
+
+def test_training_windows_never_cut_a_span():
+    from prepare_train_mix import windows
+
+    text = " ".join(f"w{i}" for i in range(300)) + " Ann Lee"
+    i = text.index("Ann Lee")
+    ex = Example("d", text, [Span(i, i + 7, "GIVENNAME")])
+    ws = windows(ex, max_chars=200)
+    assert all(len(w.text) <= 200 for w in ws)
+    for w in ws:
+        for s in w.spans:
+            assert w.text[s.start : s.end] == "Ann Lee"
+    assert sum(len(w.spans) for w in ws) == 1  # the span lands in exactly one window

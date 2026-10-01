@@ -37,6 +37,8 @@ TESTSETS: dict[str, str] = {
     "gretel_en": "data/processed/gretel_en.jsonl",
     "gretel_xx": "data/processed/gretel_xx.jsonl",
     "openpii_xx": "data/processed/openpii_xx.jsonl",
+    # out-of-distribution *dev* set for model selection (Gretel train split)
+    "gretel_dev": "data/processed/gretel_dev.jsonl",
     "fixture": "tests/fixtures/openpii_sample.jsonl",
 }
 

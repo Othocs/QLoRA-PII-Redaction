@@ -1,0 +1,51 @@
+{
+  "clean_openpii": {
+    "pool": 50000,
+    "kept": 43966,
+    "dropped_examples": 6034,
+    "flags_by_rule": {
+      "age_not_a_person": 4140,
+      "money_as_card": 2561,
+      "group_attribute": 511,
+      "reference_not_id": 184
+    },
+    "train_clean_5k": 5000,
+    "train_clean_10k": 10000
+  },
+  "nemotron_train": {
+    "rows": 100000,
+    "docs_used": 18077,
+    "windows": 23013,
+    "docs_unnameable_pii": 81923,
+    "windows_without_pii": 1090,
+    "top_blocking_labels": {
+      "customer_id": 15048,
+      "biometric_identifier": 9692,
+      "employee_id": 9363,
+      "user_name": 9076,
+      "account_number": 8883,
+      "vehicle_identifier": 7990,
+      "ipv4": 7529,
+      "password": 7161,
+      "coordinate": 7089,
+      "bank_routing_number": 6456
+    }
+  },
+  "train_mix_10k": {
+    "nemotron_train": 5000,
+    "openpii": 5000
+  },
+  "train_mix_20k": {
+    "openpii": 10000,
+    "nemotron_train": 10000
+  },
+  "gretel_dev": {
+    "en": 500,
+    "de": 87,
+    "fr": 88,
+    "it": 88,
+    "nl": 74,
+    "es": 80,
+    "sv": 83
+  }
+}

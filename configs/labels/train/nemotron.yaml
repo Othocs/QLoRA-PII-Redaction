@@ -1,0 +1,27 @@
+# Nemotron-PII label -> our label, for TRAINING (week 3, part B).
+# Same as configs/labels/eval/nemotron.yaml, except street_address -> STREET: the model
+# must answer with one of its own labels, and there is no ADDRESS label.
+map:
+  first_name: GIVENNAME
+  last_name: SURNAME
+  date: DATE
+  date_of_birth: DATE
+  date_time: DATE
+  email: EMAIL
+  phone_number: TELEPHONENUM
+  fax_number: TELEPHONENUM
+  street_address: STREET
+  city: CITY
+  postcode: ZIPCODE
+  ssn: SOCIALNUM
+  tax_id: TAXNUM
+  credit_debit_card: CREDITCARDNUMBER
+  certificate_license_number: DRIVERLICENSENUM
+  age: AGE
+  gender: GENDER
+# Labels that are not personal data in our scope: the model is trained to leave them.
+not_personal: [company_name, occupation, employment_status, education_level, language,
+               country, state, county, time, url]
+# Any other label (account_number, customer_id, medical_record_number, user_name,
+# password, ipv4, ...) is personal data our schema cannot name; documents with one are
+# not used for training, so the model never learns to leave such values unmasked.
