@@ -58,6 +58,24 @@ make eval      # Presidio + both GLiNER-PII models on 200 dev examples (CPU)
 make eval SYSTEMS=openmed TESTSETS=dev,test_id,test_holdout_regions EVAL_LIMIT=
 ```
 
+## Training and LLM evaluation (GPU)
+
+Training and vLLM evaluation run on a rented GPU (RunPod), never on a laptop. Pods clone this private repo over `ssh -A` (agent forwarding), so no credential is copied to the pod:
+
+```bash
+ssh -A root@<pod-ip> -p <port> 'bash -s' < scripts/pod_setup.sh
+```
+
+The setup script clones the repo, installs uv and the `data`, `train` and `llm` extras, and runs `make data`. Then, on the pod:
+
+```bash
+uv run --no-sync python training/train_lora.py configs/train/r16_10k_1.7b.yaml
+ADAPTER=outputs/r16_10k_1.7b TAG=lora_r16_10k_1.7b bash scripts/pod_eval.sh
+```
+
+- **Training:** QLoRA (4-bit NF4 base, bf16 compute) with TRL's `SFTTrainer`. Loss is computed on the JSON answer only. Each run writes `run_info.json` with the GPU, peak VRAM, wall time, tokens/s, trainable parameters, adapter size and cost.
+- **Evaluation:** vLLM with JSON-schema-constrained decoding, so every output parses. The valid-JSON rate is still recorded in each result file.
+
 ## Data
 
 **Training data:** [Ai4Privacy OpenPII 1M](https://huggingface.co/datasets/ai4privacy/pii-masking-openpii-1m) (CC-BY-4.0, credit "Ai4Privacy / Ai Suisse SA"), English rows only.
