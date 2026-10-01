@@ -18,6 +18,7 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 VERDICTS = {"ok", "wrong_label", "not_pii", "bad_boundary"}
+TAGS = ("event_date", "place", "injected")
 BEGIN, END = "<!-- RESULTS:BEGIN -->", "<!-- RESULTS:END -->"
 
 
@@ -33,6 +34,7 @@ def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
 
 def score() -> str:
     per_label: dict[str, Counter] = defaultdict(Counter)
+    tags: dict[str, Counter] = defaultdict(Counter)  # note tag -> label counts
     unknown = Counter()
     with open(HERE / "audit_spans.csv", newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -43,6 +45,9 @@ def score() -> str:
                 unknown[v] += 1
                 continue
             per_label[row["label"]][v] += 1
+            tag = (row.get("note") or "").removeprefix("[llm]").strip().split(":")[0].split(" ")[0]
+            if v == "ok" and tag in TAGS:
+                tags[tag][row["label"]] += 1
 
     missed: Counter = Counter()
     docs_reviewed = 0
@@ -81,6 +86,12 @@ def score() -> str:
         )
     out = [f"Spans reviewed: {n}. Documents with a missed-PII or note entry: {docs_reviewed}.", ""]
     out += lines if n else ["No verdicts filled in yet."]
+    if tags:
+        out += ["", "Spans judged correct by the dataset's convention but tagged in notes:"]
+        for tag in TAGS:
+            if tags[tag]:
+                detail = ", ".join(f"{lab} {c}" for lab, c in tags[tag].most_common())
+                out.append(f"- `{tag}`: {sum(tags[tag].values())} ({detail})")
     if missed:
         out += [
             "",
