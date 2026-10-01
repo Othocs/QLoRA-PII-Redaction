@@ -74,7 +74,8 @@ def readme_table(res: dict[tuple[str, str], dict]) -> str:
         # Prefer the in-distribution test set; CPU numbers only (GPU runs go in their own table).
         for ts in ("test_id", "dev"):
             r = res.get((system, ts))
-            if r and r["env"]["device"] in ("cpu", "default"):
+            gpu_only = r and r.get("detector") in ("base_llm", "lora")  # vLLM runs are GPU
+            if r and not gpu_only and r["env"]["device"] in ("cpu", "default"):
                 return _f(r["latency"]["p95_ms_per_1k_chars"], 0)
         return ""
 

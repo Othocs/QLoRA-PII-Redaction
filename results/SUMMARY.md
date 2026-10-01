@@ -5,6 +5,8 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 
 | System | Test set | N | Leakage chars % | Docs leaking % | Over-redaction % | Strict F1 | Partial F1 | p50 ms | p95 ms | Platform |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Base LLM, zero-shot | dev | 2000 | 45.2 | 93.0 | 3.3 | 0.482 | 0.706 | 2020 | 5361 | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | dev | 200 | 11.7 | 57.0 | 11.5 | 0.641 | 0.897 | 321 | 725 | Darwin arm64 |
 | GLiNER-PII (NVIDIA) | dev | 200 | 4.6 | 51.5 | 6.9 | 0.701 | 0.953 | 2179 | 7763 | Darwin arm64 |
+| lora_r16_10k_1.7b | dev | 2000 | 0.7 | 13.6 | 0.4 | 0.938 | 0.994 | 4717 | 7909 | Linux x86_64 |
 | Presidio | dev | 200 | 33.6 | 89.0 | 22.4 | 0.232 | 0.721 | 42 | 65 | Darwin arm64 |

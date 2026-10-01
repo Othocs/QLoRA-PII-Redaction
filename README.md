@@ -2,7 +2,7 @@
 
 A self-hosted gateway that finds personal data in English customer-support text and masks or pseudonymises it before the text is logged, analysed or sent to an external LLM. The detector is a small open LLM fine-tuned with QLoRA, backed by deterministic validators. It's benchmarked honestly against Presidio, GLiNER-PII and OpenMed's privacy filter.
 
-> **Status: week 1 of 6.** Data splits, audit tooling, metrics and baseline evaluation work. The LoRA model, gateway, demo and Docker images are stubs (see [Roadmap](#roadmap)).
+> **Status: week 2 of 6.** Data splits, the label audit, metrics, baselines and the first QLoRA model are done. The gateway, demo and Docker images are stubs (see [Roadmap](#roadmap)).
 
 ## Why a small fine-tuned model
 
@@ -23,6 +23,30 @@ Headline metric: **leakage**, the share of gold PII characters left unmasked (lo
 | Your LoRA model |  |  |  |  |  |  |  |
 | Your LoRA model + validators |  |  |  |  |  |  |  |
 <!-- RESULTS_TABLE:END -->
+
+### First LoRA run (week 2, OpenPII dev, in-distribution)
+
+All five systems below are scored on the same first 200 dev examples. The two LLM runs were also scored on all 2,000 dev examples, with near-identical results: LoRA leakage 0.74%, strict F1 0.938; zero-shot leakage 45.2%.
+
+| System | Leakage (%) | Docs leaking (%) | Over-redaction (%) | Strict F1 | Partial F1 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Presidio | 33.63 | 89.0 | 22.36 | 0.232 | 0.721 |
+| GLiNER-PII (Knowledgator) | 11.67 | 57.0 | 11.53 | 0.641 | 0.897 |
+| GLiNER-PII (NVIDIA) | 4.64 | 51.5 | 6.92 | 0.701 | 0.953 |
+| Qwen3-1.7B, zero-shot | 46.44 | 92.0 | 4.58 | 0.482 | 0.697 |
+| **Qwen3-1.7B + LoRA (r=16, 10k examples)** | **0.67** | **13.0** | **0.52** | **0.941** | **0.994** |
+
+**Training:**
+- Hardware and cost: 55 minutes on an A40, 11.3 GB peak VRAM, **$0.45**.
+- Size: 17.4M trainable parameters (1.0%), and a 33 MB adapter.
+- Loss: dev loss fell from 0.019 to 0.008 over training.
+- Output reliability: valid JSON on 100% of 2,000 outputs, with 37 of 15,255 returned values not found in the text and dropped.
+
+**How to read this:**
+- It's **in-distribution**. The model trained on the same generator it's tested on, so a big win is expected and proves little on its own. The headline comparison is the held-out region, Nemotron-PII and support-desk tests (weeks 3–5).
+- A strict F1 of 0.94 sits right at the label-noise ceiling. The [audit](data/audit/AUDIT.md) found 8.9% of gold spans wrong, mostly AGE and CREDITCARDNUMBER, so the model has learned those mistakes too.
+- **Latency is the LLM's weak point.** p50 is about 4.7 s per 1,000 characters for a single request on an A40 (batched throughput: 10.8k chars/s). GLiNER takes 0.3–2 s on a laptop CPU. Week 4 measures this properly.
+- Zero-shot reached only 97.2% valid JSON despite constrained decoding, probably from long repetitive outputs hitting the 1,024-token limit. This is to be checked.
 
 Caveats:
 - OpenMed's privacy filter was trained partly on OpenPII, so its OpenPII score is a ceiling, not a fair fight.
@@ -90,7 +114,7 @@ ADAPTER=outputs/r16_10k_1.7b TAG=lora_r16_10k_1.7b bash scripts/pod_eval.sh
 | `test_holdout_regions` | 2,000 | validation, **IN only** (never in training) |
 
 - **Deduplication:** dev and test items that are near-duplicates of the training pool are dropped. The check is MinHash on masked text (PII replaced by `[LABEL]`) at 5-gram Jaccard ≥ 0.8, and only about 0.2% were dropped. The generator paraphrases more than it reuses templates; see [`data/audit/AUDIT.md`](data/audit/AUDIT.md).
-- **Audit:** 200 training documents are hand-checked for label noise ([`data/audit/`](data/audit/)).
+- **Audit:** all 1,490 gold spans in 200 training documents were reviewed for label noise by an LLM (Claude), with a 50-row human spot-check pending. 8.9% are wrong, concentrated in AGE, CREDITCARDNUMBER, GENDER and TAXNUM ([`data/audit/AUDIT.md`](data/audit/AUDIT.md)).
 - **Support-desk test set:** 300 hand-written English support messages, including business keys that must *not* be masked ([`data/support_desk/`](data/support_desk/)). It's in progress.
 - **Nemotron-PII:** 3,000 records from the test split, with labels mapped to ours. This arrives in week 3.
 
