@@ -19,7 +19,14 @@ from collections import Counter
 from pathlib import Path
 
 import yaml
-from prepare_openpii import convert_row, iter_raw
+from prepare_openpii import (
+    _minhash,
+    convert_row,
+    iter_raw,
+    mask_text,
+    stratified_order,
+    take_deduped,
+)
 
 from pii_gateway.spans import Example, Span, validate_spans, write_examples
 
@@ -90,7 +97,8 @@ def build_nemotron(cfg: dict, rng: random.Random) -> dict[str, list[Example]]:
             "region": r["locale"],
             "domain": r["domain"],
         }
-        ex = make_example(f"nemotron-{r['uid']}", r["text"], raw, lmap, meta)
+        # uid is shared by a document's "us" and "intl" versions: uid + locale is the key
+        ex = make_example(f"nemotron-{r['uid']}-{r['locale']}", r["text"], raw, lmap, meta)
         if ex is None:
             dropped += 1
         else:
@@ -158,11 +166,39 @@ def build_openpii_xx(cfg: dict, rng: random.Random) -> dict[str, list[Example]]:
     return {"openpii_xx": out}, {}
 
 
+def build_val_in_region(cfg: dict, rng: random.Random) -> dict[str, list[Example]]:
+    """HPO plan val_ood: 1,000 OpenPII validation docs from the held-out region (IN),
+    disjoint from test_holdout_regions and near-duplicate-free against train_50k."""
+    from datasketch import MinHashLSH
+
+    from pii_gateway.spans import read_examples
+
+    sub = cfg["val_in_region"]
+    processed = Path(cfg["processed_dir"])
+    test_ids = {ex.id for ex in read_examples(processed / "test_holdout_regions.jsonl")}
+    pool = [
+        ex
+        for ex in read_examples(processed / "openpii_en_validation.jsonl")
+        if ex.meta.get("region") in sub["regions"] and ex.id not in test_ids
+    ]
+    mh = {"num_perm": 128, "threshold": 0.8, "ngram": 5}
+    lsh = MinHashLSH(threshold=mh["threshold"], num_perm=mh["num_perm"])
+    for ex in read_examples(processed / "train_50k.jsonl"):
+        lsh.insert(ex.id, _minhash(mask_text(ex), mh["num_perm"], mh["ngram"]))
+    order = stratified_order(pool, cfg["seed"] + 7)
+    got, dropped = take_deduped(order, sub["n"], lsh, set(test_ids), mh)
+    for ex in got:
+        ex.meta["language"] = "en"
+    print(f"val_in_region: {len(got)} kept, {dropped} near-duplicates dropped", file=sys.stderr)
+    return {"val_in_region": got}, {"val_in_region": 0}
+
+
 BUILDERS = {
     "nemotron": build_nemotron,
     "tab": build_tab,
     "gretel": build_gretel,
     "openpii_xx": build_openpii_xx,
+    "val_in_region": build_val_in_region,
 }
 
 

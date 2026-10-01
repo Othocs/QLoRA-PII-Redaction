@@ -30,7 +30,12 @@ TESTSETS: dict[str, str] = {
     "dev": "data/processed/dev.jsonl",
     "test_id": "data/processed/test_id.jsonl",
     "test_holdout_regions": "data/processed/test_holdout_regions.jsonl",
-    "support_desk": "data/support_desk/support_desk.jsonl",
+    "support_desk": "data/support_desk/support_desk_300.jsonl",
+    # HPO plan three-tier sets
+    "support_desk_300": "data/support_desk/support_desk_300.jsonl",  # test_final
+    "support_desk_val": "data/support_desk/support_desk_val.jsonl",  # val_ood
+    "val_in_region": "data/processed/val_in_region.jsonl",  # val_ood
+    "nemotron_dev": "data/processed/nemotron_dev.jsonl",  # val_in_dist
     # out-of-distribution sets (data/prepare_eval_sets.py)
     "nemotron": "data/processed/nemotron.jsonl",
     "tab": "data/processed/tab.jsonl",
@@ -57,12 +62,29 @@ def peak_rss_mb() -> float:
     return r / 2**20 if sys.platform == "darwin" else r / 2**10  # bytes on macOS, KiB on Linux
 
 
-def load_testset(name_or_path: str, limit: int | None) -> tuple[str, list[Example]]:
+# Labels the LLM never predicts: the gateway's validators cover them (week 4). Model-only
+# scoring treats them as out of scope; --gateway-labels keeps them as gold.
+VALIDATOR_ONLY = {"IBAN", "IPADDRESS"}
+
+
+def load_testset(
+    name_or_path: str, limit: int | None, gateway_labels: bool = False
+) -> tuple[str, list[Example]]:
     path = Path(TESTSETS.get(name_or_path, name_or_path))
     name = name_or_path if name_or_path in TESTSETS else path.stem
     if not path.exists():
         raise FileNotFoundError(f"test set {name!r} not found at {path} (run `make data`?)")
-    return name, list(read_examples(path, limit))
+    examples = list(read_examples(path, limit))
+    dup = len(examples) - len({ex.id for ex in examples})
+    if dup:  # predictions are keyed by id: a collision silently mis-scores both documents
+        raise ValueError(f"test set {name!r} has {dup} duplicate ids")
+    if not gateway_labels:
+        for ex in examples:
+            ex.spans = [
+                Span(s.start, s.end, "IGNORE", s.text) if s.label in VALIDATOR_ONLY else s
+                for s in ex.spans
+            ]
+    return name, examples
 
 
 def run_batched(
@@ -143,11 +165,20 @@ def main(argv: list[str] | None = None) -> list[Path]:
         "--tag", default=None, help="name results by this tag instead of the system name"
     )
     ap.add_argument("--latency-sample", type=int, default=50)
+    ap.add_argument(
+        "--gateway-labels",
+        action="store_true",
+        help="score IBAN/IPADDRESS gold too (default: ignored; validators cover them)",
+    )
     args = ap.parse_args(argv)
 
     out = Path(args.out)
     (out / "runs").mkdir(parents=True, exist_ok=True)
-    testsets = [load_testset(t.strip(), args.limit) for t in args.testsets.split(",") if t.strip()]
+    testsets = [
+        load_testset(t.strip(), args.limit, args.gateway_labels)
+        for t in args.testsets.split(",")
+        if t.strip()
+    ]
     written = []
     for sys_name in [s.strip() for s in args.systems.split(",") if s.strip()]:
         opts = {

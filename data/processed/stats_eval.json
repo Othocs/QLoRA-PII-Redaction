@@ -121,5 +121,34 @@
       "SOCIALNUM": 514,
       "PASSPORTNUM": 446
     }
+  },
+  "val_in_region": {
+    "rows": 1000,
+    "dropped_bad_offsets": 0,
+    "chars": 349658,
+    "per_language": {
+      "en": 1000
+    },
+    "spans_per_label": {
+      "GIVENNAME": 930,
+      "DATE": 917,
+      "SURNAME": 766,
+      "EMAIL": 549,
+      "CITY": 537,
+      "TITLE": 525,
+      "TELEPHONENUM": 399,
+      "AGE": 373,
+      "STREET": 366,
+      "BUILDINGNUM": 347,
+      "ZIPCODE": 292,
+      "IDCARDNUM": 268,
+      "CREDITCARDNUMBER": 227,
+      "GENDER": 216,
+      "DRIVERLICENSENUM": 201,
+      "TAXNUM": 181,
+      "SOCIALNUM": 163,
+      "PASSPORTNUM": 161,
+      "SEX": 144
+    }
   }
 }

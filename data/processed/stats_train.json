@@ -47,5 +47,36 @@
     "nl": 74,
     "es": 80,
     "sv": 83
+  },
+  "gretel_train": {
+    "english_rows": 25948,
+    "docs_used": 18142,
+    "windows": 30075,
+    "docs_unnameable_pii": 6714,
+    "docs_in_gretel_dev": 500,
+    "docs_placeholder_name": 584,
+    "docs_bad_offsets": 8,
+    "windows_without_pii": 3428,
+    "top_blocking_labels": {
+      "swift_bic_code": 742,
+      "customer_id": 680,
+      "employee_id": 650,
+      "bban": 625,
+      "ipv4": 613,
+      "bank_routing_number": 592,
+      "iban": 581,
+      "account_pin": 572,
+      "credit_card_security_code": 541,
+      "ipv6": 511
+    }
+  },
+  "train_mix_30k": {
+    "nemotron_train": 10000,
+    "gretel_train": 10000,
+    "openpii": 10000
+  },
+  "nemotron_dev": {
+    "rows": 1000,
+    "excluded_training_docs": 8040
   }
 }
