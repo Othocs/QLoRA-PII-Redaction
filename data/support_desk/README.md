@@ -1,49 +1,39 @@
-# Support-desk test set (English)
+# Support-desk sets (English)
 
-This is the test set closest to production: 300 short English support messages (chats, emails and agent notes) written by hand. Every value is fake. **Never paste real customer text here.**
+These sets are the closest thing we have to production text: short English support messages (chats, emails, agent notes) with clearly fake values only. **Never paste real customer text here.**
 
-Five seed messages are in `support_desk.jsonl`, and the week 1 target is 100. It's scored as the `support_desk` test set in `eval/run_eval.py`.
+| File | Messages | PII spans | Role (HPO plan) |
+| --- | ---: | ---: | --- |
+| `support_desk_val.jsonl` | 100 | 205 | `val_ood`: model selection from phase 2 on |
+| `support_desk_300.jsonl` | 300 | 715 | `test_final`: touched once, in phase 4 |
+
+**How they were made.** Claude drafted all 395 new messages; the 5 original hand-written seeds are in `support_desk_300` as `sd-0001` to `sd-0005`. The messages were then split 100 / 295 by a seeded shuffle. A human spot-check of 50 messages (`spotcheck_50.csv`: 30 val, 20 test) is pending. Until it's done, report these sets as "LLM-written and LLM-labelled".
+
+**Coverage (400 messages):**
+- Channels: 52% chat, 26% email, 22% agent notes (more chat than the 40/40/20 target).
+- About 30% have no PII at all, to measure over-redaction.
+- About 30% contain business keys that must be kept.
+- 16 contain a full card number or IBAN (fewer than the ~10% target).
+- Conventions are mostly US and UK, with some Canadian and Indian.
+- Difficult cases include typos, lowercase names, informal tone, short non-English phrases, spelled-out emails, phone numbers written as words, email headers and forwarded threads.
 
 ## Format
 
-There is one JSON object per line (see `schema.json`). When writing, give spans as `{"label", "text"}` in order of appearance. Then run:
+There is one JSON object per line: `id`, `text`, `spans` (`label`, `text`, `start`, `end`), and `meta` (`channel`, `keep`, `note`). When writing, give spans as `{"label", "text"}` in order of appearance, then run:
 
 ```bash
-uv run python data/support_desk/check_support_desk.py --fill
+uv run python data/support_desk/check_support_desk.py --path <file> --fill
 ```
 
-It fills in `start`/`end` and checks the file. `meta.keep` lists strings that look like identifiers but must **not** be masked.
+`--fill` finds each value **as a whole word**, so a house number "9" is never matched inside "ORD-51290". The checker then validates labels, offsets, word boundaries, overlaps, and that every `meta.keep` string is present and unlabelled.
 
-## What counts as PII
+## Labelling conventions
 
-Use our labels: the 19 OpenPII labels, plus `IBAN` and `IPADDRESS`.
-
-- **Names:** `GIVENNAME` and `SURNAME` are separate spans; middle names count as GIVENNAME. `TITLE` is only an honorific (Mr, Ms, Dr). Label a name even when it's lowercase or misspelt.
-- **Contact:** `EMAIL` and `TELEPHONENUM`. Write phone numbers the way customers do: spaced, dotted, with or without +44/+1, and occasionally as words.
-- **Address:** `BUILDINGNUM`, `STREET`, `CITY` and `ZIPCODE`. States, counties and countries are **not** labelled; there's no label for them, and alone they aren't identifying.
-- **Identifiers:** `IDCARDNUM`, `PASSPORTNUM`, `DRIVERLICENSENUM`, `SOCIALNUM`, `TAXNUM`, `CREDITCARDNUMBER` (the full number only), `IBAN` and `IPADDRESS`.
-- **Personal attributes:** `AGE`, `SEX`, `GENDER`, and `DATE` for birthdates and other dates tied to the person.
-
-## What must stay (put these in `meta.keep`)
-
-- Order numbers, ticket IDs, invoice numbers, SKUs and product codes (`#ORD-88213`, `T-40912`, `BX-2210-M`).
-- A year on its own ("customer since 2019").
-- The last four digits of a card on their own ("card ending 1111").
-- Company, product and shop names.
-
-## Mix to aim for (300 total)
-
-- About 40% chat (typos, lowercase, no punctuation), 40% email, 20% agent notes.
-- US and UK conventions roughly equally, plus some Canadian and Indian ones.
-- At least 60 messages with a business key that must be kept, and at least 30 with an IBAN or card number.
-- At least 30 messages with **no** PII at all, to measure over-redaction.
-
-An LLM may draft messages, but check every label by hand.
-
-## Safe fake values
-
-- **Phone numbers:** US 555-01xx numbers and UK Ofcom drama ranges (07700 900xxx, 020 7946 0xxx).
-- **Email domains:** example.com, example.org and example.net.
-- **IP addresses:** the documentation ranges 192.0.2.0/24, 198.51.100.0/24 and 203.0.113.0/24.
-- **Test cards:** 4111 1111 1111 1111 and 5555 5555 5555 4444.
-- **Example IBAN:** GB82 WEST 1234 5698 7654 32.
+- **Every person's name**, including support staff, third parties and family members. `GIVENNAME` and `SURNAME` are separate spans. A lone initial before a surname is `GIVENNAME` ("W. Ashworth"); a surname initial after a first name is not labelled ("Marcus T."). `TITLE` covers honorifics (Mr, Mrs, Ms, Mx, Dr, Prof., Sir).
+- **The person's own address parts:** `BUILDINGNUM`, `STREET` (a named house counts as the street line), `CITY` and `ZIPCODE`. Not labelled: flat, unit, room and floor numbers, localities, states and countries, and the addresses of stores, warehouses and companies.
+- **Dates and ages:**
+    - `DATE` covers dates tied to the person: date of birth, their appointment, a delivery to them, work done at their home.
+    - Not labelled: order dates, statement and letter dates, relative dates, and a year on its own (including a birth year).
+    - `AGE` is a person's age; product age ratings and "18th" are not ages.
+- **Kept (`meta.keep`), never labelled:** order, invoice, ticket, tracking, SKU, serial and gift-card numbers, including 16-digit numbers that look like cards; card last-four digits; promo codes; company names.
+- **IBAN and IPADDRESS are labelled**, but model-only scoring treats them as `IGNORE` (`eval/run_eval.py`; `--gateway-labels` scores them), because the week 4 validators cover them.
