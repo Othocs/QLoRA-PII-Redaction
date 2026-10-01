@@ -1,0 +1,15 @@
+# Gretel synthetic_pii_finance_multilingual label -> ours. Unlisted labels default to
+# IGNORE (company, time, iban/bban, swift, ip, ids, passwords, api keys, ...).
+name: NAME
+first_name: GIVENNAME
+last_name: SURNAME
+date: DATE
+date_of_birth: DATE
+date_time: DATE
+street_address: ADDRESS
+email: EMAIL
+phone_number: TELEPHONENUM
+ssn: SOCIALNUM
+driver_license_number: DRIVERLICENSENUM
+passport_number: PASSPORTNUM
+credit_card_number: CREDITCARDNUMBER

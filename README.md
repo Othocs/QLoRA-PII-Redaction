@@ -22,6 +22,7 @@ Headline metric: **leakage**, the share of gold PII characters left unmasked (lo
 | Base LLM, zero-shot |  |  |  |  |  |  |  |
 | Your LoRA model |  |  |  |  |  |  |  |
 | Your LoRA model + validators |  |  |  |  |  |  |  |
+| LoRA r16, 10k (Qwen3-1.7B) |  |  |  |  |  |  |  |
 <!-- RESULTS_TABLE:END -->
 
 ### First LoRA run (week 2, OpenPII dev, in-distribution)

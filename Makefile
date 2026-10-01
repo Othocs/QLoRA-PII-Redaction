@@ -5,7 +5,7 @@ SYSTEMS ?= presidio,gliner_knowledgator,gliner_nvidia
 TESTSETS ?= dev
 EXTRAS ?= --extra data --extra presidio --extra presidio-lg --extra gliner --extra serve
 
-.PHONY: help setup data audit audit-score eval summary support-desk test test-all lint format train serve demo
+.PHONY: help setup data eval-data audit audit-score eval summary support-desk test test-all lint format train serve demo
 
 help:
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-13s %s\n", $$1, $$2}'
@@ -15,6 +15,9 @@ setup: ## install dependencies (uv)
 
 data: ## download OpenPII, keep English, build splits + MinHash dedup
 	$(UV) run python data/prepare_openpii.py all
+
+eval-data: ## build the out-of-distribution test sets (Nemotron, TAB, Gretel, OpenPII non-EN)
+	$(UV) run python data/prepare_eval_sets.py
 
 audit: ## sample 200 training docs into review sheets (data/audit/)
 	$(UV) run python data/audit/sample_audit.py

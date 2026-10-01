@@ -109,3 +109,36 @@ def test_duplicate_predictions_dont_double_count():
     assert d.n_pred == 3
     assert d.strict_tp == 3
     assert d.by_label["GIVENNAME"]["n_pred"] == 1
+
+
+def test_ignore_regions():
+    # "Acme Ltd" (0..8) is out of scope: not a leak if missed, not over-redaction if masked.
+    text = "Acme Ltd hired Ann Lee."
+    gold = [Span(0, 8, "IGNORE"), Span(15, 18, "GIVENNAME"), Span(19, 22, "SURNAME")]
+    missed = aggregate([Example("a", text, gold)], {"a": [Span(15, 18, "GIVENNAME")]})
+    assert missed["n_gold_spans"] == 2
+    assert missed["leakage_chars"] == pytest.approx(3 / 6)
+    masked = aggregate(
+        [Example("a", text, gold)],
+        {"a": [Span(0, 8, "OTHER"), Span(15, 18, "GIVENNAME"), Span(19, 22, "SURNAME")]},
+    )
+    assert masked["leakage_chars"] == 0
+    assert masked["over_redaction"] == 0
+    assert masked["n_pred_spans"] == 2  # the prediction inside the ignored region is dropped
+    assert masked["strict"]["f1"] == 1
+    # a prediction straddling an ignored region and plain text still counts, minus the ignored part
+    spill = aggregate([Example("a", text, gold)], {"a": [Span(0, 14, "OTHER")]})
+    assert spill["over_redaction"] == 1.0  # " hired" is over-redacted; "Acme Ltd" is not counted
+    assert spill["n_pred_spans"] == 1
+
+
+def test_groups_by_every_present_key():
+    exs = [
+        Example("fr", TEXT, GOLD, {"language": "fr"}),
+        Example("de", TEXT, GOLD, {"language": "de", "region": "DE"}),
+    ]
+    r = aggregate(exs, {"fr": GOLD, "de": []})
+    assert r["per_language"]["fr"]["leakage_chars"] == 0
+    assert r["per_language"]["de"]["leakage_chars"] == 1
+    assert list(r["per_region"]) == ["DE"]  # only examples that have the key
+    assert "partial" in r["per_language"]["fr"]

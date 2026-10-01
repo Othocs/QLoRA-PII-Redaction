@@ -1,0 +1,20 @@
+# Nemotron-PII label -> ours. NAME/ADDRESS-style buckets count for leakage and partial
+# F1 only. IGNORE = outside this model's scope: not a leak if missed, not
+# over-redaction if masked. Unlisted labels default to IGNORE.
+first_name: GIVENNAME
+last_name: SURNAME
+date: DATE
+date_of_birth: DATE
+date_time: DATE
+email: EMAIL
+phone_number: TELEPHONENUM
+fax_number: TELEPHONENUM
+street_address: ADDRESS
+city: CITY
+postcode: ZIPCODE
+ssn: SOCIALNUM
+tax_id: TAXNUM
+credit_debit_card: CREDITCARDNUMBER
+certificate_license_number: DRIVERLICENSENUM
+age: AGE
+gender: GENDER

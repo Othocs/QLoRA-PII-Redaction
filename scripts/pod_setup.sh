@@ -28,4 +28,5 @@ export UV_NO_SYNC=1  # later `uv run`s must not re-sync without the extras
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 uv run python -c "import torch, vllm, trl, peft, bitsandbytes; print('torch', torch.__version__, 'cuda', torch.cuda.is_available(), '| vllm', vllm.__version__, '| trl', trl.__version__)"
 [ -f data/processed/train_10k.jsonl ] || make data
+[ -f data/processed/nemotron.jsonl ] || uv run python data/prepare_eval_sets.py
 echo "setup done: $(pwd)"

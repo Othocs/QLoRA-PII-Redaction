@@ -1,0 +1,21 @@
+# Out-of-distribution test sets (week 3). Built by `make eval-data`
+# (data/prepare_eval_sets.py) into data/processed/<name>.jsonl.
+# Training stays English-only; the non-English sets measure generalisation.
+raw_dir: data/raw/eval
+processed_dir: data/processed
+seed: 23
+
+nemotron:            # different generator (NVIDIA), English, us + intl locales
+  repo_id: nvidia/Nemotron-PII
+  file: data/test-00000-of-00001.parquet
+  n: 3000
+tab:                 # real ECHR court cases, human-annotated (Pilán et al., 2022)
+  repo_id: ildpil/text-anonymization-benchmark
+  file: echr_test.zip
+gretel:              # different generator (Gretel), finance documents
+  repo_id: gretelai/synthetic_pii_finance_multilingual
+  file: data/test-00000-of-00001.parquet
+  n_english: 1000    # gretel_en; every non-English test row goes to gretel_xx
+openpii_xx:          # same generator as training, other languages
+  languages: [fr, de, es, it, nl, bg]
+  n_per_language: 500

@@ -1,0 +1,125 @@
+{
+  "nemotron": {
+    "rows": 3000,
+    "dropped_bad_offsets": 0,
+    "chars": 2866644,
+    "per_language": {
+      "en": 3000
+    },
+    "spans_per_label": {
+      "IGNORE": 13167,
+      "DATE": 3402,
+      "GIVENNAME": 2530,
+      "SURNAME": 1809,
+      "EMAIL": 1620,
+      "TELEPHONENUM": 976,
+      "CITY": 572,
+      "ADDRESS": 519,
+      "CREDITCARDNUMBER": 404,
+      "GENDER": 213,
+      "AGE": 209,
+      "ZIPCODE": 188,
+      "SOCIALNUM": 181,
+      "DRIVERLICENSENUM": 82,
+      "TAXNUM": 38
+    }
+  },
+  "tab": {
+    "rows": 127,
+    "dropped_bad_offsets": 0,
+    "chars": 647638,
+    "per_language": {
+      "en": 127
+    },
+    "spans_per_label": {
+      "IGNORE": 3308,
+      "DATE": 2488,
+      "NAME": 958,
+      "CODE": 322,
+      "LOC": 295
+    }
+  },
+  "gretel_en": {
+    "rows": 1000,
+    "dropped_bad_offsets": 5,
+    "chars": 1423861,
+    "per_language": {
+      "en": 1000
+    },
+    "spans_per_label": {
+      "IGNORE": 1945,
+      "DATE": 1933,
+      "NAME": 1461,
+      "ADDRESS": 790,
+      "EMAIL": 308,
+      "TELEPHONENUM": 195,
+      "GIVENNAME": 57,
+      "SURNAME": 35,
+      "PASSPORTNUM": 32,
+      "SOCIALNUM": 29,
+      "DRIVERLICENSENUM": 29,
+      "CREDITCARDNUMBER": 23
+    }
+  },
+  "gretel_xx": {
+    "rows": 2629,
+    "dropped_bad_offsets": 3,
+    "chars": 3075202,
+    "per_language": {
+      "de": 476,
+      "nl": 446,
+      "es": 443,
+      "it": 441,
+      "sv": 430,
+      "fr": 393
+    },
+    "spans_per_label": {
+      "NAME": 6000,
+      "IGNORE": 4509,
+      "DATE": 3020,
+      "ADDRESS": 1973,
+      "EMAIL": 580,
+      "TELEPHONENUM": 414,
+      "GIVENNAME": 123,
+      "SURNAME": 84,
+      "SOCIALNUM": 77,
+      "DRIVERLICENSENUM": 68,
+      "PASSPORTNUM": 59,
+      "CREDITCARDNUMBER": 44
+    }
+  },
+  "openpii_xx": {
+    "rows": 3000,
+    "dropped_bad_offsets": 0,
+    "chars": 1022954,
+    "per_language": {
+      "fr": 500,
+      "de": 500,
+      "es": 500,
+      "it": 500,
+      "nl": 500,
+      "bg": 500
+    },
+    "spans_per_label": {
+      "DATE": 2560,
+      "GIVENNAME": 2438,
+      "SURNAME": 2187,
+      "EMAIL": 1605,
+      "CITY": 1507,
+      "TITLE": 1348,
+      "TELEPHONENUM": 1163,
+      "AGE": 1049,
+      "STREET": 957,
+      "BUILDINGNUM": 943,
+      "ZIPCODE": 887,
+      "IDCARDNUM": 678,
+      "CREDITCARDNUMBER": 652,
+      "DRIVERLICENSENUM": 594,
+      "GENDER": 570,
+      "SEX": 547,
+      "TAXNUM": 536,
+      "SOCIALNUM": 514,
+      "PASSPORTNUM": 446
+    }
+  }
+}

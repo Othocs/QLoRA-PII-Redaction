@@ -10,7 +10,7 @@ boundaries *and* label; partial F1 needs any overlap and ignores the label.
 from __future__ import annotations
 
 from collections import defaultdict
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -84,10 +84,23 @@ class DocScore:
     by_label: dict[str, dict[str, int]] = field(default_factory=dict)
 
 
+IGNORE = "IGNORE"
+
+
 def score_doc(text: str, gold: list[Span], pred: list[Span]) -> DocScore:
-    gold, pred = dedupe_spans(gold), dedupe_spans(pred)
+    """Score one document.
+
+    Gold spans labelled IGNORE mark regions outside the evaluation scope (e.g. a
+    dataset's "company" label): they are not counted as leaks, masking them is not
+    over-redaction, and predictions lying entirely inside them are not counted.
+    """
+    ignore = [s for s in gold if s.label == IGNORE]
+    gold = dedupe_spans(s for s in gold if s.label != IGNORE)
     n = len(text)
-    gm, pm = _mask(n, gold), _mask(n, pred)
+    gm = _mask(n, gold)
+    im = _mask(n, ignore) & ~gm  # real gold wins where the two overlap
+    pred = [s for s in dedupe_spans(pred) if not im[max(0, s.start) : min(n, s.end)].all()]
+    pm = _mask(n, pred) & ~im
     tp_keys = {(s.start, s.end, s.label) for s in gold} & {(s.start, s.end, s.label) for s in pred}
 
     def overlaps(s: Span, m: np.ndarray) -> bool:
@@ -139,9 +152,10 @@ def _add(acc: _Acc, d: DocScore) -> None:
 def aggregate(
     examples: Iterable[Example],
     predictions: Mapping[str, list[Span]],
-    group_key: str | None = "region",
+    group_keys: Sequence[str] = ("region", "language"),
 ) -> dict:
-    """Micro-averaged metrics overall, per gold/pred label and per `meta[group_key]`.
+    """Micro-averaged metrics overall, per gold/pred label and per `meta[key]` for each
+    key in `group_keys` that at least one example has.
 
     Examples with no entry in `predictions` count as "predicted nothing".
     Per-label leakage uses gold spans of that label; per-label strict P/R/F1 use
@@ -149,14 +163,15 @@ def aggregate(
     OTHER) shows up with precision 0 and no gold.
     """
     overall = _Acc()
-    groups: dict[str, _Acc] = defaultdict(_Acc)
+    groups: dict[str, dict[str, _Acc]] = {k: defaultdict(_Acc) for k in group_keys}
     labels: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
 
     for ex in examples:
         d = score_doc(ex.text, ex.spans, predictions.get(ex.id, []))
         _add(overall, d)
-        if group_key:
-            _add(groups[str(ex.meta.get(group_key))], d)
+        for key in group_keys:
+            if ex.meta.get(key) is not None:
+                _add(groups[key][str(ex.meta[key])], d)
         for lab, counts in d.by_label.items():
             for k, v in counts.items():
                 labels[lab][k] += v
@@ -174,13 +189,11 @@ def aggregate(
 
     out = overall.result()
     out["per_label"] = per_label
-    if group_key:
-        out[f"per_{group_key}"] = {
-            k: {
-                kk: vv
-                for kk, vv in acc.result().items()
-                if kk in ("docs", "leakage_chars", "leakage_docs", "over_redaction", "strict")
+    keep = ("docs", "leakage_chars", "leakage_docs", "over_redaction", "strict", "partial")
+    for key, accs in groups.items():
+        if accs:
+            out[f"per_{key}"] = {
+                k: {kk: vv for kk, vv in acc.result().items() if kk in keep}
+                for k, acc in sorted(accs.items())
             }
-            for k, acc in sorted(groups.items())
-        }
     return out

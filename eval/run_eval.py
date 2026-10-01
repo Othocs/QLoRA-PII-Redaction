@@ -31,6 +31,12 @@ TESTSETS: dict[str, str] = {
     "test_id": "data/processed/test_id.jsonl",
     "test_holdout_regions": "data/processed/test_holdout_regions.jsonl",
     "support_desk": "data/support_desk/support_desk.jsonl",
+    # out-of-distribution sets (data/prepare_eval_sets.py)
+    "nemotron": "data/processed/nemotron.jsonl",
+    "tab": "data/processed/tab.jsonl",
+    "gretel_en": "data/processed/gretel_en.jsonl",
+    "gretel_xx": "data/processed/gretel_xx.jsonl",
+    "openpii_xx": "data/processed/openpii_xx.jsonl",
     "fixture": "tests/fixtures/openpii_sample.jsonl",
 }
 

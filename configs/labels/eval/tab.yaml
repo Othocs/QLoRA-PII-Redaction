@@ -1,0 +1,6 @@
+# TAB entity_type -> ours, for mentions annotated DIRECT or QUASI (must be masked).
+# NO_MASK mentions and unlisted types (ORG, DEM, QUANTITY, MISC) become IGNORE.
+PERSON: NAME
+DATETIME: DATE
+CODE: CODE
+LOC: LOC

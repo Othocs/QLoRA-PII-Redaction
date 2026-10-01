@@ -17,7 +17,18 @@ SYSTEM_NAMES = {
     "base_llm": "Base LLM, zero-shot",
     "lora": "Your LoRA model",
     "lora_validators": "Your LoRA model + validators",
+    "lora_r16_10k_1.7b": "LoRA r16, 10k (Qwen3-1.7B)",
 }
+# The adapter shown as "Your LoRA model" in the README table (results are tagged per run).
+README_LORA_TAG = "lora_r16_10k_1.7b"
+OOD_SETS = [
+    ("test_holdout_regions", "OpenPII, region IN"),
+    ("nemotron", "Nemotron-PII"),
+    ("tab", "TAB (real ECHR)"),
+    ("gretel_en", "Gretel EN"),
+    ("gretel_xx", "Gretel non-EN"),
+    ("openpii_xx", "OpenPII non-EN"),
+]
 README_BEGIN, README_END = "<!-- RESULTS_TABLE:BEGIN -->", "<!-- RESULTS_TABLE:END -->"
 
 
@@ -58,7 +69,55 @@ def summary_md(res: dict[tuple[str, str], dict]) -> str:
             f"{_f(lat['p50_ms_per_1k_chars'], 0)} | {_f(lat['p95_ms_per_1k_chars'], 0)} | "
             f"{r['env']['platform']} |"
         )
+    lines += ood_tables(res)
     return "\n".join(lines) + "\n"
+
+
+def ood_tables(res: dict[tuple[str, str], dict]) -> list[str]:
+    """Leakage pivot over the out-of-distribution sets, then per-language leakage."""
+    systems = sorted({s for s, ts in res if ts in dict(OOD_SETS)})
+    if not systems:
+        return []
+    out = [
+        "",
+        "## Out-of-distribution leakage (%)",
+        "",
+        "Each cell is leakage / partial F1; n/a means not run (Presidio is English-only here).",
+        "",
+        "| System | " + " | ".join(label for _, label in OOD_SETS) + " |",
+        "| --- |" + " ---: |" * len(OOD_SETS),
+    ]
+    for system in systems:
+        cells = []
+        for ts, _ in OOD_SETS:
+            r = res.get((system, ts))
+            m = r["metrics"] if r else None
+            cells.append(
+                f"{_pct(m['leakage_chars'])} / {_f(m['partial']['f1'], 2)}" if m else "n/a"
+            )
+        out.append(f"| {SYSTEM_NAMES.get(system, system)} | " + " | ".join(cells) + " |")
+    for ts in ("gretel_xx", "openpii_xx"):
+        langs = sorted(
+            {
+                lang
+                for (s, t), r in res.items()
+                if t == ts
+                for lang in r["metrics"].get("per_language", {})
+            }
+        )
+        if not langs:
+            continue
+        out += ["", f"### {dict(OOD_SETS)[ts]}: leakage (%) by language", ""]
+        out.append("| System | " + " | ".join(langs) + " |")
+        out.append("| --- |" + " ---: |" * len(langs))
+        for system in systems:
+            r = res.get((system, ts))
+            if not r:
+                continue
+            per = r["metrics"].get("per_language", {})
+            cells = [_pct(per[lang]["leakage_chars"]) if lang in per else "" for lang in langs]
+            out.append(f"| {SYSTEM_NAMES.get(system, system)} | " + " | ".join(cells) + " |")
+    return out
 
 
 def readme_table(res: dict[tuple[str, str], dict]) -> str:
@@ -86,6 +145,8 @@ def readme_table(res: dict[tuple[str, str], dict]) -> str:
         "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for key, label in SYSTEM_NAMES.items():
+        if key == "lora":
+            key = README_LORA_TAG
         lines.append(
             f"| {label} | {leak(key, 'test_id')} | {leak(key, 'test_holdout_regions')} | "
             f"{leak(key, 'nemotron')} | {leak(key, 'support_desk')} | {sd_f1(key)} | "

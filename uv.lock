@@ -2359,6 +2359,7 @@ dependencies = [
 data = [
     { name = "datasketch" },
     { name = "huggingface-hub" },
+    { name = "pyarrow" },
 ]
 gliner = [
     { name = "gliner" },
@@ -2416,6 +2417,7 @@ requires-dist = [
     { name = "numpy", marker = "extra == 'llm'", specifier = "<2.5" },
     { name = "peft", marker = "extra == 'train'", specifier = ">=0.15" },
     { name = "presidio-analyzer", marker = "extra == 'presidio'", specifier = ">=2.2.358" },
+    { name = "pyarrow", marker = "extra == 'data'", specifier = ">=15" },
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "spacy", marker = "extra == 'presidio'", specifier = ">=3.8,<3.9" },
     { name = "torch", marker = "extra == 'gliner'", specifier = ">=2.4" },
