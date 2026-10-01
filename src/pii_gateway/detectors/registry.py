@@ -69,6 +69,7 @@ def _llm(with_adapter: bool) -> Callable[..., Detector]:
             adapter=adapter if with_adapter else None,
             backend=kw.get("backend") or "vllm",
             name="lora" if with_adapter else "base_llm",
+            gpu_memory_utilization=float(os.environ.get("PII_VLLM_GPU_UTIL", "0.85")),
         )
 
     return build
