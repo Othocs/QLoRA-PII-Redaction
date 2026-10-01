@@ -10,13 +10,25 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | GLiNER-PII (Knowledgator) | dev | 200 | 11.7 | 57.0 | 11.5 | 0.641 | 0.897 | 321 | 725 | Darwin arm64 |
 | GLiNER-PII (NVIDIA) | dev | 200 | 4.6 | 51.5 | 6.9 | 0.701 | 0.953 | 2179 | 7763 | Darwin arm64 |
 | LoRA r16, 10k (Qwen3-1.7B) | dev | 2000 | 0.7 | 13.6 | 0.4 | 0.938 | 0.994 | 4717 | 7909 | Linux x86_64 |
+| M0 OpenPII 10k | dev | 2000 | 0.7 | 13.7 | 0.4 | 0.938 | 0.994 |  |  | Linux x86_64 |
+| M1 cleaned OpenPII 10k | dev | 2000 | 0.8 | 15.6 | 0.5 | 0.936 | 0.993 |  |  | Linux x86_64 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | dev | 2000 | 0.9 | 17.8 | 0.7 | 0.909 | 0.992 |  |  | Linux x86_64 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | dev | 2000 | 0.7 | 15.8 | 0.5 | 0.936 | 0.994 |  |  | Linux x86_64 |
 | Presidio | dev | 200 | 33.6 | 89.0 | 22.4 | 0.232 | 0.721 | 42 | 65 | Darwin arm64 |
+| M0 OpenPII 10k | gretel_dev | 1000 | 40.0 | 84.4 | 51.5 | 0.120 | 0.514 |  |  | Linux x86_64 |
+| M1 cleaned OpenPII 10k | gretel_dev | 1000 | 40.2 | 84.2 | 51.2 | 0.120 | 0.519 |  |  | Linux x86_64 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | gretel_dev | 1000 | 28.8 | 83.3 | 33.6 | 0.183 | 0.657 |  |  | Linux x86_64 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | gretel_dev | 1000 | 29.3 | 84.3 | 30.8 | 0.186 | 0.667 |  |  | Linux x86_64 |
 | Base LLM, zero-shot | gretel_en | 1000 | 62.0 | 87.9 | 38.4 | 0.138 | 0.508 | 1616 | 10752 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | gretel_en | 1000 | 44.1 | 85.1 | 46.6 | 0.135 | 0.522 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | gretel_en | 1000 | 40.5 | 84.9 | 47.0 | 0.135 | 0.534 |  |  | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | gretel_en | 1000 | 46.7 | 84.9 | 44.3 | 0.207 | 0.576 | 22 | 55 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | gretel_en | 1000 | 25.5 | 83.9 | 35.7 | 0.208 | 0.730 | 50 | 118 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | gretel_en | 1000 | 44.1 | 84.8 | 46.4 | 0.134 | 0.520 | 1251 | 13187 | Linux x86_64 |
+| M0 OpenPII 10k | gretel_en | 1000 | 40.7 | 85.1 | 47.2 | 0.134 | 0.532 |  |  | Linux x86_64 |
+| M1 cleaned OpenPII 10k | gretel_en | 1000 | 40.4 | 85.3 | 47.2 | 0.136 | 0.539 |  |  | Linux x86_64 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | gretel_en | 1000 | 27.6 | 83.8 | 30.8 | 0.205 | 0.681 |  |  | Linux x86_64 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | gretel_en | 1000 | 28.7 | 84.2 | 29.0 | 0.213 | 0.695 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | gretel_en | 1000 | 29.2 | 83.2 | 34.4 | 0.148 | 0.659 | 162 | 496 | Linux x86_64 |
 | Presidio | gretel_en | 1000 | 29.0 | 75.6 | 58.5 | 0.351 | 0.600 | 27 | 57 | Linux x86_64 |
 | Base LLM, zero-shot | gretel_xx | 2629 | 65.5 | 86.7 | 47.5 | 0.105 | 0.449 | 959 | 8800 | Linux x86_64 |
@@ -25,6 +37,10 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | GLiNER-PII (Knowledgator) | gretel_xx | 2629 | 44.9 | 82.6 | 59.8 | 0.128 | 0.502 | 22 | 43 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | gretel_xx | 2629 | 29.5 | 82.3 | 37.2 | 0.164 | 0.694 | 57 | 101 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | gretel_xx | 2629 | 45.0 | 84.6 | 52.5 | 0.105 | 0.488 | 1310 | 6209 | Linux x86_64 |
+| M0 OpenPII 10k | gretel_xx | 2629 | 42.4 | 84.4 | 54.3 | 0.101 | 0.486 |  |  | Linux x86_64 |
+| M1 cleaned OpenPII 10k | gretel_xx | 2629 | 41.7 | 84.5 | 52.9 | 0.106 | 0.505 |  |  | Linux x86_64 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | gretel_xx | 2629 | 32.7 | 83.0 | 38.3 | 0.159 | 0.623 |  |  | Linux x86_64 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | gretel_xx | 2629 | 33.1 | 83.7 | 33.6 | 0.164 | 0.640 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | gretel_xx | 2629 | 39.1 | 85.1 | 36.1 | 0.093 | 0.620 | 181 | 488 | Linux x86_64 |
 | Base LLM, zero-shot | nemotron | 3000 | 39.4 | 66.4 | 17.9 | 0.592 | 0.672 | 1603 | 5444 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | nemotron | 3000 | 21.8 | 44.4 | 5.1 | 0.738 | 0.821 |  |  | Linux x86_64 |
@@ -32,12 +48,20 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | GLiNER-PII (Knowledgator) | nemotron | 3000 | 15.0 | 31.9 | 15.6 | 0.756 | 0.818 | 25 | 56 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | nemotron | 3000 | 6.2 | 12.6 | 13.4 | 0.851 | 0.928 | 54 | 133 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | nemotron | 3000 | 21.7 | 44.2 | 5.1 | 0.740 | 0.820 | 1829 | 5844 | Linux x86_64 |
+| M0 OpenPII 10k | nemotron | 3000 | 19.0 | 42.2 | 6.0 | 0.741 | 0.825 |  |  | Linux x86_64 |
+| M1 cleaned OpenPII 10k | nemotron | 3000 | 18.7 | 42.0 | 5.8 | 0.756 | 0.836 |  |  | Linux x86_64 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | nemotron | 3000 | 3.7 | 8.9 | 2.7 | 0.908 | 0.964 |  |  | Linux x86_64 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | nemotron | 3000 | 3.7 | 9.1 | 2.6 | 0.912 | 0.964 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | nemotron | 3000 | 2.4 | 7.9 | 7.0 | 0.864 | 0.942 | 254 | 694 | Linux x86_64 |
 | Presidio | nemotron | 3000 | 13.9 | 41.9 | 33.0 | 0.402 | 0.746 | 32 | 53 | Linux x86_64 |
 | Base LLM, zero-shot | openpii_xx | 3000 | 51.3 | 93.6 | 4.6 | 0.436 | 0.652 | 1836 | 12341 | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | openpii_xx | 3000 | 11.9 | 62.7 | 18.3 | 0.538 | 0.872 | 47 | 105 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | openpii_xx | 3000 | 8.4 | 57.2 | 6.6 | 0.644 | 0.943 | 126 | 301 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | openpii_xx | 3000 | 2.4 | 24.9 | 1.6 | 0.856 | 0.983 | 4322 | 6709 | Linux x86_64 |
+| M0 OpenPII 10k | openpii_xx | 3000 | 2.3 | 24.4 | 1.6 | 0.856 | 0.983 |  |  | Linux x86_64 |
+| M1 cleaned OpenPII 10k | openpii_xx | 3000 | 2.3 | 26.2 | 1.4 | 0.862 | 0.984 |  |  | Linux x86_64 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | openpii_xx | 3000 | 2.3 | 26.8 | 2.1 | 0.810 | 0.979 |  |  | Linux x86_64 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | openpii_xx | 3000 | 2.1 | 25.3 | 1.8 | 0.835 | 0.982 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | openpii_xx | 3000 | 3.0 | 40.4 | 1.2 | 0.632 | 0.981 | 583 | 1146 | Linux x86_64 |
 | Base LLM, zero-shot | tab | 127 | 82.7 | 100.0 | 11.2 | 0.165 | 0.363 | 893 | 1886 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | tab | 127 | 22.8 | 100.0 | 2.9 | 0.449 | 0.882 |  |  | Linux x86_64 |
@@ -45,12 +69,20 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | GLiNER-PII (Knowledgator) | tab | 127 | 58.1 | 100.0 | 40.4 | 0.352 | 0.472 | 19 | 22 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | tab | 127 | 19.3 | 100.0 | 17.6 | 0.484 | 0.858 | 43 | 51 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | tab | 127 | 23.2 | 100.0 | 3.0 | 0.449 | 0.879 | 929 | 1571 | Linux x86_64 |
+| M0 OpenPII 10k | tab | 127 | 18.5 | 100.0 | 3.5 | 0.448 | 0.909 |  |  | Linux x86_64 |
+| M1 cleaned OpenPII 10k | tab | 127 | 19.5 | 100.0 | 3.3 | 0.436 | 0.904 |  |  | Linux x86_64 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | tab | 127 | 21.5 | 100.0 | 2.7 | 0.486 | 0.891 |  |  | Linux x86_64 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | tab | 127 | 18.3 | 100.0 | 2.0 | 0.461 | 0.909 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | tab | 127 | 14.9 | 100.0 | 6.8 | 0.402 | 0.897 | 128 | 160 | Linux x86_64 |
 | Presidio | tab | 127 | 11.2 | 100.0 | 34.1 | 0.494 | 0.699 | 24 | 29 | Linux x86_64 |
 | Base LLM, zero-shot | test_holdout_regions | 2000 | 46.8 | 92.5 | 3.3 | 0.481 | 0.704 | 1615 | 4881 | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | test_holdout_regions | 2000 | 12.7 | 64.6 | 11.1 | 0.628 | 0.903 | 49 | 109 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | test_holdout_regions | 2000 | 6.3 | 53.3 | 5.7 | 0.703 | 0.949 | 121 | 293 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | test_holdout_regions | 2000 | 0.9 | 15.2 | 0.4 | 0.932 | 0.993 | 4162 | 8591 | Linux x86_64 |
+| M0 OpenPII 10k | test_holdout_regions | 2000 | 0.8 | 15.3 | 0.5 | 0.931 | 0.993 |  |  | Linux x86_64 |
+| M1 cleaned OpenPII 10k | test_holdout_regions | 2000 | 0.8 | 15.9 | 0.5 | 0.927 | 0.993 |  |  | Linux x86_64 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | test_holdout_regions | 2000 | 0.9 | 17.3 | 0.8 | 0.900 | 0.992 |  |  | Linux x86_64 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | test_holdout_regions | 2000 | 0.8 | 15.8 | 0.5 | 0.929 | 0.993 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | test_holdout_regions | 2000 | 0.8 | 27.5 | 1.4 | 0.657 | 0.987 | 587 | 1150 | Linux x86_64 |
 | Presidio | test_holdout_regions | 2000 | 35.7 | 89.9 | 19.0 | 0.223 | 0.709 | 43 | 72 | Linux x86_64 |
 
@@ -66,6 +98,10 @@ Each cell is leakage / partial F1; n/a means not run (Presidio is English-only h
 | GLiNER-PII (Knowledgator) | 12.7 / 0.90 | 15.0 / 0.82 | 58.1 / 0.47 | 46.7 / 0.58 | 44.9 / 0.50 | 11.9 / 0.87 |
 | GLiNER-PII (NVIDIA) | 6.3 / 0.95 | 6.2 / 0.93 | 19.3 / 0.86 | 25.5 / 0.73 | 29.5 / 0.69 | 8.4 / 0.94 |
 | LoRA r16, 10k (Qwen3-1.7B) | 0.9 / 0.99 | 21.7 / 0.82 | 23.2 / 0.88 | 44.1 / 0.52 | 45.0 / 0.49 | 2.4 / 0.98 |
+| M0 OpenPII 10k | 0.8 / 0.99 | 19.0 / 0.83 | 18.5 / 0.91 | 40.7 / 0.53 | 42.4 / 0.49 | 2.3 / 0.98 |
+| M1 cleaned OpenPII 10k | 0.8 / 0.99 | 18.7 / 0.84 | 19.5 / 0.90 | 40.4 / 0.54 | 41.7 / 0.51 | 2.3 / 0.98 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | 0.9 / 0.99 | 3.7 / 0.96 | 21.5 / 0.89 | 27.6 / 0.68 | 32.7 / 0.62 | 2.3 / 0.98 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | 0.8 / 0.99 | 3.7 / 0.96 | 18.3 / 0.91 | 28.7 / 0.70 | 33.1 / 0.64 | 2.1 / 0.98 |
 | OpenMed privacy filter v2 | 0.8 / 0.99 | 2.4 / 0.94 | 14.9 / 0.90 | 29.2 / 0.66 | 39.1 / 0.62 | 3.0 / 0.98 |
 | Presidio | 35.7 / 0.71 | 13.9 / 0.75 | 11.2 / 0.70 | 29.0 / 0.60 | n/a | n/a |
 
@@ -79,6 +115,10 @@ Each cell is leakage / partial F1; n/a means not run (Presidio is English-only h
 | GLiNER-PII (Knowledgator) | 44.4 | 42.3 | 37.7 | 46.3 | 52.2 | 44.9 |
 | GLiNER-PII (NVIDIA) | 29.1 | 31.4 | 20.5 | 26.0 | 35.9 | 31.8 |
 | LoRA r16, 10k (Qwen3-1.7B) | 45.0 | 46.0 | 36.9 | 43.4 | 50.2 | 46.3 |
+| M0 OpenPII 10k | 42.6 | 43.1 | 34.3 | 41.0 | 47.6 | 43.7 |
+| M1 cleaned OpenPII 10k | 42.0 | 40.5 | 34.0 | 40.8 | 47.3 | 43.6 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | 31.2 | 34.3 | 23.6 | 29.4 | 39.8 | 35.5 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | 31.9 | 34.6 | 23.1 | 30.8 | 39.8 | 35.9 |
 | OpenMed privacy filter v2 | 33.1 | 48.1 | 27.0 | 33.0 | 49.4 | 40.3 |
 
 ### OpenPII non-EN: leakage (%) by language
@@ -89,4 +129,19 @@ Each cell is leakage / partial F1; n/a means not run (Presidio is English-only h
 | GLiNER-PII (Knowledgator) | 13.7 | 11.4 | 12.6 | 10.7 | 12.1 | 10.5 |
 | GLiNER-PII (NVIDIA) | 15.1 | 8.3 | 5.4 | 7.1 | 7.5 | 6.7 |
 | LoRA r16, 10k (Qwen3-1.7B) | 5.2 | 1.9 | 1.8 | 1.3 | 1.9 | 2.2 |
+| M0 OpenPII 10k | 5.1 | 1.9 | 1.6 | 1.1 | 1.9 | 2.1 |
+| M1 cleaned OpenPII 10k | 4.3 | 2.3 | 1.7 | 1.4 | 2.2 | 1.7 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | 4.3 | 2.3 | 1.6 | 1.2 | 2.6 | 2.0 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | 3.8 | 2.1 | 1.9 | 1.4 | 2.3 | 1.4 |
 | OpenMed privacy filter v2 | 1.6 | 3.0 | 4.1 | 2.7 | 2.6 | 3.9 |
+
+## Training-data ablation (leakage % / over-redaction %)
+
+Qwen3-1.7B, QLoRA r=16, 1 epoch; only the training data differs. ¹ Nemotron train is in M2/M3's training data, so Nemotron test is in-distribution for them.
+
+| Model | OpenPII dev | Gretel dev (selection) | OpenPII IN | OpenPII non-EN | Nemotron ¹ | TAB | Gretel EN | Gretel non-EN |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| M0 OpenPII 10k | 0.7 / 0.4 | 40.0 / 51.5 | 0.8 / 0.5 | 2.3 / 1.6 | 19.0 / 6.0 | 18.5 / 3.5 | 40.7 / 47.2 | 42.4 / 54.3 |
+| M1 cleaned OpenPII 10k | 0.8 / 0.5 | 40.2 / 51.2 | 0.8 / 0.5 | 2.3 / 1.4 | 18.7 / 5.8 | 19.5 / 3.3 | 40.4 / 47.2 | 41.7 / 52.9 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | 0.9 / 0.7 | 28.8 / 33.6 | 0.9 / 0.8 | 2.3 / 2.1 | 3.7 / 2.7 | 21.5 / 2.7 | 27.6 / 30.8 | 32.7 / 38.3 |
+| M3 cleaned OpenPII 10k + Nemotron 10k | 0.7 / 0.5 | 29.3 / 30.8 | 0.8 / 0.5 | 2.1 / 1.8 | 3.7 / 2.6 | 18.3 / 2.0 | 28.7 / 29.0 | 33.1 / 33.6 |

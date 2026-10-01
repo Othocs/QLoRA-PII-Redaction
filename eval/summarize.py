@@ -24,7 +24,7 @@ SYSTEM_NAMES = {
     "m3_mix20k": "M3 cleaned OpenPII 10k + Nemotron 10k",
 }
 # The adapter shown as "Your LoRA model" in the README table (results are tagged per run).
-README_LORA_TAG = "lora_r16_10k_1.7b"
+README_LORA_TAG = "m3_mix20k"  # chosen in week 3 part B on dev + gretel_dev
 OOD_SETS = [
     ("test_holdout_regions", "OpenPII, region IN"),
     ("nemotron", "Nemotron-PII"),

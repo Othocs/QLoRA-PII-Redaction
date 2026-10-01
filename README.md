@@ -2,7 +2,7 @@
 
 A self-hosted gateway that finds personal data in English customer-support text and masks or pseudonymises it before the text is logged, analysed or sent to an external LLM. The detector is a small open LLM fine-tuned with QLoRA, backed by deterministic validators. It's benchmarked honestly against Presidio, GLiNER-PII and OpenMed's privacy filter.
 
-> **Status: week 2 of 6.** Data splits, the label audit, metrics, baselines and the first QLoRA model are done. The gateway, demo and Docker images are stubs (see [Roadmap](#roadmap)).
+> **Status: week 3 of 6.** Data, label audit, baselines, out-of-distribution tests and a training-data ablation are done; the current model is M3 (cleaned OpenPII + Nemotron, 20k). The gateway, demo and Docker images are stubs (see [Roadmap](#roadmap)).
 
 ## Why a small fine-tuned model
 
@@ -20,13 +20,13 @@ Headline metric: **leakage**, the share of gold PII characters left unmasked (lo
 | GLiNER-PII (NVIDIA) |  | 6.3 | 6.2 |  |  | 7763 |  |
 | OpenMed privacy filter v2 |  | 0.8 | 2.4 |  |  |  |  |
 | Base LLM, zero-shot |  | 46.8 | 39.4 |  |  |  |  |
-| Your LoRA model |  | 0.9 | 21.7 |  |  |  |  |
+| Your LoRA model |  | 0.8 | 3.7 |  |  |  |  |
 | Your LoRA model + validators |  |  |  |  |  |  |  |
 | LoRA r16, 10k (Qwen3-1.7B) |  | 0.9 | 21.7 |  |  |  |  |
-| M0 OpenPII 10k |  |  |  |  |  |  |  |
-| M1 cleaned OpenPII 10k |  |  |  |  |  |  |  |
-| M2 cleaned OpenPII 5k + Nemotron 5k |  |  |  |  |  |  |  |
-| M3 cleaned OpenPII 10k + Nemotron 10k |  |  |  |  |  |  |  |
+| M0 OpenPII 10k |  | 0.8 | 19.0 |  |  |  |  |
+| M1 cleaned OpenPII 10k |  | 0.8 | 18.7 |  |  |  |  |
+| M2 cleaned OpenPII 5k + Nemotron 5k |  | 0.9 | 3.7 |  |  |  |  |
+| M3 cleaned OpenPII 10k + Nemotron 10k |  | 0.8 | 3.7 |  |  |  |  |
 <!-- RESULTS_TABLE:END -->
 
 ### First LoRA run (week 2, OpenPII dev, in-distribution)
@@ -80,7 +80,29 @@ The same LoRA model (trained only on English OpenPII from the CA, GB and US regi
   - **Takeaway:** more varied, cleaner training data is the lever, not decoding tricks. The OOD table above uses the earlier 2,000-character setting; `results/diagB_*` holds the 1,200-character runs.
 - **Label mappings:** see `configs/labels/eval/`. Labels outside our scope (company, IBAN, time, and so on) are ignored, so they count neither as leaks nor as over-redaction.
 
+### Training-data ablation (week 3, part B)
+
+Same model and recipe (Qwen3-1.7B, QLoRA r=16, 1 epoch, 1,200-character chunks); only the training data changes. Each cell is leakage % / over-redaction %.
+
+| Model | OpenPII dev | **Gretel dev** (selection) | TAB | Gretel EN | Gretel non-EN | OpenPII IN | OpenPII non-EN | Nemotron ¹ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| M0 OpenPII 10k | 0.7 / 0.4 | 40.0 / 51.5 | 18.5 / 3.5 | 40.7 / 47.2 | 42.4 / 54.3 | 0.8 / 0.5 | 2.3 / 1.6 | 19.0 / 6.0 |
+| M1 cleaned OpenPII 10k | 0.8 / 0.5 | 40.2 / 51.2 | 19.5 / 3.3 | 40.4 / 47.2 | 41.7 / 52.9 | 0.8 / 0.5 | 2.3 / 1.4 | 18.7 / 5.8 |
+| M2 cleaned OpenPII 5k + Nemotron 5k | 0.9 / 0.7 | **28.8** / 33.6 | 21.5 / 2.7 | 27.6 / 30.8 | 32.7 / 38.3 | 0.9 / 0.8 | 2.3 / 2.1 | 3.7 / 2.7 |
+| **M3 cleaned OpenPII 10k + Nemotron 10k** | **0.7** / 0.5 | 29.3 / **30.8** | **18.3** / 2.0 | 28.7 / 29.0 | 33.1 / 33.6 | 0.8 / 0.5 | 2.1 / 1.8 | 3.7 / 2.6 |
+| *GLiNER-PII (NVIDIA), reference* | | | 19.3 | 25.5 | 29.5 | 6.3 | 8.4 | 6.2 ² |
+
+¹ Nemotron's train split is in M2 and M3's training data, so Nemotron test is in-distribution for them. ² NVIDIA's GLiNER was trained on Nemotron.
+
+- **A second data source is what helps.** Adding Nemotron cut leakage on Gretel, a generator neither model saw, from about 40% to about 29% and roughly halved over-redaction. OpenPII results held.
+- **Label cleaning alone barely moved anything** (M1 vs M0), even though it removed 32% of the card-number predictions on Gretel. Over-redaction there comes mostly from Gretel's own unlabelled dates and cities, EDI codes and blank form fields.
+- **Doubling the mixed data** (M3 vs M2) left leakage about the same and reduced over-redaction further.
+- **Selection rule, using dev sets only:** lowest Gretel-dev leakage, with differences under 1 point counted as a tie, broken by over-redaction and then OpenPII dev. M2 and M3 tie on leakage (28.8 vs 29.3), and M3 wins the tie-break, so **M3 is the current model.** It's now within 3–4 points of NVIDIA's GLiNER on Gretel and slightly better on TAB (18.3 vs 19.3).
+- **Still open:** invented values remain frequent. On Gretel dev, 36% of M3's returned values weren't in the text and 2.8% of outputs hit the length limit. Alignment removes them, but the loops cost recall.
+- **Cost:** M1 52 min ($0.43), M2 49 min ($0.40), M3 97 min ($0.80) on an A40; about $2.40 for the whole session with evaluation.
+
 Caveats:
+- "Your LoRA model" is M3 (see the training-data ablation below). Its Nemotron column is **in-distribution**, because Nemotron's train split is in its training data. Its out-of-distribution numbers are TAB, Gretel and the India region.
 - OpenMed's privacy filter was trained partly on OpenPII, so its OpenPII score is a ceiling, not a fair fight.
 - NVIDIA's GLiNER-PII was trained on Nemotron-PII's train split.
 - The week 1 numbers are on 200 dev examples ([`results/SUMMARY.md`](results/SUMMARY.md)). CPU latencies come from an 8 GB M1 under heavy memory pressure and will be re-measured in week 4.
