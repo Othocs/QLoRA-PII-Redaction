@@ -41,6 +41,7 @@ train = [
 # can't share an environment with the gliner extra (see [tool.uv] conflicts).
 llm = [
     "vllm>=0.10.2; sys_platform == 'linux'",
+    "numpy<2.5",  # numba (used by vLLM) supports NumPy <= 2.4
 ]
 serve = [
     "fastapi>=0.115",

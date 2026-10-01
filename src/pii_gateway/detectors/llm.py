@@ -185,6 +185,11 @@ class LLMDetector:
     # -- backends
 
     def _init_vllm(self, max_model_len: int, gpu_memory_utilization: float) -> None:
+        import os
+
+        # Greedy decoding needs no top-k/top-p kernel; FlashInfer's sampler would
+        # JIT-compile CUDA code at startup, which fails on images without nvcc.
+        os.environ.setdefault("VLLM_USE_FLASHINFER_SAMPLER", "0")
         from vllm import LLM, SamplingParams
 
         self.llm = LLM(
