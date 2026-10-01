@@ -29,9 +29,18 @@ gliner = [
     "torch>=2.4",
 ]
 train = [
-    "trl>=0.19; sys_platform == 'linux'",
-    "peft>=0.15; sys_platform == 'linux'",
+    "trl>=1.0",
+    "peft>=0.15",
+    "datasets>=3.0",
+    "accelerate>=1.4",
+    "transformers>=5.10",
+    "torch>=2.4",
     "bitsandbytes>=0.45; sys_platform == 'linux'",
+]
+# GPU inference with JSON-constrained decoding. vLLM pins its own torch, so it
+# can't share an environment with the gliner extra (see [tool.uv] conflicts).
+llm = [
+    "vllm>=0.10.2; sys_platform == 'linux'",
 ]
 serve = [
     "fastapi>=0.115",
@@ -48,6 +57,9 @@ dev = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.uv]
+conflicts = [[{ extra = "llm" }, { extra = "gliner" }]]
 
 [tool.hatch.metadata]
 allow-direct-references = true

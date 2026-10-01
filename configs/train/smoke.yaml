@@ -1,0 +1,13 @@
+# CPU smoke test of the training pipeline with a tiny random Qwen3 (no quantization).
+base_model: trl-internal-testing/tiny-Qwen3ForCausalLM
+train_file: tests/fixtures/openpii_sample.jsonl
+eval_file: null
+output_dir: outputs/smoke
+lora: {r: 8, alpha: 16, dropout: 0.0, target_modules: all-linear}
+quantization: none
+learning_rate: 2.0e-4
+epochs: 1
+batch_size: 4
+grad_accum: 1
+max_seq_length: 1024
+completion_only_loss: true
