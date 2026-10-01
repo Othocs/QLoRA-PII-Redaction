@@ -79,3 +79,43 @@ def test_missing_results_and_report(tmp_path):
     md = (tmp_path / "sweeps" / "t.md").read_text()
     assert "p1_a **(winner)**" in md
     assert "| p1_b |" in md and md.rstrip().splitlines()[-3].endswith("| g |")  # missing primary
+
+
+def test_bootstrap_ratios_and_interval():
+    import numpy as np
+
+    from eval.bootstrap import bootstrap, ci, ratios
+
+    counts = np.array([[10, 2, 12, 4], [20, 0, 18, 0], [10, 5, 6, 1]], dtype=float)
+    leak, over = ratios(counts)  # sums: gold 40, leaked 7, pred 36, over 5
+    assert leak == pytest.approx(7 / 40) and over == pytest.approx(5 / 36)
+    lo, hi = ci(bootstrap(counts, 500)[:, 0])
+    assert lo <= leak <= hi
+    same = np.array([[10, 1, 10, 0]] * 5, dtype=float)
+    assert ci(bootstrap(same, 200)[:, 0]) == pytest.approx((0.1, 0.1))
+
+
+def _write_runs(results, tag, perfect):
+    from eval.run_eval import load_testset
+
+    _, examples = load_testset("fixture", None)
+    (results / "runs").mkdir(parents=True, exist_ok=True)
+    with open(results / "runs" / f"{tag}__fixture.jsonl", "w") as f:
+        for ex in examples:
+            pred = [s.to_dict() for s in ex.spans] if perfect else []
+            f.write(json.dumps({"id": ex.id, "pred": pred}) + "\n")
+
+
+def test_bootstrap_cli_seeds_and_paired(tmp_path):
+    from eval.bootstrap import main as boot
+
+    _write_runs(tmp_path, "good", perfect=True)
+    _write_runs(tmp_path, "none", perfect=False)
+    out = boot(["--testset", "fixture", "--tags", "good", "--n", "200", "--results", str(tmp_path)])
+    assert out["leakage_pct"] == 0 and out["leakage_ci95_pct"] == [0, 0] and out["docs"] == 20
+    pair = boot(["--testset", "fixture", "--tags", "good,none", "--paired", "--n", "200",
+                 "--results", str(tmp_path)])  # fmt: skip
+    assert pair["leakage_diff_pct"] == pytest.approx(-100) and pair["a_better_share"] == 1.0
+    seeds = boot(["--testset", "fixture", "--tags", "good,none", "--n", "200",
+                  "--results", str(tmp_path)])  # fmt: skip
+    assert seeds["leakage_pct"] == pytest.approx(50) and seeds["seed_spread_pct"] == 100
