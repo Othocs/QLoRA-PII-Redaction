@@ -34,6 +34,7 @@ TESTSETS: dict[str, str] = {
     # HPO plan three-tier sets
     "support_desk_300": "data/support_desk/support_desk_300.jsonl",  # test_final
     "support_desk_val": "data/support_desk/support_desk_val.jsonl",  # val_ood
+    "support_desk_hard": "data/support_desk/support_desk_hard.jsonl",  # val_ood (hard slice)
     "val_in_region": "data/processed/val_in_region.jsonl",  # val_ood
     "nemotron_dev": "data/processed/nemotron_dev.jsonl",  # val_in_dist
     # out-of-distribution sets (data/prepare_eval_sets.py)

@@ -14,6 +14,14 @@ Rules:
      or whose share of outputs hitting the token limit exceeds 2% on the primary sets is
      discarded. If every candidate fails, the best is still reported, flagged.
 
+Phase 3 (--baseline TAG): every candidate is compared with the baseline (the r=16 model)
+on the primary sets with the team's decision matrix, using paired document bootstraps:
+  A  adopt: relative leakage reduction >= 20% and the leakage-difference CI excludes 0
+  B  adopt: leakage within noise (|delta| < 0.15 pt) and over-redaction down >= 1.5 pt
+     with its CI excluding 0
+  D  reject: leakage worse beyond noise, or more invented values / token-limit hits
+  C  keep the baseline otherwise (parsimony). Among adopted candidates the smaller rank wins.
+
 Writes results/sweeps/<name>.md (a table + the decision) and prints it.
 """
 
@@ -25,6 +33,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 TIE = 1.0  # percentage points
+REL_GAIN = 0.20  # phase 3 matrix A: relative leakage reduction
+NOISE = 0.15  # phase 3: leakage delta (pt) treated as parity
+OVER_GAIN = 1.5  # phase 3 matrix B: over-redaction drop (pt)
 MAX_DROPPED = 0.05
 MAX_TRUNCATED = 0.02
 
@@ -144,6 +155,80 @@ def report(name: str, cands: list[Candidate], winner, why, primary, in_dist, san
     return "\n".join(lines)
 
 
+def paired_ci(results: Path, a: str, b: str, sets: list[str], n: int = 1000) -> dict | None:
+    """Bootstrap CI (pt) of the mean-over-sets difference a - b in leakage and over-redaction,
+    resampling documents within each set. None if prediction files are missing."""
+    import numpy as np
+
+    from eval.bootstrap import doc_counts, ratios
+
+    try:
+        pairs = [(doc_counts(a, s, results), doc_counts(b, s, results)) for s in sets]
+    except FileNotFoundError:
+        return None
+    rng = np.random.default_rng(0)
+    dl, do = np.zeros(n), np.zeros(n)
+    for ca, cb in pairs:
+        idx = rng.integers(0, len(ca), size=(n, len(ca)))
+        for i in range(n):
+            la, oa = ratios(ca[idx[i]])
+            lb, ob = ratios(cb[idx[i]])
+            dl[i] += 100 * (la - lb) / len(pairs)
+            do[i] += 100 * (oa - ob) / len(pairs)
+    q = lambda x: [float(v) for v in np.percentile(x, [2.5, 97.5])]  # noqa: E731
+    return {"leak": q(dl), "over": q(do)}
+
+
+def rank_of(c: Candidate) -> int:
+    for o in c.overrides:
+        if o.startswith("lora.r="):
+            return int(o.split("=", 1)[1])
+    return 16
+
+
+def matrix(base: Candidate, c: Candidate, cis: dict | None) -> tuple[str, str]:
+    dl, do = c.leak - base.leak, c.over - base.over
+    rel = -dl / base.leak if base.leak else 0.0
+    more_loops = (c.dropped or 0) > (base.dropped or 0) + 0.02 or (c.truncated or 0) > (
+        base.truncated or 0
+    ) + 0.01
+    sig_leak = cis is not None and cis["leak"][1] < 0
+    sig_over = cis is not None and cis["over"][1] < 0
+    if dl > NOISE or more_loops:
+        return "D", f"reject: leakage {dl:+.2f} pt" + (", more loops" if more_loops else "")
+    if rel >= REL_GAIN and sig_leak:
+        return "A", f"adopt: {100 * rel:.0f}% relative leakage reduction (CI excludes 0)"
+    if abs(dl) < NOISE and -do >= OVER_GAIN and sig_over:
+        return "B", f"adopt: leakage parity, over-redaction {do:+.2f} pt (CI excludes 0)"
+    why = f"parity/noise (rel {100 * rel:.0f}%, over {do:+.2f} pt"
+    if cis is None:
+        why += ", no bootstrap: prediction files missing"
+    return "C", why + ")"
+
+
+def phase3(results: Path, base_tag: str, cands: list[Candidate], primary, hard) -> tuple:
+    base = next(c for c in cands if c.tag == base_tag)
+    rows, adopted = [], []
+    for c in cands:
+        if c.tag == base_tag or c.leak is None:
+            continue
+        cis = paired_ci(results, c.tag, base_tag, primary)
+        verdict, why = matrix(base, c, cis)
+        rows.append((c, verdict, why, cis))
+        if verdict in ("A", "B"):
+            adopted.append(c)
+    winner = min(adopted, key=lambda c: (rank_of(c), c.leak)) if adopted else base
+    hard_leak = {c.tag: _hard(results, c.tag, hard) for c in cands}
+    return winner, rows, hard_leak
+
+
+def _hard(results: Path, tag: str, hard: str | None) -> float | None:
+    p = results / f"{tag}__{hard}.json"
+    return (
+        100 * json.loads(p.read_text())["metrics"]["leakage_chars"] if hard and p.exists() else None
+    )
+
+
 def main(argv: list[str] | None = None) -> Candidate | None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("--name", required=True)
@@ -154,6 +239,8 @@ def main(argv: list[str] | None = None) -> Candidate | None:
     ap.add_argument("--in-dist", default="", help="comma-separated in-distribution sets")
     ap.add_argument("--sanity", action="store_true")
     ap.add_argument("--results", default="results")
+    ap.add_argument("--baseline", help="phase 3: compare every tag with this r=16 baseline")
+    ap.add_argument("--hard", help="phase 3: hard-slice set reported per candidate")
     args = ap.parse_args(argv)
 
     results = Path(args.results)
@@ -163,9 +250,39 @@ def main(argv: list[str] | None = None) -> Candidate | None:
         tags = [t for t in args.tags.split(",") if t]
     else:
         tags = sorted({p.name.split("__")[0] for p in results.glob(f"{args.prefix}*__*.json")})
+    if args.baseline and args.baseline not in tags:
+        tags.append(args.baseline)
     cands = [load_candidate(results, t, primary, in_dist) for t in tags]
     winner, why = choose(cands, args.sanity)
     md = report(args.name, cands, winner, why, primary, in_dist, args.sanity)
+    if args.baseline:
+        winner, rows, hard_leak = phase3(results, args.baseline, cands, primary, args.hard)
+        lines = [
+            "",
+            f"### Phase 3 decision matrix vs baseline {args.baseline}",
+            "",
+            "| Candidate | Rank | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI "
+            "| Hard slice leakage (%) | Verdict |",
+            "| --- | ---: | ---: | --- | ---: | --- | ---: | --- |",
+        ]
+        base = next(c for c in cands if c.tag == args.baseline)
+        for c, verdict, why, cis in rows:
+            ci_l = f"[{cis['leak'][0]:+.2f}, {cis['leak'][1]:+.2f}]" if cis else "n/a"
+            ci_o = f"[{cis['over'][0]:+.2f}, {cis['over'][1]:+.2f}]" if cis else "n/a"
+            hl = hard_leak.get(c.tag)
+            lines.append(
+                f"| {c.tag} | {rank_of(c)} | {c.leak - base.leak:+.2f} | {ci_l} | "
+                f"{c.over - base.over:+.2f} | {ci_o} | {'' if hl is None else f'{hl:.1f}'} "
+                f"| {verdict}: {why} |"
+            )
+        bh = hard_leak.get(args.baseline)
+        lines += [
+            "",
+            f"Baseline hard-slice leakage: {'' if bh is None else f'{bh:.1f}%'}.",
+            f"**Phase 3 decision:** {winner.tag} (rank {rank_of(winner)}).",
+            "",
+        ]
+        md += "\n".join(lines)
     (results / "sweeps").mkdir(parents=True, exist_ok=True)
     (results / "sweeps" / f"{args.name}.md").write_text(md)
     print(md)

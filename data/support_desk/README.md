@@ -5,9 +5,22 @@ These sets are the closest thing we have to production text: short English suppo
 | File | Messages | PII spans | Role (HPO plan) |
 | --- | ---: | ---: | --- |
 | `support_desk_val.jsonl` | 100 | 205 | `val_ood`: model selection from phase 2 on |
+| `support_desk_hard.jsonl` | 100 | 371 | `val_ood` hard slice, added after phase 2 found `val_ood` saturated |
 | `support_desk_300.jsonl` | 300 | 715 | `test_final`: touched once, in phase 4 |
 
-**How they were made.** Claude drafted all 395 new messages; the 5 original hand-written seeds are in `support_desk_300` as `sd-0001` to `sd-0005`. The messages were then split 100 / 295 by a seeded shuffle. A human spot-check of 50 messages (`spotcheck_50.csv`: 30 val, 20 test) is pending. Until it's done, report these sets as "LLM-written and LLM-labelled".
+**How they were made.** Claude drafted all 395 new messages; the 5 original hand-written seeds are in `support_desk_300` as `sd-0001` to `sd-0005`. The messages were then split 100 / 295 by a seeded shuffle. A human spot-check of 50 messages (`spotcheck_50.csv`: 30 val, 20 test) and 20 hard messages (`spotcheck_hard_20.csv`) is pending.
+
+**The hard slice** (`support_desk_hard`, `sd-h001` to `sd-h100`) is built from deliberately difficult cases:
+- names that are also words (Will, May, Hope, Grant, Rose, Reading-the-town);
+- nicknames alongside legal names;
+- non-standard dates ("120390", "7th Jan '91", "the 3rd of the 4th 1987");
+- emails and phone numbers spelled out or split across lines;
+- unspaced or lowercase postcodes; informal addresses;
+- look-alike IDs next to order numbers;
+- non-English introductions;
+- dense agent shorthand; several people per message.
+
+Shorthand such as "28F" and "15yo" is labelled as a single AGE span. Until it's done, report these sets as "LLM-written and LLM-labelled".
 
 **Coverage (400 messages):**
 - Channels: 52% chat, 26% email, 22% agent notes (more chat than the 40/40/20 target).

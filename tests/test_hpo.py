@@ -119,3 +119,38 @@ def test_bootstrap_cli_seeds_and_paired(tmp_path):
     seeds = boot(["--testset", "fixture", "--tags", "good,none", "--n", "200",
                   "--results", str(tmp_path)])  # fmt: skip
     assert seeds["leakage_pct"] == pytest.approx(50) and seeds["seed_spread_pct"] == 100
+
+
+def test_phase3_matrix_verdicts():
+    from eval.select import Candidate, matrix
+
+    def cand(tag, leak, over, dropped=0.01, trunc=0.0):
+        return Candidate(tag, leak, over, 1.0, dropped, trunc, [], ["lora.r=32"])
+
+    base = cand("r16", 5.0, 10.0)
+    sig = {"leak": [-1.5, -0.4], "over": [-2.5, -0.5]}
+    insig = {"leak": [-1.5, 0.4], "over": [-2.5, 0.3]}
+    assert matrix(base, cand("a", 3.9, 10.0), sig)[0] == "A"  # 22% relative, significant
+    assert matrix(base, cand("a2", 3.9, 10.0), insig)[0] == "C"  # same gain, CI spans 0
+    assert matrix(base, cand("b", 5.1, 8.2), sig)[0] == "B"  # parity, -1.8 pt over
+    assert matrix(base, cand("b2", 5.1, 9.0), sig)[0] == "C"  # over drop only 1.0 pt
+    assert matrix(base, cand("d", 5.4, 9.0), sig)[0] == "D"  # leakage worse beyond noise
+    assert matrix(base, cand("loops", 4.0, 9.0, dropped=0.05), sig)[0] == "D"  # more invented
+
+
+def test_phase3_prefers_smaller_rank(tmp_path):
+    from eval.select import Candidate, phase3
+
+    def cand(tag, leak, over, r):
+        return Candidate(tag, leak, over, 1.0, 0.0, 0.0, [], [f"lora.r={r}"])
+
+    cands = [cand("r16", 5.0, 10.0, 16), cand("r32", 3.5, 10.0, 32), cand("r64", 3.0, 10.0, 64)]
+    import eval.select as sel
+
+    orig = sel.paired_ci
+    sel.paired_ci = lambda *a, **k: {"leak": [-2.0, -0.5], "over": [-1.0, 1.0]}
+    try:
+        winner, rows, _ = phase3(tmp_path, "r16", cands, ["s"], None)
+    finally:
+        sel.paired_ci = orig
+    assert {v for _, v, _, _ in rows} == {"A"} and winner.tag == "r32"
