@@ -13,6 +13,9 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
 - **Decision (user, with the team's rationale): M4 @ 4e-4 goes forward.** When scaling capacity, a tie is broken in favour of the broader data mix (higher ranks need more data and diversity). In phase 4, a tie is broken in favour of lower over-redaction.
 - **Fix for saturation:** `support_desk_hard` was added (100 deliberately difficult messages). `val_ood` is now the mean leakage of support_desk_val, support_desk_hard and val_in_region.
 
+## Support-desk labels (2026-10-02)
+- **Decision (user):** the LLM-drafted labels in support_desk_val, support_desk_hard and support_desk_300 are accepted as correct without a human spot-check. They are validated by `check_support_desk.py` only. Reports on these sets carry this caveat.
+
 ## Phase 3: rank 32/64 (rules set before running)
 - **Grid:** r ∈ {32, 64}, α = 2r, η ∈ {1e-4, 1.4e-4, 2e-4} (`phase3_rank.txt`). Baseline: M4 r=16 @ 4e-4.
 - **Best LR per rank:** chosen with the general rule (val_ood leakage, then the tie band, then over-redaction).
