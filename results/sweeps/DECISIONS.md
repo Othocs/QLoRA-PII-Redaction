@@ -98,3 +98,39 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
   - The fresh set is hard: M4 leaks 27.6% on it, above the team's 5–10% band for val_ood. Its leakage is dominated by spoken phone numbers and titles, where M5 gained most.
   - Both the fresh set and the training data are LLM-written, by different models.
 - **Decision: M5 is the phase 4 candidate.** Phase 4 is waiting for the user's go (the rule set before the run).
+
+## Phase 4: final blind evaluation of M5 (2026-10-02)
+- **Run:** two A40 pods, about $3.30. Seeds 42 and 3407 were trained (135 min each); seed 13 is the milestone 1 adapter. Each of TAB, support_desk_300 and test_id was scored **once** per system.
+- **Baselines:** GLiNER-PII (NVIDIA), OpenMed and Presidio on support_desk_300. Their TAB numbers are from week 3, and they were not run on test_id. Validators alone ran on all three sets.
+- **Statistics:** 95% CIs from 1,000 document resamples, with per-document counts averaged over the seeds (`eval/phase4_report.py` → `results/phase4/phase4.md`).
+- **Support desk (300).** M5 leaks **1.70% [0.82, 2.78]**, with document leakage 4.6% and over-redaction 5.8%. The full gateway leaks **1.25% [0.50, 2.14]** under the gateway scope, against 4.21% for the model alone in that scope (Δ −2.96 [−5.30, −1.02]). Paired against each baseline:
+
+  | M5 − baseline | Leakage Δ (pt) | Over-redaction Δ (pt) |
+  | --- | --- | --- |
+  | OpenMed (3.54%) | −1.84 [−3.76, −0.03] | −10.3 |
+  | GLiNER-PII (8.11%) | −6.41 [−9.46, −3.39] | −17.5 |
+  | Presidio (18.91%) | −17.21 [−20.78, −13.36] | −17.3 |
+
+- **TAB (127).** M5 leaks 15.91% [13.92, 18.42], with over-redaction 5.2%. Against the baselines:
+  - OpenMed (14.91%): +1.01 [−0.85, +3.31], a tie;
+  - GLiNER-PII (19.29%): −3.38 [−4.54, −2.22], better;
+  - Presidio (11.23%): +4.69 [+2.92, +6.46], worse on leakage, though Presidio over-redacts 34.1%.
+
+  The validators add nothing on TAB, and every system leaks some PII in every document.
+- **test_id (5,000).** M5 leaks 0.60% [0.54, 0.69], with document leakage 13.8%; the gateway leaks 0.55%.
+- **Seed spread:**
+
+  | Test set | Seed 13 | Seed 42 | Seed 3407 |
+  | --- | ---: | ---: | ---: |
+  | support_desk_300 | 0.68% | 2.22% | 2.20% |
+  | TAB | 15.05% | 17.52% | 15.17% |
+  | test_id | 0.61% | 0.61% | 0.60% |
+
+  Seed 13 is the run that passed the milestone 1 gate, so single-seed numbers on support text vary by about 1.5 pt. This is why seed-averaged numbers are reported.
+- **Live gateway** (M5 + validators, uvicorn, one A40): 100 support_desk_val requests, all returned 200.
+  - Latency was 0.38 s at the median and 1.08 s at p95 per request.
+  - All 100 restores were exact, and the server log contained 0 values.
+  - 31 of 205 gold values remained in the output, but 29 of those are AGE, SEX or CITY, which the analytics policy deliberately keeps.
+  - Offline, the gateway leaks 1.51% on support_desk_val.
+- **Docker:** both images build in CI. The CPU image ran locally and in CI; the GPU image was built and its imports checked, but it was not run.
+- **Final model: M5** (r=16, learning rate 4e-4, `train_mix_32k`).

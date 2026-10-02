@@ -1,0 +1,531 @@
+{
+  "n_resamples": 1000,
+  "seeds": [
+    "m5_targeted",
+    "m5_s42",
+    "m5_s3407"
+  ],
+  "sets": {
+    "tab": {
+      "m5_model": {
+        "leak": 15.91,
+        "leak_ci": [
+          13.92,
+          18.42
+        ],
+        "doc_leak": 100.0,
+        "doc_leak_ci": [
+          100.0,
+          100.0
+        ],
+        "over": 5.24,
+        "over_ci": [
+          4.3,
+          6.32
+        ],
+        "docs": 127
+      },
+      "m5_seed_leak": {
+        "m5_targeted": 15.05,
+        "m5_s42": 17.52,
+        "m5_s3407": 15.17
+      },
+      "m5_model_gateway_scope": {
+        "leak": 15.91,
+        "leak_ci": [
+          13.92,
+          18.42
+        ],
+        "doc_leak": 100.0,
+        "doc_leak_ci": [
+          100.0,
+          100.0
+        ],
+        "over": 5.24,
+        "over_ci": [
+          4.3,
+          6.32
+        ],
+        "docs": 127
+      },
+      "m5_gateway": {
+        "leak": 15.87,
+        "leak_ci": [
+          13.86,
+          18.39
+        ],
+        "doc_leak": 100.0,
+        "doc_leak_ci": [
+          100.0,
+          100.0
+        ],
+        "over": 5.24,
+        "over_ci": [
+          4.3,
+          6.32
+        ],
+        "docs": 127
+      },
+      "gateway_vs_model": {
+        "leak_diff": -0.04,
+        "leak_diff_ci": [
+          -0.1,
+          0.0
+        ],
+        "over_diff": -0.0,
+        "over_diff_ci": [
+          -0.01,
+          0.0
+        ]
+      },
+      "baselines": {
+        "gliner_nvidia": {
+          "leak": 19.29,
+          "leak_ci": [
+            17.02,
+            21.72
+          ],
+          "doc_leak": 100.0,
+          "doc_leak_ci": [
+            100.0,
+            100.0
+          ],
+          "over": 17.55,
+          "over_ci": [
+            15.18,
+            20.1
+          ],
+          "docs": 127,
+          "m5_minus_baseline": {
+            "leak_diff": -3.38,
+            "leak_diff_ci": [
+              -4.54,
+              -2.22
+            ],
+            "over_diff": -12.32,
+            "over_diff_ci": [
+              -15.02,
+              -9.77
+            ]
+          }
+        },
+        "openmed": {
+          "leak": 14.91,
+          "leak_ci": [
+            13.43,
+            16.44
+          ],
+          "doc_leak": 100.0,
+          "doc_leak_ci": [
+            100.0,
+            100.0
+          ],
+          "over": 6.75,
+          "over_ci": [
+            5.8,
+            7.81
+          ],
+          "docs": 127,
+          "m5_minus_baseline": {
+            "leak_diff": 1.01,
+            "leak_diff_ci": [
+              -0.85,
+              3.31
+            ],
+            "over_diff": -1.51,
+            "over_diff_ci": [
+              -2.71,
+              -0.25
+            ]
+          }
+        },
+        "presidio": {
+          "leak": 11.23,
+          "leak_ci": [
+            9.32,
+            13.7
+          ],
+          "doc_leak": 100.0,
+          "doc_leak_ci": [
+            100.0,
+            100.0
+          ],
+          "over": 34.12,
+          "over_ci": [
+            31.74,
+            36.36
+          ],
+          "docs": 127,
+          "m5_minus_baseline": {
+            "leak_diff": 4.69,
+            "leak_diff_ci": [
+              2.92,
+              6.46
+            ],
+            "over_diff": -28.88,
+            "over_diff_ci": [
+              -31.02,
+              -26.77
+            ]
+          }
+        },
+        "validators": {
+          "leak": 99.95,
+          "leak_ci": [
+            99.88,
+            100.0
+          ],
+          "doc_leak": 100.0,
+          "doc_leak_ci": [
+            100.0,
+            100.0
+          ],
+          "over": 0.0,
+          "over_ci": [
+            0.0,
+            0.0
+          ],
+          "docs": 127,
+          "m5_minus_baseline": {
+            "leak_diff": -84.04,
+            "leak_diff_ci": [
+              -86.04,
+              -81.55
+            ],
+            "over_diff": 5.24,
+            "over_diff_ci": [
+              4.3,
+              6.32
+            ]
+          }
+        }
+      }
+    },
+    "support_desk_300": {
+      "m5_model": {
+        "leak": 1.7,
+        "leak_ci": [
+          0.82,
+          2.78
+        ],
+        "doc_leak": 4.58,
+        "doc_leak_ci": [
+          2.7,
+          7.15
+        ],
+        "over": 5.75,
+        "over_ci": [
+          4.02,
+          7.77
+        ],
+        "docs": 300
+      },
+      "m5_seed_leak": {
+        "m5_targeted": 0.68,
+        "m5_s42": 2.22,
+        "m5_s3407": 2.2
+      },
+      "m5_model_gateway_scope": {
+        "leak": 4.21,
+        "leak_ci": [
+          2.12,
+          6.53
+        ],
+        "doc_leak": 7.51,
+        "doc_leak_ci": [
+          4.68,
+          10.71
+        ],
+        "over": 5.74,
+        "over_ci": [
+          4.01,
+          7.76
+        ],
+        "docs": 300
+      },
+      "m5_gateway": {
+        "leak": 1.25,
+        "leak_ci": [
+          0.5,
+          2.14
+        ],
+        "doc_leak": 4.23,
+        "doc_leak_ci": [
+          2.16,
+          6.85
+        ],
+        "over": 5.72,
+        "over_ci": [
+          3.96,
+          7.78
+        ],
+        "docs": 300
+      },
+      "gateway_vs_model": {
+        "leak_diff": -2.96,
+        "leak_diff_ci": [
+          -5.3,
+          -1.02
+        ],
+        "over_diff": -0.02,
+        "over_diff_ci": [
+          -0.26,
+          0.24
+        ]
+      },
+      "baselines": {
+        "gliner_nvidia": {
+          "leak": 8.11,
+          "leak_ci": [
+            5.18,
+            11.03
+          ],
+          "doc_leak": 16.59,
+          "doc_leak_ci": [
+            11.68,
+            22.01
+          ],
+          "over": 23.23,
+          "over_ci": [
+            20.13,
+            26.4
+          ],
+          "docs": 300,
+          "m5_minus_baseline": {
+            "leak_diff": -6.41,
+            "leak_diff_ci": [
+              -9.46,
+              -3.39
+            ],
+            "over_diff": -17.48,
+            "over_diff_ci": [
+              -20.77,
+              -14.49
+            ]
+          }
+        },
+        "openmed": {
+          "leak": 3.54,
+          "leak_ci": [
+            2.09,
+            5.27
+          ],
+          "doc_leak": 16.11,
+          "doc_leak_ci": [
+            11.0,
+            21.17
+          ],
+          "over": 16.05,
+          "over_ci": [
+            13.47,
+            18.65
+          ],
+          "docs": 300,
+          "m5_minus_baseline": {
+            "leak_diff": -1.84,
+            "leak_diff_ci": [
+              -3.76,
+              -0.03
+            ],
+            "over_diff": -10.3,
+            "over_diff_ci": [
+              -12.82,
+              -7.92
+            ]
+          }
+        },
+        "presidio": {
+          "leak": 18.91,
+          "leak_ci": [
+            15.23,
+            22.37
+          ],
+          "doc_leak": 45.02,
+          "doc_leak_ci": [
+            38.28,
+            51.42
+          ],
+          "over": 23.1,
+          "over_ci": [
+            19.68,
+            26.37
+          ],
+          "docs": 300,
+          "m5_minus_baseline": {
+            "leak_diff": -17.21,
+            "leak_diff_ci": [
+              -20.78,
+              -13.36
+            ],
+            "over_diff": -17.34,
+            "over_diff_ci": [
+              -20.71,
+              -14.29
+            ]
+          }
+        },
+        "validators": {
+          "leak": 69.31,
+          "leak_ci": [
+            64.17,
+            74.46
+          ],
+          "doc_leak": 87.68,
+          "doc_leak_ci": [
+            83.09,
+            91.98
+          ],
+          "over": 1.32,
+          "over_ci": [
+            0.0,
+            4.02
+          ],
+          "docs": 300,
+          "m5_minus_baseline": {
+            "leak_diff": -67.61,
+            "leak_diff_ci": [
+              -72.93,
+              -62.37
+            ],
+            "over_diff": 4.43,
+            "over_diff_ci": [
+              1.91,
+              6.94
+            ]
+          }
+        }
+      }
+    },
+    "test_id": {
+      "m5_model": {
+        "leak": 0.6,
+        "leak_ci": [
+          0.54,
+          0.69
+        ],
+        "doc_leak": 13.84,
+        "doc_leak_ci": [
+          13.0,
+          14.77
+        ],
+        "over": 0.48,
+        "over_ci": [
+          0.42,
+          0.55
+        ],
+        "docs": 5000
+      },
+      "m5_seed_leak": {
+        "m5_targeted": 0.61,
+        "m5_s42": 0.61,
+        "m5_s3407": 0.6
+      },
+      "m5_model_gateway_scope": {
+        "leak": 0.6,
+        "leak_ci": [
+          0.54,
+          0.69
+        ],
+        "doc_leak": 13.84,
+        "doc_leak_ci": [
+          13.0,
+          14.77
+        ],
+        "over": 0.48,
+        "over_ci": [
+          0.42,
+          0.55
+        ],
+        "docs": 5000
+      },
+      "m5_gateway": {
+        "leak": 0.55,
+        "leak_ci": [
+          0.49,
+          0.63
+        ],
+        "doc_leak": 13.7,
+        "doc_leak_ci": [
+          12.85,
+          14.58
+        ],
+        "over": 0.59,
+        "over_ci": [
+          0.51,
+          0.66
+        ],
+        "docs": 5000
+      },
+      "gateway_vs_model": {
+        "leak_diff": -0.05,
+        "leak_diff_ci": [
+          -0.08,
+          -0.03
+        ],
+        "over_diff": 0.11,
+        "over_diff_ci": [
+          0.08,
+          0.14
+        ]
+      },
+      "baselines": {
+        "validators": {
+          "leak": 83.68,
+          "leak_ci": [
+            83.33,
+            84.03
+          ],
+          "doc_leak": 99.1,
+          "doc_leak_ci": [
+            98.82,
+            99.36
+          ],
+          "over": 0.96,
+          "over_ci": [
+            0.69,
+            1.27
+          ],
+          "docs": 5000,
+          "m5_minus_baseline": {
+            "leak_diff": -83.08,
+            "leak_diff_ci": [
+              -83.44,
+              -82.72
+            ],
+            "over_diff": -0.48,
+            "over_diff_ci": [
+              -0.77,
+              -0.21
+            ]
+          }
+        }
+      }
+    }
+  },
+  "gateway_latency": {
+    "testset": "support_desk_val",
+    "policy": "analytics",
+    "health": {
+      "status": "ok",
+      "detector": "lora",
+      "vault": true
+    },
+    "requests": 100,
+    "status_codes": {
+      "200": 100
+    },
+    "latency_s": {
+      "p50": 0.38057417096570134,
+      "p95": 1.0769442000892013,
+      "max": 1.3591499784961343,
+      "mean": 0.4165821327827871
+    },
+    "latency_s_per_1k_chars": {
+      "p50": 4.599799822679462,
+      "p95": 9.757045419097613
+    },
+    "gold_values_left_in_output": 31,
+    "gold_values": 205,
+    "restore_exact": 100
+  }
+}

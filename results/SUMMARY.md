@@ -95,6 +95,13 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M2 cleaned OpenPII 5k + Nemotron 5k | openpii_xx | 3000 | 2.3 | 26.8 | 2.1 | 0.810 | 0.979 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | openpii_xx | 3000 | 2.1 | 25.3 | 1.8 | 0.835 | 0.982 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | openpii_xx | 3000 | 3.0 | 40.4 | 1.2 | 0.632 | 0.981 | 583 | 1146 | Linux x86_64 |
+| GLiNER-PII (NVIDIA) | support_desk_300 | 300 | 8.1 | 11.7 | 23.2 | 0.709 | 0.855 | 400 | 1023 | Linux x86_64 |
+| m5_s3407 | support_desk_300 | 300 | 2.2 | 3.7 | 5.5 | 0.858 | 0.972 | 4187 | 11136 | Linux x86_64 |
+| m5_s42 | support_desk_300 | 300 | 2.2 | 4.0 | 5.7 | 0.857 | 0.969 | 4189 | 11199 | Linux x86_64 |
+| m5_targeted | support_desk_300 | 300 | 0.7 | 2.0 | 6.1 | 0.858 | 0.971 | 4549 | 10967 | Linux x86_64 |
+| OpenMed privacy filter v2 | support_desk_300 | 300 | 3.5 | 11.3 | 16.1 | 0.639 | 0.874 | 1370 | 2310 | Linux x86_64 |
+| Presidio | support_desk_300 | 300 | 18.9 | 31.7 | 23.1 | 0.170 | 0.740 | 76 | 145 | Linux x86_64 |
+| validators | support_desk_300 | 300 | 69.3 | 61.7 | 1.3 | 0.225 | 0.230 | 1 | 6 | Darwin arm64 |
 | m5_targeted | support_desk_fresh | 100 | 4.6 | 13.0 | 3.1 | 0.915 | 0.961 | 7596 | 12604 | Linux x86_64 |
 | p2_m4_lr4e-4 | support_desk_fresh | 100 | 27.6 | 35.0 | 8.7 | 0.827 | 0.905 | 7585 | 11890 | Linux x86_64 |
 | m5_targeted | support_desk_hard | 100 | 5.3 | 15.0 | 8.9 | 0.808 | 0.938 | 7225 | 13732 | Linux x86_64 |
@@ -120,8 +127,12 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M1 cleaned OpenPII 10k | tab | 127 | 19.5 | 100.0 | 3.3 | 0.436 | 0.904 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | tab | 127 | 21.5 | 100.0 | 2.7 | 0.486 | 0.891 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | tab | 127 | 18.3 | 100.0 | 2.0 | 0.461 | 0.909 |  |  | Linux x86_64 |
+| m5_s3407 | tab | 127 | 15.2 | 100.0 | 5.3 | 0.481 | 0.903 | 633 | 1291 | Linux x86_64 |
+| m5_s42 | tab | 127 | 17.5 | 100.0 | 4.7 | 0.499 | 0.890 | 599 | 1134 | Linux x86_64 |
+| m5_targeted | tab | 127 | 15.0 | 100.0 | 5.7 | 0.484 | 0.903 | 606 | 1597 | Linux x86_64 |
 | OpenMed privacy filter v2 | tab | 127 | 14.9 | 100.0 | 6.8 | 0.402 | 0.897 | 128 | 160 | Linux x86_64 |
 | Presidio | tab | 127 | 11.2 | 100.0 | 34.1 | 0.494 | 0.699 | 24 | 29 | Linux x86_64 |
+| validators | tab | 127 | 100.0 | 100.0 | 0.0 | 0.000 | 0.001 | 1 | 2 | Darwin arm64 |
 | Base LLM, zero-shot | test_holdout_regions | 2000 | 46.8 | 92.5 | 3.3 | 0.481 | 0.704 | 1615 | 4881 | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | test_holdout_regions | 2000 | 12.7 | 64.6 | 11.1 | 0.628 | 0.903 | 49 | 109 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | test_holdout_regions | 2000 | 6.3 | 53.3 | 5.7 | 0.703 | 0.949 | 121 | 293 | Linux x86_64 |
@@ -132,6 +143,10 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M3 cleaned OpenPII 10k + Nemotron 10k | test_holdout_regions | 2000 | 0.8 | 15.8 | 0.5 | 0.929 | 0.993 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | test_holdout_regions | 2000 | 0.8 | 27.5 | 1.4 | 0.657 | 0.987 | 587 | 1150 | Linux x86_64 |
 | Presidio | test_holdout_regions | 2000 | 35.7 | 89.9 | 19.0 | 0.223 | 0.709 | 43 | 72 | Linux x86_64 |
+| m5_s3407 | test_id | 5000 | 0.6 | 13.7 | 0.5 | 0.947 | 0.994 | 4101 | 9693 | Linux x86_64 |
+| m5_s42 | test_id | 5000 | 0.6 | 13.9 | 0.5 | 0.948 | 0.994 | 4211 | 9684 | Linux x86_64 |
+| m5_targeted | test_id | 5000 | 0.6 | 13.9 | 0.5 | 0.944 | 0.994 | 4105 | 10221 | Linux x86_64 |
+| validators | test_id | 5000 | 83.7 | 99.1 | 1.0 | 0.149 | 0.208 | 1 | 3 | Darwin arm64 |
 | m5_targeted | val_in_region | 1000 | 0.6 | 14.2 | 0.3 | 0.938 | 0.995 | 4800 | 8553 | Linux x86_64 |
 | p1_lr4e-4 | val_in_region | 1000 | 0.6 | 13.1 | 0.3 | 0.938 | 0.996 |  |  | Linux x86_64 |
 | p2_m4_lr2.83e-4 | val_in_region | 1000 | 0.6 | 12.3 | 0.4 | 0.936 | 0.995 |  |  | Linux x86_64 |
@@ -157,8 +172,12 @@ Each cell is leakage / partial F1; n/a means not run (Presidio is English-only h
 | M1 cleaned OpenPII 10k | 0.8 / 0.99 | 18.7 / 0.84 | 19.5 / 0.90 | 40.4 / 0.54 | 41.7 / 0.51 | 2.3 / 0.98 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | 0.9 / 0.99 | 3.7 / 0.96 | 21.5 / 0.89 | 27.6 / 0.68 | 32.7 / 0.62 | 2.3 / 0.98 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | 0.8 / 0.99 | 3.7 / 0.96 | 18.3 / 0.91 | 28.7 / 0.70 | 33.1 / 0.64 | 2.1 / 0.98 |
+| m5_s3407 | n/a | n/a | 15.2 / 0.90 | n/a | n/a | n/a |
+| m5_s42 | n/a | n/a | 17.5 / 0.89 | n/a | n/a | n/a |
+| m5_targeted | n/a | n/a | 15.0 / 0.90 | n/a | n/a | n/a |
 | OpenMed privacy filter v2 | 0.8 / 0.99 | 2.4 / 0.94 | 14.9 / 0.90 | 29.2 / 0.66 | 39.1 / 0.62 | 3.0 / 0.98 |
 | Presidio | 35.7 / 0.71 | 13.9 / 0.75 | 11.2 / 0.70 | 29.0 / 0.60 | n/a | n/a |
+| validators | n/a | n/a | 100.0 / 0.00 | n/a | n/a | n/a |
 
 ### Gretel non-EN: leakage (%) by language
 
@@ -200,6 +219,93 @@ Qwen3-1.7B, QLoRA r=16, 1 epoch; only the training data differs. ¹ Nemotron tra
 | M1 cleaned OpenPII 10k | 0.8 / 0.5 | 40.2 / 51.2 | 0.8 / 0.5 | 2.3 / 1.4 | 18.7 / 5.8 | 19.5 / 3.3 | 40.4 / 47.2 | 41.7 / 52.9 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | 0.9 / 0.7 | 28.8 / 33.6 | 0.9 / 0.8 | 2.3 / 2.1 | 3.7 / 2.7 | 21.5 / 2.7 | 27.6 / 30.8 | 32.7 / 38.3 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | 0.7 / 0.5 | 29.3 / 30.8 | 0.8 / 0.5 | 2.1 / 1.8 | 3.7 / 2.6 | 18.3 / 2.0 | 28.7 / 29.0 | 33.1 / 33.6 |
+
+# Phase 4: final blind evaluation
+
+M5 = Qwen3-1.7B + QLoRA r=16, lr 4e-4, train_mix_32k; seeds 13, 42, 3407 (per-document counts averaged over seeds). 95% CIs: 1000 document resamples. Each test set was scored once per system.
+
+### tab (127 documents)
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | 95% CI | Over-redaction (%) | 95% CI |
+| --- | ---: | --- | ---: | --- | ---: | --- |
+| **M5, model alone** | 15.91 | [13.92, 18.42] | 100.00 | [100.00, 100.00] | 5.24 | [4.30, 6.32] |
+| gliner_nvidia | 19.29 | [17.02, 21.72] | 100.00 | [100.00, 100.00] | 17.55 | [15.18, 20.10] |
+| openmed | 14.91 | [13.43, 16.44] | 100.00 | [100.00, 100.00] | 6.75 | [5.80, 7.81] |
+| presidio | 11.23 | [9.32, 13.70] | 100.00 | [100.00, 100.00] | 34.12 | [31.74, 36.36] |
+| validators | 99.95 | [99.88, 100.00] | 100.00 | [100.00, 100.00] | 0.00 | [0.00, 0.00] |
+
+Seed leakage (13, 42, 3407): 15.05, 17.52, 15.17.
+
+| M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
+| --- | ---: | --- | ---: | --- |
+| gliner_nvidia | -3.38 | [-4.54, -2.22] | -12.32 | [-15.02, -9.77] |
+| openmed | +1.01 | [-0.85, 3.31] | -1.51 | [-2.71, -0.25] |
+| presidio | +4.69 | [2.92, 6.46] | -28.88 | [-31.02, -26.77] |
+| validators | -84.04 | [-86.04, -81.55] | +5.24 | [4.30, 6.32] |
+
+Gateway label scope (IBAN, IPADDRESS counted):
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | Over-redaction (%) |
+| --- | ---: | --- | ---: | ---: |
+| M5 model alone | 15.91 | [13.92, 18.42] | 100.00 | 5.24 |
+| **M5 + validators (gateway)** | 15.87 | [13.86, 18.39] | 100.00 | 5.24 |
+
+Gateway − model: leakage -0.04 pt [-0.10, 0.00], over-redaction -0.00 pt [-0.01, 0.00].
+
+### support_desk_300 (300 documents)
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | 95% CI | Over-redaction (%) | 95% CI |
+| --- | ---: | --- | ---: | --- | ---: | --- |
+| **M5, model alone** | 1.70 | [0.82, 2.78] | 4.58 | [2.70, 7.15] | 5.75 | [4.02, 7.77] |
+| gliner_nvidia | 8.11 | [5.18, 11.03] | 16.59 | [11.68, 22.01] | 23.23 | [20.13, 26.40] |
+| openmed | 3.54 | [2.09, 5.27] | 16.11 | [11.00, 21.17] | 16.05 | [13.47, 18.65] |
+| presidio | 18.91 | [15.23, 22.37] | 45.02 | [38.28, 51.42] | 23.10 | [19.68, 26.37] |
+| validators | 69.31 | [64.17, 74.46] | 87.68 | [83.09, 91.98] | 1.32 | [0.00, 4.02] |
+
+Seed leakage (13, 42, 3407): 0.68, 2.22, 2.20.
+
+| M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
+| --- | ---: | --- | ---: | --- |
+| gliner_nvidia | -6.41 | [-9.46, -3.39] | -17.48 | [-20.77, -14.49] |
+| openmed | -1.84 | [-3.76, -0.03] | -10.30 | [-12.82, -7.92] |
+| presidio | -17.21 | [-20.78, -13.36] | -17.34 | [-20.71, -14.29] |
+| validators | -67.61 | [-72.93, -62.37] | +4.43 | [1.91, 6.94] |
+
+Gateway label scope (IBAN, IPADDRESS counted):
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | Over-redaction (%) |
+| --- | ---: | --- | ---: | ---: |
+| M5 model alone | 4.21 | [2.12, 6.53] | 7.51 | 5.74 |
+| **M5 + validators (gateway)** | 1.25 | [0.50, 2.14] | 4.23 | 5.72 |
+
+Gateway − model: leakage -2.96 pt [-5.30, -1.02], over-redaction -0.02 pt [-0.26, 0.24].
+
+### test_id (5000 documents)
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | 95% CI | Over-redaction (%) | 95% CI |
+| --- | ---: | --- | ---: | --- | ---: | --- |
+| **M5, model alone** | 0.60 | [0.54, 0.69] | 13.84 | [13.00, 14.77] | 0.48 | [0.42, 0.55] |
+| validators | 83.68 | [83.33, 84.03] | 99.10 | [98.82, 99.36] | 0.96 | [0.69, 1.27] |
+
+Seed leakage (13, 42, 3407): 0.61, 0.61, 0.60.
+
+| M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
+| --- | ---: | --- | ---: | --- |
+| validators | -83.08 | [-83.44, -82.72] | -0.48 | [-0.77, -0.21] |
+
+Gateway label scope (IBAN, IPADDRESS counted):
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | Over-redaction (%) |
+| --- | ---: | --- | ---: | ---: |
+| M5 model alone | 0.60 | [0.54, 0.69] | 13.84 | 0.48 |
+| **M5 + validators (gateway)** | 0.55 | [0.49, 0.63] | 13.70 | 0.59 |
+
+Gateway − model: leakage -0.05 pt [-0.08, -0.03], over-redaction +0.11 pt [0.08, 0.14].
+
+### Live gateway (M5 + validators, one A40, single requests)
+
+100 support_desk_val messages, HTTP {'200': 100}: latency p50 0.38 s, p95 1.08 s per request; restore exact 100/100.
+
 
 # Hyperparameter sweeps (eval/select.py)
 

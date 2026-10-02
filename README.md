@@ -2,13 +2,62 @@
 
 A self-hosted gateway that finds personal data in English customer-support text and masks or pseudonymises it before the text is logged, analysed or sent to an external LLM. The detector is a small open LLM fine-tuned with QLoRA, backed by deterministic validators. It's benchmarked honestly against Presidio, GLiNER-PII and OpenMed's privacy filter.
 
-> **Status: week 3 of 6.** Data, label audit, baselines, out-of-distribution tests and a training-data ablation are done; the current model is M3 (cleaned OpenPII + Nemotron, 20k). The gateway, demo and Docker images are stubs (see [Roadmap](#roadmap)).
+> **Status (2 October).** Final model: **M5**, Qwen3-1.7B + QLoRA r=16 trained on cleaned OpenPII, Nemotron-PII and Gretel EN (10k each) plus 2k targeted synthetic support messages. It has passed a blind 3-seed evaluation (below).
+>
+> - **Built:** the gateway (validators, normalisation, recall-first merge, policies, AES-256-GCM vault, FastAPI) and the CPU and GPU Docker images.
+> - **Still stubs:** the demo and `/proxy` (see [Roadmap](#roadmap)).
 
 ## Why a small fine-tuned model
 
 You can't send customer PII to a third party in order to remove the PII. A redactor has to run on-premises, on every message, with exact spans, and a missed phone number is a data leak. That makes it a narrow, high-volume task that a small model can learn, where cost and latency per call matter. GDPR names pseudonymisation as a safeguard (Art. 4(5), 25 and 32).
 
 ## Results
+
+### Final blind evaluation (phase 4)
+
+How these numbers were produced:
+
+- **Model:** M5, 3 seeds (13, 42, 3407), with per-document counts averaged over the seeds.
+- **Scoring:** each test set was scored **once** per system.
+- **Confidence intervals:** 95%, from 1,000 document resamples.
+- **Gateway rows:** M5 + validators, with IBAN and IP addresses counted as gold. Full tables are in [`results/phase4/phase4.md`](results/phase4/phase4.md).
+
+Leakage (%) with 95% CI; over-redaction (%) in parentheses:
+
+| System | Support desk (300 msgs) | TAB court cases (127) | OpenPII test_id (5,000) |
+| --- | --- | --- | --- |
+| **M5 + validators (gateway)** | **1.3** [0.5, 2.1] (5.7) | 15.9 [13.9, 18.4] (5.2) | 0.55 [0.49, 0.63] (0.6) |
+| **M5, model alone** | **1.7** [0.8, 2.8] (5.8) | 15.9 [13.9, 18.4] (5.2) | 0.60 [0.54, 0.69] (0.5) |
+| OpenMed privacy filter v2 | 3.5 [2.1, 5.3] (16.1) | 14.9 [13.4, 16.4] (6.8) | not run |
+| GLiNER-PII (NVIDIA) | 8.1 [5.2, 11.0] (23.2) | 19.3 [17.0, 21.7] (17.6) | not run |
+| Presidio 2.2 | 18.9 [15.2, 22.4] (23.1) | 11.2 [9.3, 13.7] (34.1) | not run |
+| Validators alone | 69.3 [64.2, 74.5] (1.3) | 99.9 (0.0) | 83.7 (1.0) |
+
+**Support desk.** M5 has the lowest leakage of every system, and the paired differences exclude 0:
+
+| Comparison | Leakage Δ (pt) |
+| --- | --- |
+| M5 − OpenMed | −1.8 [−3.8, −0.03] |
+| M5 − GLiNER-PII | −6.4 [−9.5, −3.4] |
+| M5 − Presidio | −17.2 [−20.8, −13.4] |
+
+It also over-redacts a third as much as the baselines. Under the gateway label scope (IBAN and IP addresses counted), the validators cut M5's support-desk leakage from 4.2% to 1.3%, a difference of −3.0 pt [−5.3, −1.0].
+
+**TAB.** M5 ties OpenMed (+1.0 [−0.9, +3.3]) and beats GLiNER-PII (−3.4 [−4.5, −2.2]). Presidio leaks less (11.2%) but over-redacts 34% of what it masks.
+
+**Seed spread** (leakage for seeds 13 / 42 / 3407):
+
+| Test set | Leakage (%) |
+| --- | --- |
+| Support desk | 0.7 / 2.2 / 2.2 |
+| TAB | 15.1 / 17.5 / 15.2 |
+| test_id | 0.61 / 0.61 / 0.60 |
+
+**Live gateway.** On one A40, with single requests, the full gateway answered 100 support messages with a median latency of 0.38 s and a p95 of 1.08 s per request. Every `/restore` round-trip was exact.
+
+**Caveats.** The support-desk sets are LLM-written; Claude drafted them and they were not human-checked. TAB is real legal text, but only 127 documents.
+
+### Earlier results (weeks 2–3)
 
 Headline metric: **leakage**, the share of gold PII characters left unmasked (lower is better). The out-of-distribution columns (held-out region, Nemotron-PII, support desk) are the headline; the in-distribution OpenPII column is not. Full per-test-set numbers are in [`results/SUMMARY.md`](results/SUMMARY.md).
 
@@ -189,8 +238,8 @@ All metrics are also broken down per label and per region.
 1. **Week 1 (this pass): data and baselines.** Splits, MinHash dedup, audit sheets, metrics, Presidio / GLiNER / OpenMed wrappers and `make eval`.
 2. **Week 2: first LoRA model.** Prompt format, span alignment, JSON-constrained decoding, then r=16 on 10k examples with Qwen3-1.7B.
 3. **Week 3: ablations.** Rank 8/16/32, data 2k/10k/50k, 1.7B vs 4B, attention-only vs all linear layers; Nemotron-PII evaluation.
-4. **Week 4: gateway.** Validators, normalisation, recall-first merge, policies, encrypted vault, FastAPI `/redact` `/restore` `/proxy`, and the canary log-leak test.
-5. **Week 5: demo and hard tests.** Gradio (Redact, Safe LLM, Compare), GPU and CPU Docker images, the finished support-desk and adversarial sets.
+4. **Week 4: gateway (done, except `/proxy` and the canary log-leak test).** Validators, normalisation, recall-first merge, policies, encrypted vault, FastAPI `/redact` `/restore` `/proxy`, and the canary log-leak test.
+5. **Week 5: demo and hard tests.** Gradio (Redact, Safe LLM, Compare) is still to do. Done: the GPU and CPU Docker images, the support-desk sets (val, hard, fresh, 300) and the targeted-data model M5.
 6. **Week 6: release.** Model card, adapters on the Hugging Face Hub, write-up.
 
 ### Demo example (week 5)
