@@ -19,6 +19,9 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | p1_lr4e-4 | dev | 2000 | 0.6 | 14.5 | 0.4 | 0.945 | 0.995 |  |  | Linux x86_64 |
 | p1_lr5e-5 | dev | 2000 | 1.6 | 26.5 | 0.8 | 0.875 | 0.988 |  |  | Linux x86_64 |
 | p1_lr6e-4 | dev | 2000 | 0.7 | 13.9 | 0.4 | 0.951 | 0.995 |  |  | Linux x86_64 |
+| p2_m4_lr2.83e-4 | dev | 2000 | 0.6 | 13.9 | 0.5 | 0.941 | 0.994 |  |  | Linux x86_64 |
+| p2_m4_lr2e-4 | dev | 2000 | 0.7 | 14.8 | 0.6 | 0.932 | 0.994 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | dev | 2000 | 0.6 | 13.8 | 0.4 | 0.947 | 0.995 |  |  | Linux x86_64 |
 | Presidio | dev | 200 | 33.6 | 89.0 | 22.4 | 0.232 | 0.721 | 42 | 65 | Darwin arm64 |
 | M0 OpenPII 10k | gretel_dev | 1000 | 40.0 | 84.4 | 51.5 | 0.120 | 0.514 |  |  | Linux x86_64 |
 | M1 cleaned OpenPII 10k | gretel_dev | 1000 | 40.2 | 84.2 | 51.2 | 0.120 | 0.519 |  |  | Linux x86_64 |
@@ -29,6 +32,9 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | p1_lr4e-4 | gretel_dev | 1000 | 29.1 | 83.9 | 28.7 | 0.184 | 0.675 |  |  | Linux x86_64 |
 | p1_lr5e-5 | gretel_dev | 1000 | 29.6 | 83.4 | 37.7 | 0.171 | 0.645 |  |  | Linux x86_64 |
 | p1_lr6e-4 | gretel_dev | 1000 | 28.7 | 83.8 | 30.2 | 0.187 | 0.679 |  |  | Linux x86_64 |
+| p2_m4_lr2.83e-4 | gretel_dev | 1000 | 17.9 | 77.7 | 13.4 | 0.318 | 0.839 |  |  | Linux x86_64 |
+| p2_m4_lr2e-4 | gretel_dev | 1000 | 18.2 | 78.0 | 13.6 | 0.311 | 0.836 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | gretel_dev | 1000 | 17.3 | 77.3 | 12.8 | 0.317 | 0.848 |  |  | Linux x86_64 |
 | Base LLM, zero-shot | gretel_en | 1000 | 62.0 | 87.9 | 38.4 | 0.138 | 0.508 | 1616 | 10752 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | gretel_en | 1000 | 44.1 | 85.1 | 46.6 | 0.135 | 0.522 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | gretel_en | 1000 | 40.5 | 84.9 | 47.0 | 0.135 | 0.534 |  |  | Linux x86_64 |
@@ -64,6 +70,10 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M3 cleaned OpenPII 10k + Nemotron 10k | nemotron | 3000 | 3.7 | 9.1 | 2.6 | 0.912 | 0.964 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | nemotron | 3000 | 2.4 | 7.9 | 7.0 | 0.864 | 0.942 | 254 | 694 | Linux x86_64 |
 | Presidio | nemotron | 3000 | 13.9 | 41.9 | 33.0 | 0.402 | 0.746 | 32 | 53 | Linux x86_64 |
+| p1_lr4e-4 | nemotron_dev | 1000 | 2.2 | 5.1 | 1.7 | 0.936 | 0.977 |  |  | Linux x86_64 |
+| p2_m4_lr2.83e-4 | nemotron_dev | 1000 | 2.9 | 6.3 | 4.6 | 0.915 | 0.959 |  |  | Linux x86_64 |
+| p2_m4_lr2e-4 | nemotron_dev | 1000 | 3.0 | 6.9 | 3.7 | 0.920 | 0.967 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | nemotron_dev | 1000 | 2.8 | 6.4 | 3.5 | 0.920 | 0.965 |  |  | Linux x86_64 |
 | Base LLM, zero-shot | openpii_xx | 3000 | 51.3 | 93.6 | 4.6 | 0.436 | 0.652 | 1836 | 12341 | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | openpii_xx | 3000 | 11.9 | 62.7 | 18.3 | 0.538 | 0.872 | 47 | 105 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | openpii_xx | 3000 | 8.4 | 57.2 | 6.6 | 0.644 | 0.943 | 126 | 301 | Linux x86_64 |
@@ -73,6 +83,10 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M2 cleaned OpenPII 5k + Nemotron 5k | openpii_xx | 3000 | 2.3 | 26.8 | 2.1 | 0.810 | 0.979 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | openpii_xx | 3000 | 2.1 | 25.3 | 1.8 | 0.835 | 0.982 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | openpii_xx | 3000 | 3.0 | 40.4 | 1.2 | 0.632 | 0.981 | 583 | 1146 | Linux x86_64 |
+| p1_lr4e-4 | support_desk_val | 100 | 1.4 | 6.0 | 12.1 | 0.792 | 0.902 |  |  | Linux x86_64 |
+| p2_m4_lr2.83e-4 | support_desk_val | 100 | 2.4 | 6.0 | 15.2 | 0.787 | 0.895 |  |  | Linux x86_64 |
+| p2_m4_lr2e-4 | support_desk_val | 100 | 1.4 | 5.0 | 13.7 | 0.804 | 0.905 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | support_desk_val | 100 | 1.1 | 4.0 | 14.2 | 0.797 | 0.907 |  |  | Linux x86_64 |
 | Base LLM, zero-shot | tab | 127 | 82.7 | 100.0 | 11.2 | 0.165 | 0.363 | 893 | 1886 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | tab | 127 | 22.8 | 100.0 | 2.9 | 0.449 | 0.882 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | tab | 127 | 19.0 | 100.0 | 3.1 | 0.450 | 0.906 |  |  | Linux x86_64 |
@@ -95,6 +109,10 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M3 cleaned OpenPII 10k + Nemotron 10k | test_holdout_regions | 2000 | 0.8 | 15.8 | 0.5 | 0.929 | 0.993 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | test_holdout_regions | 2000 | 0.8 | 27.5 | 1.4 | 0.657 | 0.987 | 587 | 1150 | Linux x86_64 |
 | Presidio | test_holdout_regions | 2000 | 35.7 | 89.9 | 19.0 | 0.223 | 0.709 | 43 | 72 | Linux x86_64 |
+| p1_lr4e-4 | val_in_region | 1000 | 0.6 | 13.1 | 0.3 | 0.938 | 0.996 |  |  | Linux x86_64 |
+| p2_m4_lr2.83e-4 | val_in_region | 1000 | 0.6 | 12.3 | 0.4 | 0.936 | 0.995 |  |  | Linux x86_64 |
+| p2_m4_lr2e-4 | val_in_region | 1000 | 0.7 | 13.2 | 0.5 | 0.932 | 0.995 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | val_in_region | 1000 | 0.7 | 12.1 | 0.3 | 0.944 | 0.995 |  |  | Linux x86_64 |
 
 ## Out-of-distribution leakage (%)
 
@@ -171,4 +189,17 @@ Primary: leakage on gretel_dev (mean). Tie band 1.0 pt; tie-breaks: over-redacti
 | p1_lr1e-4 | output_dir=outputs/hpo/p1_lr1e-4 learning_rate=1e-4 | 29.80 | 31.82 | 0.99 | 38.0 | 3.4 | no |  |
 
 **Decision:** p1_lr4e-4: 4 candidates within 1.0 pt of the best leakage (28.70%); tie broken by over-redaction, then in-distribution leakage.
+
+## Sweep: phase2_m4
+
+Primary: leakage on support_desk_val + val_in_region (mean). Tie band 1.0 pt; tie-breaks: over-redaction, then leakage on dev + nemotron_dev + gretel_dev. Sanity rule on: dropped ≤ 5%, token-limit ≤ 2%.
+
+| Run | Overrides | Primary leakage (%) | Over-redaction (%) | In-dist leakage (%) | Dropped values (%) | Hit token limit (%) | Sane | Missing |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| p2_m4_lr4e-4 | output_dir=outputs/hpo/p2_m4_lr4e-4 learning_rate=4e-4 | 0.91 | 7.26 | 6.89 | 0.1 | 0.0 | yes |  |
+| p1_lr4e-4 **(winner)** | output_dir=outputs/hpo/p1_lr4e-4 learning_rate=4e-4 | 0.99 | 6.21 | 10.64 | 0.1 | 0.0 | yes |  |
+| p2_m4_lr2e-4 | output_dir=outputs/hpo/p2_m4_lr2e-4 learning_rate=2e-4 | 1.09 | 7.06 | 7.30 | 0.2 | 0.0 | yes |  |
+| p2_m4_lr2.83e-4 | output_dir=outputs/hpo/p2_m4_lr2.83e-4 learning_rate=2.83e-4 | 1.53 | 7.83 | 7.15 | 0.1 | 0.0 | yes |  |
+
+**Decision:** p1_lr4e-4: 4 candidates within 1.0 pt of the best leakage (0.91%); tie broken by over-redaction, then in-distribution leakage.
 
