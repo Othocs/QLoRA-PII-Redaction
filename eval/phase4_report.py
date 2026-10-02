@@ -52,10 +52,13 @@ def main(argv: list[str] | None = None) -> dict:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("--n", type=int, default=1000)
     ap.add_argument("--results", default="results")
+    ap.add_argument("--sets", default=",".join(SETS))
+    ap.add_argument("--name", default="phase4", help="output: results/phase4/<name>.{json,md}")
+    ap.add_argument("--title", default="Phase 4: final blind evaluation")
     args = ap.parse_args(argv)
     R = Path(args.results)
-    out: dict = {"n_resamples": args.n, "seeds": SEEDS, "sets": {}}
-    for ts in SETS:
+    out: dict = {"n_resamples": args.n, "seeds": SEEDS, "sets": {}, "title": args.title}
+    for ts in [t for t in args.sets.split(",") if t]:
         per_seed = {t: doc_counts(t, ts, R) for t in SEEDS}
         model = np.mean(list(per_seed.values()), axis=0)
         gl = np.mean([doc_counts(f"{t}_gl", ts, R, True) for t in SEEDS], axis=0)
@@ -67,6 +70,7 @@ def main(argv: list[str] | None = None) -> dict:
             "m5_gateway": summary(gw, args.n),
             "gateway_vs_model": paired(gw, gl, args.n),
             "baselines": {},
+            "m5_per_label_leak": per_label(R, ts),
         }
         for b in BASELINES:
             if not (R / "runs" / f"{b}__{ts}.jsonl").exists():
@@ -81,11 +85,22 @@ def main(argv: list[str] | None = None) -> dict:
     if lat.exists():
         out["gateway_latency"] = json.loads(lat.read_text())
     (R / "phase4").mkdir(exist_ok=True)
-    (R / "phase4" / "phase4.json").write_text(json.dumps(out, indent=2) + "\n")
+    (R / "phase4" / f"{args.name}.json").write_text(json.dumps(out, indent=2) + "\n")
     md = render(out)
-    (R / "phase4" / "phase4.md").write_text(md)
+    (R / "phase4" / f"{args.name}.md").write_text(md)
     print(md)
     return out
+
+
+def per_label(R: Path, ts: str) -> dict:
+    """Seed-averaged character leakage per gold label (from each seed's result JSON)."""
+    acc: dict[str, list[float]] = {}
+    for t in SEEDS:
+        m = json.loads((R / f"{t}__{ts}.json").read_text())["metrics"]
+        for lab, v in m.get("per_label", {}).items():
+            if v.get("n_gold"):
+                acc.setdefault(lab, []).append(100 * v["leakage_chars"])
+    return {lab: round(sum(v) / len(v), 2) for lab, v in sorted(acc.items())}
 
 
 def _ci(x: list) -> str:
@@ -93,7 +108,7 @@ def _ci(x: list) -> str:
 
 
 def render(out: dict) -> str:
-    lines = ["## Phase 4: final blind evaluation", "",
+    lines = [f"## {out.get('title', 'Phase 4: final blind evaluation')}", "",
              f"M5 = Qwen3-1.7B + QLoRA r=16, lr 4e-4, train_mix_32k; seeds 13, 42, 3407 (per-document "
              f"counts averaged over seeds). 95% CIs: {out['n_resamples']} document resamples. "
              "Each test set was scored once per system.", ""]  # fmt: skip
@@ -108,7 +123,9 @@ def render(out: dict) -> str:
         for b, s in e["baselines"].items():
             lines.append(row(b, s))
         seeds = ", ".join(f"{v:.2f}" for v in e["m5_seed_leak"].values())
-        lines += ["", f"Seed leakage (13, 42, 3407): {seeds}.", ""]
+        labs = ", ".join(f"{k} {v:.1f}" for k, v in e.get("m5_per_label_leak", {}).items())
+        lines += ["", f"Seed leakage (13, 42, 3407): {seeds}.", "",
+                  f"M5 leakage by label (%, seed mean): {labs}.", ""]  # fmt: skip
         if e["baselines"]:
             lines += ["| M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |",
                       "| --- | ---: | --- | ---: | --- |"]  # fmt: skip

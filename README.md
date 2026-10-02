@@ -53,6 +53,20 @@ It also over-redacts a third as much as the baselines. Under the gateway label s
 | TAB | 15.1 / 17.5 / 15.2 |
 | test_id | 0.61 / 0.61 / 0.60 |
 
+**Coverage beyond phase 4** (M5 3 seeds, each set scored once; [`results/phase4/final_coverage.md`](results/phase4/final_coverage.md)):
+
+| Set | M5 leakage | OpenMed | GLiNER-PII | Presidio | Status for M5 |
+| --- | --- | --- | --- | --- | --- |
+| OpenPII held-out region (IN, 2,000) | **0.70** [0.60, 0.82] | 0.80 | 6.31 | 35.67 | Unseen |
+| **ABCD: real human-typed support chats (1,002)** | 2.55 [2.04, 3.15] | 0.73 | **0.26** | 8.76 | Unseen |
+| Nemotron-PII test (3,000) | 2.64 [2.25, 3.09] | **1.33** | 5.02 | 12.87 | In-distribution |
+| Gretel EN test (1,000) | **11.43** [10.13, 12.83] | 29.23 | 25.51 | 29.05 | In-distribution |
+
+- **Real conversations: M5 doesn't win.** On ABCD's human-typed chats, GLiNER-PII and OpenMed leak less than M5 (+2.3 and +1.8 pt, CIs excluding 0).
+  - ABCD's labels come from each chat's fictional customer card, and it reuses only 10 names and 9 cities (see `data/abcd/README.md`).
+  - Over-redaction is high for every system there (32–60%), driven by unlabelled order IDs and purchase dates.
+- **Held-out region:** M5 ties OpenMed.
+
 **Live gateway.** On one A40, with single requests, the full gateway answered 100 support messages with a median latency of 0.38 s and a p95 of 1.08 s per request. Every `/restore` round-trip was exact.
 
 **Caveats.** The support-desk sets are LLM-written; Claude drafted them and they were not human-checked. TAB is real legal text, but only 127 documents.
@@ -64,10 +78,10 @@ Headline metric: **leakage**, the share of gold PII characters left unmasked (lo
 <!-- RESULTS_TABLE:BEGIN -->
 | System | Leakage, OpenPII (%) | Leakage, held-out region IN (%) | Leakage, Nemotron-PII (%) | Leakage, support desk (%) | Strict F1, support desk | p95 latency CPU (ms / 1k chars) | Cost ($ / 1M chars) |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Presidio |  | 35.7 | 13.9 |  |  | 65 |  |
+| Presidio |  | 35.7 | 12.9 |  |  | 65 |  |
 | GLiNER-PII (Knowledgator) |  | 12.7 | 15.0 |  |  | 725 |  |
-| GLiNER-PII (NVIDIA) |  | 6.3 | 6.2 |  |  | 7763 |  |
-| OpenMed privacy filter v2 |  | 0.8 | 2.4 |  |  |  |  |
+| GLiNER-PII (NVIDIA) |  | 6.3 | 5.0 |  |  | 7763 |  |
+| OpenMed privacy filter v2 |  | 0.8 | 1.3 |  |  |  |  |
 | Base LLM, zero-shot |  | 46.8 | 39.4 |  |  |  |  |
 | Your LoRA model |  | 0.8 | 3.7 |  |  |  |  |
 | Your LoRA model + validators |  |  |  |  |  |  |  |

@@ -1,0 +1,263 @@
+{
+  "system": "validators",
+  "detector": "validators",
+  "adapter": null,
+  "detector_config": null,
+  "testset": "nemotron",
+  "n_examples": 3000,
+  "limit": null,
+  "metrics": {
+    "docs": 3000,
+    "n_gold_spans": 12743,
+    "n_pred_spans": 2497,
+    "leakage_chars": 0.63694405660761,
+    "leakage_docs": 0.8886666666666667,
+    "over_redaction": 0.0073752872285227184,
+    "strict": {
+      "precision": 0.9767721265518622,
+      "recall": 0.19139919956054305,
+      "f1": 0.32007874015748033
+    },
+    "partial": {
+      "precision": 0.9863836603924709,
+      "recall": 0.19328258651808836,
+      "f1": 0.3232283464566929
+    },
+    "per_label": {
+      "ADDRESS": {
+        "n_gold": 519,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "AGE": {
+        "n_gold": 209,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "CITY": {
+        "n_gold": 572,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "CREDITCARDNUMBER": {
+        "n_gold": 404,
+        "n_pred": 44,
+        "leakage_chars": 0.8910433979686058,
+        "partial_recall": 0.10891089108910891,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.10891089108910891,
+          "f1": 0.1964285714285714
+        }
+      },
+      "DATE": {
+        "n_gold": 3402,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "DRIVERLICENSENUM": {
+        "n_gold": 82,
+        "n_pred": 0,
+        "leakage_chars": 0.9398410896708286,
+        "partial_recall": 0.06097560975609756,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "EMAIL": {
+        "n_gold": 1620,
+        "n_pred": 1613,
+        "leakage_chars": 0.003708427815570673,
+        "partial_recall": 0.9938271604938271,
+        "strict": {
+          "precision": 0.9931804091754495,
+          "recall": 0.9888888888888889,
+          "f1": 0.9910300030931024
+        }
+      },
+      "GENDER": {
+        "n_gold": 213,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "GIVENNAME": {
+        "n_gold": 2530,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "IPADDRESS": {
+        "n_gold": 0,
+        "n_pred": 8,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "SOCIALNUM": {
+        "n_gold": 181,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "SURNAME": {
+        "n_gold": 1809,
+        "n_pred": 0,
+        "leakage_chars": 0.9997438087105038,
+        "partial_recall": 0.000552791597567717,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "TAXNUM": {
+        "n_gold": 38,
+        "n_pred": 0,
+        "leakage_chars": 0.854586129753915,
+        "partial_recall": 0.15789473684210525,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "TELEPHONENUM": {
+        "n_gold": 976,
+        "n_pred": 832,
+        "leakage_chars": 0.17535545023696683,
+        "partial_recall": 0.8165983606557377,
+        "strict": {
+          "precision": 0.953125,
+          "recall": 0.8125,
+          "f1": 0.8772123893805309
+        }
+      },
+      "ZIPCODE": {
+        "n_gold": 188,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      }
+    },
+    "per_region": {
+      "intl": {
+        "docs": 1501,
+        "leakage_chars": 0.5936874944963707,
+        "leakage_docs": 0.8987341772151899,
+        "over_redaction": 0.006856896869811204,
+        "strict": {
+          "precision": 0.9746079163554892,
+          "recall": 0.20438527799530148,
+          "f1": 0.3379078197824961
+        },
+        "partial": {
+          "precision": 0.9858103061986557,
+          "recall": 0.206734534064213,
+          "f1": 0.34179181771103057
+        }
+      },
+      "us": {
+        "docs": 1499,
+        "leakage_chars": 0.6874752016928978,
+        "leakage_docs": 0.8785857238158773,
+        "over_redaction": 0.00816155209402108,
+        "strict": {
+          "precision": 0.9792746113989638,
+          "recall": 0.17835797420572508,
+          "f1": 0.3017562533262374
+        },
+        "partial": {
+          "precision": 0.9870466321243523,
+          "recall": 0.1797735136835483,
+          "f1": 0.3041511442256519
+        }
+      }
+    },
+    "per_language": {
+      "en": {
+        "docs": 3000,
+        "leakage_chars": 0.63694405660761,
+        "leakage_docs": 0.8886666666666667,
+        "over_redaction": 0.0073752872285227184,
+        "strict": {
+          "precision": 0.9767721265518622,
+          "recall": 0.19139919956054305,
+          "f1": 0.32007874015748033
+        },
+        "partial": {
+          "precision": 0.9863836603924709,
+          "recall": 0.19328258651808836,
+          "f1": 0.3232283464566929
+        }
+      }
+    }
+  },
+  "latency": {
+    "p50_ms_per_1k_chars": 0.8420656607928698,
+    "p95_ms_per_1k_chars": 2.52121717135815,
+    "chars_per_sec": 1032265.8904988478,
+    "n_errors": 0,
+    "errors": []
+  },
+  "env": {
+    "device": "default",
+    "platform": "Darwin arm64",
+    "processor": "arm",
+    "python": "3.12.8",
+    "git_sha": "68fa9d1",
+    "model_load_s": 0.0,
+    "peak_rss_mb": 59.3,
+    "timestamp": "2026-10-02T22:45:06+00:00"
+  }
+}

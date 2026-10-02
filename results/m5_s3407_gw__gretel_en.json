@@ -1,0 +1,244 @@
+{
+  "system": "m5_s3407_gw",
+  "detector": "gateway",
+  "source_predictions": "m5_s3407",
+  "testset": "gretel_en",
+  "n_examples": 1000,
+  "gateway_labels": true,
+  "metrics": {
+    "docs": 1000,
+    "n_gold_spans": 4892,
+    "n_pred_spans": 6305,
+    "leakage_chars": 0.10953950210439269,
+    "leakage_docs": 0.756,
+    "over_redaction": 0.1275334977990616,
+    "strict": {
+      "precision": 0.34417129262490087,
+      "recall": 0.4435813573180703,
+      "f1": 0.3876038224524426
+    },
+    "partial": {
+      "precision": 0.8740681998413957,
+      "recall": 0.8990188062142274,
+      "f1": 0.8863679524890491
+    },
+    "per_label": {
+      "ADDRESS": {
+        "n_gold": 790,
+        "n_pred": 0,
+        "leakage_chars": 0.0873850197109067,
+        "partial_recall": 0.9037974683544304,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "AGE": {
+        "n_gold": 0,
+        "n_pred": 1,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "BUILDINGNUM": {
+        "n_gold": 0,
+        "n_pred": 1,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "CITY": {
+        "n_gold": 0,
+        "n_pred": 40,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "CREDITCARDNUMBER": {
+        "n_gold": 23,
+        "n_pred": 33,
+        "leakage_chars": 0.09390862944162437,
+        "partial_recall": 0.9130434782608695,
+        "strict": {
+          "precision": 0.6363636363636364,
+          "recall": 0.9130434782608695,
+          "f1": 0.75
+        }
+      },
+      "DATE": {
+        "n_gold": 1933,
+        "n_pred": 1951,
+        "leakage_chars": 0.12531773249949565,
+        "partial_recall": 0.8877392653905846,
+        "strict": {
+          "precision": 0.796002050230651,
+          "recall": 0.8034143817899638,
+          "f1": 0.7996910401647785
+        }
+      },
+      "DRIVERLICENSENUM": {
+        "n_gold": 29,
+        "n_pred": 22,
+        "leakage_chars": 0.12968299711815562,
+        "partial_recall": 0.8620689655172413,
+        "strict": {
+          "precision": 0.8636363636363636,
+          "recall": 0.6551724137931034,
+          "f1": 0.7450980392156864
+        }
+      },
+      "EMAIL": {
+        "n_gold": 308,
+        "n_pred": 310,
+        "leakage_chars": 0.025455557101126722,
+        "partial_recall": 0.9772727272727273,
+        "strict": {
+          "precision": 0.9225806451612903,
+          "recall": 0.9285714285714286,
+          "f1": 0.9255663430420712
+        }
+      },
+      "GENDER": {
+        "n_gold": 0,
+        "n_pred": 1,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "GIVENNAME": {
+        "n_gold": 57,
+        "n_pred": 1384,
+        "leakage_chars": 0.023076923076923078,
+        "partial_recall": 0.9649122807017544,
+        "strict": {
+          "precision": 0.025289017341040464,
+          "recall": 0.6140350877192983,
+          "f1": 0.04857737682165163
+        }
+      },
+      "NAME": {
+        "n_gold": 1461,
+        "n_pred": 0,
+        "leakage_chars": 0.15495038079852297,
+        "partial_recall": 0.891170431211499,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "PASSPORTNUM": {
+        "n_gold": 32,
+        "n_pred": 28,
+        "leakage_chars": 0.09375,
+        "partial_recall": 0.90625,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.875,
+          "f1": 0.9333333333333333
+        }
+      },
+      "SOCIALNUM": {
+        "n_gold": 29,
+        "n_pred": 28,
+        "leakage_chars": 0.05740181268882175,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.9285714285714286,
+          "recall": 0.896551724137931,
+          "f1": 0.912280701754386
+        }
+      },
+      "STREET": {
+        "n_gold": 0,
+        "n_pred": 802,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "SURNAME": {
+        "n_gold": 35,
+        "n_pred": 1163,
+        "leakage_chars": 0.4407894736842105,
+        "partial_recall": 0.42857142857142855,
+        "strict": {
+          "precision": 0.01117798796216681,
+          "recall": 0.37142857142857144,
+          "f1": 0.02170283806343907
+        }
+      },
+      "TELEPHONENUM": {
+        "n_gold": 195,
+        "n_pred": 460,
+        "leakage_chars": 0.028859527121001392,
+        "partial_recall": 0.9794871794871794,
+        "strict": {
+          "precision": 0.4108695652173913,
+          "recall": 0.9692307692307692,
+          "f1": 0.5770992366412213
+        }
+      },
+      "TITLE": {
+        "n_gold": 0,
+        "n_pred": 59,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "ZIPCODE": {
+        "n_gold": 0,
+        "n_pred": 22,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      }
+    },
+    "per_language": {
+      "en": {
+        "docs": 1000,
+        "leakage_chars": 0.10953950210439269,
+        "leakage_docs": 0.756,
+        "over_redaction": 0.1275334977990616,
+        "strict": {
+          "precision": 0.34417129262490087,
+          "recall": 0.4435813573180703,
+          "f1": 0.3876038224524426
+        },
+        "partial": {
+          "precision": 0.8740681998413957,
+          "recall": 0.8990188062142274,
+          "f1": 0.8863679524890491
+        }
+      }
+    }
+  }
+}

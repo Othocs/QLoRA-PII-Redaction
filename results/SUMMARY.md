@@ -5,6 +5,13 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 
 | System | Test set | N | Leakage chars % | Docs leaking % | Over-redaction % | Strict F1 | Partial F1 | p50 ms | p95 ms | Platform |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| GLiNER-PII (NVIDIA) | abcd | 1002 | 0.3 | 0.6 | 32.4 | 0.756 | 0.824 | 47 | 69 | Linux x86_64 |
+| m5_s3407 | abcd | 1002 | 3.1 | 5.3 | 50.0 | 0.612 | 0.667 | 733 | 1670 | Linux x86_64 |
+| m5_s42 | abcd | 1002 | 1.5 | 3.4 | 48.0 | 0.616 | 0.681 | 896 | 1505 | Linux x86_64 |
+| m5_targeted | abcd | 1002 | 3.0 | 6.1 | 47.2 | 0.621 | 0.687 | 785 | 1303 | Linux x86_64 |
+| OpenMed privacy filter v2 | abcd | 1002 | 0.7 | 3.6 | 42.4 | 0.599 | 0.673 | 218 | 350 | Linux x86_64 |
+| Presidio | abcd | 1002 | 8.8 | 18.3 | 59.6 | 0.073 | 0.490 | 31 | 38 | Linux x86_64 |
+| validators | abcd | 1002 | 74.2 | 78.4 | 44.0 | 0.165 | 0.166 | 0 | 1 | Darwin arm64 |
 | Base LLM, zero-shot | dev | 2000 | 45.2 | 93.0 | 3.3 | 0.482 | 0.706 | 2020 | 5361 | Linux x86_64 |
 | diagB_chunk1200_tok2048 | dev | 2000 | 0.7 | 13.7 | 0.4 | 0.938 | 0.994 |  |  | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | dev | 200 | 11.7 | 57.0 | 11.5 | 0.641 | 0.897 | 321 | 725 | Darwin arm64 |
@@ -53,8 +60,12 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M1 cleaned OpenPII 10k | gretel_en | 1000 | 40.4 | 85.3 | 47.2 | 0.136 | 0.539 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | gretel_en | 1000 | 27.6 | 83.8 | 30.8 | 0.205 | 0.681 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | gretel_en | 1000 | 28.7 | 84.2 | 29.0 | 0.213 | 0.695 |  |  | Linux x86_64 |
+| m5_s3407 | gretel_en | 1000 | 11.0 | 75.6 | 9.9 | 0.398 | 0.903 | 533 | 4175 | Linux x86_64 |
+| m5_s42 | gretel_en | 1000 | 11.9 | 76.1 | 10.0 | 0.391 | 0.898 | 542 | 4169 | Linux x86_64 |
+| m5_targeted | gretel_en | 1000 | 11.4 | 74.9 | 9.7 | 0.392 | 0.902 | 562 | 4158 | Linux x86_64 |
 | OpenMed privacy filter v2 | gretel_en | 1000 | 29.2 | 83.2 | 34.4 | 0.148 | 0.659 | 162 | 496 | Linux x86_64 |
 | Presidio | gretel_en | 1000 | 29.0 | 75.6 | 58.5 | 0.351 | 0.600 | 27 | 57 | Linux x86_64 |
+| validators | gretel_en | 1000 | 88.5 | 88.3 | 23.9 | 0.153 | 0.166 | 1 | 6 | Darwin arm64 |
 | Base LLM, zero-shot | gretel_xx | 2629 | 65.5 | 86.7 | 47.5 | 0.105 | 0.449 | 959 | 8800 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | gretel_xx | 2629 | 44.9 | 84.5 | 52.9 | 0.104 | 0.486 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | gretel_xx | 2629 | 42.4 | 84.4 | 54.4 | 0.102 | 0.484 |  |  | Linux x86_64 |
@@ -70,14 +81,18 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | diagA_chunk2000_tok1024 | nemotron | 3000 | 21.8 | 44.4 | 5.1 | 0.738 | 0.821 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | nemotron | 3000 | 18.8 | 41.9 | 6.1 | 0.740 | 0.824 |  |  | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | nemotron | 3000 | 15.0 | 31.9 | 15.6 | 0.756 | 0.818 | 25 | 56 | Linux x86_64 |
-| GLiNER-PII (NVIDIA) | nemotron | 3000 | 6.2 | 12.6 | 13.4 | 0.851 | 0.928 | 54 | 133 | Linux x86_64 |
+| GLiNER-PII (NVIDIA) | nemotron | 3000 | 5.0 | 11.2 | 11.9 | 0.865 | 0.939 | 56 | 134 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | nemotron | 3000 | 21.7 | 44.2 | 5.1 | 0.740 | 0.820 | 1829 | 5844 | Linux x86_64 |
 | M0 OpenPII 10k | nemotron | 3000 | 19.0 | 42.2 | 6.0 | 0.741 | 0.825 |  |  | Linux x86_64 |
 | M1 cleaned OpenPII 10k | nemotron | 3000 | 18.7 | 42.0 | 5.8 | 0.756 | 0.836 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | nemotron | 3000 | 3.7 | 8.9 | 2.7 | 0.908 | 0.964 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | nemotron | 3000 | 3.7 | 9.1 | 2.6 | 0.912 | 0.964 |  |  | Linux x86_64 |
-| OpenMed privacy filter v2 | nemotron | 3000 | 2.4 | 7.9 | 7.0 | 0.864 | 0.942 | 254 | 694 | Linux x86_64 |
-| Presidio | nemotron | 3000 | 13.9 | 41.9 | 33.0 | 0.402 | 0.746 | 32 | 53 | Linux x86_64 |
+| m5_s3407 | nemotron | 3000 | 2.7 | 8.0 | 3.6 | 0.915 | 0.965 | 2040 | 5110 | Linux x86_64 |
+| m5_s42 | nemotron | 3000 | 2.7 | 8.6 | 3.1 | 0.919 | 0.966 | 1949 | 5378 | Linux x86_64 |
+| m5_targeted | nemotron | 3000 | 2.5 | 7.9 | 3.8 | 0.912 | 0.963 | 1629 | 5639 | Linux x86_64 |
+| OpenMed privacy filter v2 | nemotron | 3000 | 1.3 | 6.5 | 4.2 | 0.882 | 0.957 | 249 | 680 | Linux x86_64 |
+| Presidio | nemotron | 3000 | 12.9 | 41.1 | 31.6 | 0.410 | 0.756 | 30 | 47 | Linux x86_64 |
+| validators | nemotron | 3000 | 63.7 | 88.9 | 0.7 | 0.320 | 0.323 | 1 | 3 | Darwin arm64 |
 | m5_targeted | nemotron_dev | 1000 | 3.2 | 7.8 | 3.5 | 0.919 | 0.964 | 861 | 4235 | Linux x86_64 |
 | p1_lr4e-4 | nemotron_dev | 1000 | 2.2 | 5.1 | 1.7 | 0.936 | 0.977 |  |  | Linux x86_64 |
 | p2_m4_lr2.83e-4 | nemotron_dev | 1000 | 2.9 | 6.3 | 4.6 | 0.915 | 0.959 |  |  | Linux x86_64 |
@@ -141,8 +156,12 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M1 cleaned OpenPII 10k | test_holdout_regions | 2000 | 0.8 | 15.9 | 0.5 | 0.927 | 0.993 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | test_holdout_regions | 2000 | 0.9 | 17.3 | 0.8 | 0.900 | 0.992 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | test_holdout_regions | 2000 | 0.8 | 15.8 | 0.5 | 0.929 | 0.993 |  |  | Linux x86_64 |
+| m5_s3407 | test_holdout_regions | 2000 | 0.7 | 13.7 | 0.6 | 0.935 | 0.994 | 4431 | 9229 | Linux x86_64 |
+| m5_s42 | test_holdout_regions | 2000 | 0.7 | 14.5 | 0.6 | 0.935 | 0.993 | 4774 | 9142 | Linux x86_64 |
+| m5_targeted | test_holdout_regions | 2000 | 0.7 | 13.9 | 0.5 | 0.936 | 0.993 | 4356 | 9152 | Linux x86_64 |
 | OpenMed privacy filter v2 | test_holdout_regions | 2000 | 0.8 | 27.5 | 1.4 | 0.657 | 0.987 | 587 | 1150 | Linux x86_64 |
 | Presidio | test_holdout_regions | 2000 | 35.7 | 89.9 | 19.0 | 0.223 | 0.709 | 43 | 72 | Linux x86_64 |
+| validators | test_holdout_regions | 2000 | 84.0 | 98.9 | 0.7 | 0.144 | 0.213 | 1 | 3 | Darwin arm64 |
 | m5_s3407 | test_id | 5000 | 0.6 | 13.7 | 0.5 | 0.947 | 0.994 | 4101 | 9693 | Linux x86_64 |
 | m5_s42 | test_id | 5000 | 0.6 | 13.9 | 0.5 | 0.948 | 0.994 | 4211 | 9684 | Linux x86_64 |
 | m5_targeted | test_id | 5000 | 0.6 | 13.9 | 0.5 | 0.944 | 0.994 | 4105 | 10221 | Linux x86_64 |
@@ -166,18 +185,18 @@ Each cell is leakage / partial F1; n/a means not run (Presidio is English-only h
 | diagA_chunk2000_tok1024 | n/a | 21.8 / 0.82 | 22.8 / 0.88 | 44.1 / 0.52 | 44.9 / 0.49 | n/a |
 | diagB_chunk1200_tok2048 | n/a | 18.8 / 0.82 | 19.0 / 0.91 | 40.5 / 0.53 | 42.4 / 0.48 | n/a |
 | GLiNER-PII (Knowledgator) | 12.7 / 0.90 | 15.0 / 0.82 | 58.1 / 0.47 | 46.7 / 0.58 | 44.9 / 0.50 | 11.9 / 0.87 |
-| GLiNER-PII (NVIDIA) | 6.3 / 0.95 | 6.2 / 0.93 | 19.3 / 0.86 | 25.5 / 0.73 | 29.5 / 0.69 | 8.4 / 0.94 |
+| GLiNER-PII (NVIDIA) | 6.3 / 0.95 | 5.0 / 0.94 | 19.3 / 0.86 | 25.5 / 0.73 | 29.5 / 0.69 | 8.4 / 0.94 |
 | LoRA r16, 10k (Qwen3-1.7B) | 0.9 / 0.99 | 21.7 / 0.82 | 23.2 / 0.88 | 44.1 / 0.52 | 45.0 / 0.49 | 2.4 / 0.98 |
 | M0 OpenPII 10k | 0.8 / 0.99 | 19.0 / 0.83 | 18.5 / 0.91 | 40.7 / 0.53 | 42.4 / 0.49 | 2.3 / 0.98 |
 | M1 cleaned OpenPII 10k | 0.8 / 0.99 | 18.7 / 0.84 | 19.5 / 0.90 | 40.4 / 0.54 | 41.7 / 0.51 | 2.3 / 0.98 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | 0.9 / 0.99 | 3.7 / 0.96 | 21.5 / 0.89 | 27.6 / 0.68 | 32.7 / 0.62 | 2.3 / 0.98 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | 0.8 / 0.99 | 3.7 / 0.96 | 18.3 / 0.91 | 28.7 / 0.70 | 33.1 / 0.64 | 2.1 / 0.98 |
-| m5_s3407 | n/a | n/a | 15.2 / 0.90 | n/a | n/a | n/a |
-| m5_s42 | n/a | n/a | 17.5 / 0.89 | n/a | n/a | n/a |
-| m5_targeted | n/a | n/a | 15.0 / 0.90 | n/a | n/a | n/a |
-| OpenMed privacy filter v2 | 0.8 / 0.99 | 2.4 / 0.94 | 14.9 / 0.90 | 29.2 / 0.66 | 39.1 / 0.62 | 3.0 / 0.98 |
-| Presidio | 35.7 / 0.71 | 13.9 / 0.75 | 11.2 / 0.70 | 29.0 / 0.60 | n/a | n/a |
-| validators | n/a | n/a | 100.0 / 0.00 | n/a | n/a | n/a |
+| m5_s3407 | 0.7 / 0.99 | 2.7 / 0.97 | 15.2 / 0.90 | 11.0 / 0.90 | n/a | n/a |
+| m5_s42 | 0.7 / 0.99 | 2.7 / 0.97 | 17.5 / 0.89 | 11.9 / 0.90 | n/a | n/a |
+| m5_targeted | 0.7 / 0.99 | 2.5 / 0.96 | 15.0 / 0.90 | 11.4 / 0.90 | n/a | n/a |
+| OpenMed privacy filter v2 | 0.8 / 0.99 | 1.3 / 0.96 | 14.9 / 0.90 | 29.2 / 0.66 | 39.1 / 0.62 | 3.0 / 0.98 |
+| Presidio | 35.7 / 0.71 | 12.9 / 0.76 | 11.2 / 0.70 | 29.0 / 0.60 | n/a | n/a |
+| validators | 84.0 / 0.21 | 63.7 / 0.32 | 100.0 / 0.00 | 88.5 / 0.17 | n/a | n/a |
 
 ### Gretel non-EN: leakage (%) by language
 
@@ -409,6 +428,86 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
   - The fresh set is hard: M4 leaks 27.6% on it, above the team's 5–10% band for val_ood. Its leakage is dominated by spoken phone numbers and titles, where M5 gained most.
   - Both the fresh set and the training data are LLM-written, by different models.
 - **Decision: M5 is the phase 4 candidate.** Phase 4 is waiting for the user's go (the rule set before the run).
+
+## Phase 4: final blind evaluation of M5 (2026-10-02)
+- **Run:** two A40 pods, about $3.30. Seeds 42 and 3407 were trained (135 min each); seed 13 is the milestone 1 adapter. Each of TAB, support_desk_300 and test_id was scored **once** per system.
+- **Baselines:** GLiNER-PII (NVIDIA), OpenMed and Presidio on support_desk_300. Their TAB numbers are from week 3, and they were not run on test_id. Validators alone ran on all three sets.
+- **Statistics:** 95% CIs from 1,000 document resamples, with per-document counts averaged over the seeds (`eval/phase4_report.py` → `results/phase4/phase4.md`).
+- **Support desk (300).** M5 leaks **1.70% [0.82, 2.78]**, with document leakage 4.6% and over-redaction 5.8%. The full gateway leaks **1.25% [0.50, 2.14]** under the gateway scope, against 4.21% for the model alone in that scope (Δ −2.96 [−5.30, −1.02]). Paired against each baseline:
+
+  | M5 − baseline | Leakage Δ (pt) | Over-redaction Δ (pt) |
+  | --- | --- | --- |
+  | OpenMed (3.54%) | −1.84 [−3.76, −0.03] | −10.3 |
+  | GLiNER-PII (8.11%) | −6.41 [−9.46, −3.39] | −17.5 |
+  | Presidio (18.91%) | −17.21 [−20.78, −13.36] | −17.3 |
+
+- **TAB (127).** M5 leaks 15.91% [13.92, 18.42], with over-redaction 5.2%. Against the baselines:
+  - OpenMed (14.91%): +1.01 [−0.85, +3.31], a tie;
+  - GLiNER-PII (19.29%): −3.38 [−4.54, −2.22], better;
+  - Presidio (11.23%): +4.69 [+2.92, +6.46], worse on leakage, though Presidio over-redacts 34.1%.
+
+  The validators add nothing on TAB, and every system leaks some PII in every document.
+- **test_id (5,000).** M5 leaks 0.60% [0.54, 0.69], with document leakage 13.8%; the gateway leaks 0.55%.
+- **Seed spread:**
+
+  | Test set | Seed 13 | Seed 42 | Seed 3407 |
+  | --- | ---: | ---: | ---: |
+  | support_desk_300 | 0.68% | 2.22% | 2.20% |
+  | TAB | 15.05% | 17.52% | 15.17% |
+  | test_id | 0.61% | 0.61% | 0.60% |
+
+  Seed 13 is the run that passed the milestone 1 gate, so single-seed numbers on support text vary by about 1.5 pt. This is why seed-averaged numbers are reported.
+- **Live gateway** (M5 + validators, uvicorn, one A40): 100 support_desk_val requests, all returned 200.
+  - Latency was 0.38 s at the median and 1.08 s at p95 per request.
+  - All 100 restores were exact, and the server log contained 0 values.
+  - 31 of 205 gold values remained in the output, but 29 of those are AGE, SEX or CITY, which the analytics policy deliberately keeps.
+  - Offline, the gateway leaks 1.51% on support_desk_val.
+- **Docker:** both images build in CI. The CPU image ran locally and in CI; the GPU image was built and its imports checked, but it was not run.
+- **Final model: M5** (r=16, learning rate 4e-4, `train_mix_32k`).
+
+## Final coverage run: rules set before running (2026-10-02)
+- **Model:** M5 is frozen and nothing is selected. The three seeds' adapters (13, 42, 3407) are scored once each on four sets:
+  - `nemotron` (3,000) and `gretel_en` (1,000): the official test splits of two training sources. They are **in-distribution** for M5, which trained on their train splits, so they show what it learned, not how it generalises.
+  - `test_holdout_regions` (2,000): OpenPII region IN, excluded from training. A clean unseen test.
+  - `abcd` (1,002): **real human-typed support chats** from ASAPP's ABCD test split (MIT licence), labelled from each conversation's fictional customer card (`data/abcd/README.md`). A clean unseen test.
+- **Baselines:** GLiNER-PII (NVIDIA), OpenMed and Presidio are re-scored on `abcd` and `nemotron`. The week-3 Nemotron predictions predate the duplicate-ID fix. The week-3 predictions on `test_holdout_regions` and `gretel_en` are still valid and are reused.
+- **ABCD labelling rules:**
+  - customer name → GIVENNAME / SURNAME; email, phone (with digit variants), street (BUILDINGNUM + STREET), city and zip → their labels;
+  - username, account ID, PIN, password and security answer → IGNORE;
+  - order ID, state, membership level, products and amounts → not labelled;
+  - extra rules: a house number before a labelled street, an agent's self-introduction → GIVENNAME, a typed username → IGNORE.
+- **ABCD filter:** drop a conversation whose delexicalised tokens show a value the matching missed. This dropped 2 of 1,004.
+- **ABCD caveat:** only 10 distinct customer names and 9 cities, so results are reported by label as well as overall.
+- **Statistics:** 95% CIs from 1,000 document resamples, seeds averaged. The model alone and the gateway (with validators) are both reported.
+
+### Final coverage result (2026-10-03)
+- **Run:** one A40, about $0.50. 3 seeds × 4 sets, plus the baselines on ABCD and Nemotron, each scored once. 95% CIs, seeds averaged (`results/phase4/final_coverage.md`).
+- **Clean unseen sets:**
+
+  | Set | M5 leakage | OpenMed | GLiNER-PII | Presidio |
+  | --- | --- | --- | --- | --- |
+  | test_holdout_regions (region IN) | **0.70% [0.60, 0.82]** | 0.80% | 6.31% | 35.67% |
+  | ABCD (real human chats) | 2.55% [2.04, 3.15] | 0.73% | **0.26%** | 8.76% |
+
+  - **test_holdout_regions: M5 ties OpenMed** (Δ −0.10 [−0.24, +0.04]) and beats the others. Over-redaction: M5 0.56%, OpenMed 1.35%.
+  - **ABCD: M5 is worse than GLiNER-PII** (+2.30 [+1.74, +2.94]) **and OpenMed** (+1.82 [+1.20, +2.45]), and better than Presidio. Seeds vary: 2.98, 1.55, 3.13.
+  - **ABCD over-redaction** is high for every system: M5 48.4%, GLiNER 32.4%, OpenMed 42.5%, Presidio 59.6%, validators 44.0%.
+    - Most of M5's comes from masking purchase and order dates, which our conventions treat as not personal.
+    - Most of GLiNER's and the validators' comes from ABCD's unlabelled 10-digit order IDs.
+  - **M5's ABCD misses:** about 45 spans missed entirely per seed, mostly ZIPCODE and CITY in typed addresses. At least one is a gold error: a store's city that matched the customer's card. The labelling rules were fixed before running and are not changed after seeing results.
+- **Training sources' own test splits** (in-distribution for M5):
+
+  | Set | M5 | OpenMed | GLiNER-PII | Presidio |
+  | --- | --- | --- | --- | --- |
+  | nemotron | 2.64% | **1.33%** (M5 +1.32) | 5.02% | 12.87% |
+  | gretel_en | **11.43%** | 29.23% | 25.51% | 29.05% |
+
+  On Nemotron, M5 beats GLiNER-PII and Presidio. On Gretel EN it beats every baseline by 14–18 pt.
+- **Gateway vs model:** the validators lower leakage by only 0.04–0.23 pt on these sets. They help mainly on IBAN- and card-heavy support text.
+- **Conclusion:**
+  - M5 is the best or tied-best system on OpenPII-style text (including the held-out region) and on LLM-written support text.
+  - **On real human-typed support chats (ABCD), the encoder baselines leak less.** The support-desk advantage did not transfer.
+  - This is the main open question for any deployment claim. Next steps would be real support data with human labels, and ABCD-style conversational training data.
 
 ## Sweep: m5_targeted
 

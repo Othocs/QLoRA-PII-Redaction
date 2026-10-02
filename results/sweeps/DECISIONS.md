@@ -149,3 +149,32 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
 - **ABCD filter:** drop a conversation whose delexicalised tokens show a value the matching missed. This dropped 2 of 1,004.
 - **ABCD caveat:** only 10 distinct customer names and 9 cities, so results are reported by label as well as overall.
 - **Statistics:** 95% CIs from 1,000 document resamples, seeds averaged. The model alone and the gateway (with validators) are both reported.
+
+### Final coverage result (2026-10-03)
+- **Run:** one A40, about $0.50. 3 seeds × 4 sets, plus the baselines on ABCD and Nemotron, each scored once. 95% CIs, seeds averaged (`results/phase4/final_coverage.md`).
+- **Clean unseen sets:**
+
+  | Set | M5 leakage | OpenMed | GLiNER-PII | Presidio |
+  | --- | --- | --- | --- | --- |
+  | test_holdout_regions (region IN) | **0.70% [0.60, 0.82]** | 0.80% | 6.31% | 35.67% |
+  | ABCD (real human chats) | 2.55% [2.04, 3.15] | 0.73% | **0.26%** | 8.76% |
+
+  - **test_holdout_regions: M5 ties OpenMed** (Δ −0.10 [−0.24, +0.04]) and beats the others. Over-redaction: M5 0.56%, OpenMed 1.35%.
+  - **ABCD: M5 is worse than GLiNER-PII** (+2.30 [+1.74, +2.94]) **and OpenMed** (+1.82 [+1.20, +2.45]), and better than Presidio. Seeds vary: 2.98, 1.55, 3.13.
+  - **ABCD over-redaction** is high for every system: M5 48.4%, GLiNER 32.4%, OpenMed 42.5%, Presidio 59.6%, validators 44.0%.
+    - Most of M5's comes from masking purchase and order dates, which our conventions treat as not personal.
+    - Most of GLiNER's and the validators' comes from ABCD's unlabelled 10-digit order IDs.
+  - **M5's ABCD misses:** about 45 spans missed entirely per seed, mostly ZIPCODE and CITY in typed addresses. At least one is a gold error: a store's city that matched the customer's card. The labelling rules were fixed before running and are not changed after seeing results.
+- **Training sources' own test splits** (in-distribution for M5):
+
+  | Set | M5 | OpenMed | GLiNER-PII | Presidio |
+  | --- | --- | --- | --- | --- |
+  | nemotron | 2.64% | **1.33%** (M5 +1.32) | 5.02% | 12.87% |
+  | gretel_en | **11.43%** | 29.23% | 25.51% | 29.05% |
+
+  On Nemotron, M5 beats GLiNER-PII and Presidio. On Gretel EN it beats every baseline by 14–18 pt.
+- **Gateway vs model:** the validators lower leakage by only 0.04–0.23 pt on these sets. They help mainly on IBAN- and card-heavy support text.
+- **Conclusion:**
+  - M5 is the best or tied-best system on OpenPII-style text (including the held-out region) and on LLM-written support text.
+  - **On real human-typed support chats (ABCD), the encoder baselines leak less.** The support-desk advantage did not transfer.
+  - This is the main open question for any deployment claim. Next steps would be real support data with human labels, and ABCD-style conversational training data.
