@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "A small fine-tuned LLM for on-premises PII redaction: what transfers and what doesn't"
+type: software
+authors:
+  - family-names: Menkor
+    given-names: Othmane
+date-released: 2026-10-03
+license: Apache-2.0
+repository-code: "https://github.com/Othocs/pii-gateway"
+abstract: >-
+  A QLoRA-tuned Qwen3-1.7B PII span detector and a self-hosted redaction gateway
+  (validators, normalisation, recall-first merge, policies, AES-256-GCM vault, FastAPI,
+  Docker), evaluated blind with 3 seeds against Presidio, GLiNER-PII and OpenMed on
+  synthetic, legal (TAB) and real customer-service (ABCD) text.
+keywords: [PII, de-identification, redaction, LoRA, QLoRA, privacy, NER]
