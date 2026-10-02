@@ -2,6 +2,7 @@
 
     python data/prepare_train_mix.py            # week 3 part B: Nemotron, mixes 10k/20k, gretel_dev
     python data/prepare_train_mix.py phase2     # HPO plan phase 2: Gretel EN, mix 30k, nemotron_dev
+    python data/prepare_train_mix.py targeted   # milestone 1: mix 30k + targeted messages
 
 Needs data/processed/train_clean_{5k,10k}.jsonl (data/clean_labels.py). Writes:
   train_nemo_{5k,10k}.jsonl   Nemotron-PII *train* split, as <=1,200-char windows
@@ -15,6 +16,8 @@ phase2:
   train_mix_30k.jsonl          clean OpenPII 10k + Nemotron 10k + Gretel EN 10k, shuffled
   nemotron_dev.jsonl           1,000 windows of Nemotron train docs NOT used for training,
                                eval label map (out-of-scope labels = IGNORE)
+targeted:
+  train_mix_32k.jsonl          train_mix_30k + data/synthetic/targeted_2k.jsonl, shuffled
 """
 
 from __future__ import annotations
@@ -254,12 +257,32 @@ def phase2(stats: dict) -> None:
     stats["nemotron_dev"] = {"rows": len(dev), "excluded_training_docs": len(used)}
 
 
+def targeted(stats: dict) -> None:
+    """Milestone 1: train_mix_32k = train_mix_30k + the DeepSeek-written targeted messages."""
+    extra = list(read_examples(Path("data/synthetic/targeted_2k.jsonl")))
+    mix = list(read_examples(PROCESSED / "train_mix_30k.jsonl")) + extra
+    random.Random(f"{SEED}-train_mix_32k").shuffle(mix)
+    write_examples(PROCESSED / "train_mix_32k.jsonl", mix)
+    stats["train_mix_32k"] = dict(Counter(ex.meta.get("source") for ex in mix))
+    stats["targeted"] = {
+        "rows": len(extra),
+        "patterns": dict(Counter(ex.meta.get("pattern") for ex in extra)),
+        "labels": dict(Counter(s.label for ex in extra for s in ex.spans)),
+    }
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
-    ap.add_argument("step", nargs="?", default="base", choices=["base", "phase2"])
+    ap.add_argument("step", nargs="?", default="base", choices=["base", "phase2", "targeted"])
     args = ap.parse_args()
     stats_path = PROCESSED / "stats_train.json"
     stats = json.loads(stats_path.read_text()) if stats_path.exists() else {}
+    if args.step == "targeted":
+        targeted(stats)
+        stats_path.write_text(json.dumps(stats, indent=2) + "\n")
+        print(json.dumps({k: stats[k] for k in ("train_mix_32k", "targeted")}, indent=2),
+              file=sys.stderr)  # fmt: skip
+        return
     if args.step == "phase2":
         phase2(stats)
         stats_path.write_text(json.dumps(stats, indent=2) + "\n")
