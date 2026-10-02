@@ -14,11 +14,21 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M1 cleaned OpenPII 10k | dev | 2000 | 0.8 | 15.6 | 0.5 | 0.936 | 0.993 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | dev | 2000 | 0.9 | 17.8 | 0.7 | 0.909 | 0.992 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | dev | 2000 | 0.7 | 15.8 | 0.5 | 0.936 | 0.994 |  |  | Linux x86_64 |
+| p1_lr1e-4 | dev | 2000 | 1.0 | 19.1 | 0.6 | 0.914 | 0.992 |  |  | Linux x86_64 |
+| p1_lr2e-4 | dev | 2000 | 0.7 | 15.7 | 0.5 | 0.932 | 0.994 |  |  | Linux x86_64 |
+| p1_lr4e-4 | dev | 2000 | 0.6 | 14.5 | 0.4 | 0.945 | 0.995 |  |  | Linux x86_64 |
+| p1_lr5e-5 | dev | 2000 | 1.6 | 26.5 | 0.8 | 0.875 | 0.988 |  |  | Linux x86_64 |
+| p1_lr6e-4 | dev | 2000 | 0.7 | 13.9 | 0.4 | 0.951 | 0.995 |  |  | Linux x86_64 |
 | Presidio | dev | 200 | 33.6 | 89.0 | 22.4 | 0.232 | 0.721 | 42 | 65 | Darwin arm64 |
 | M0 OpenPII 10k | gretel_dev | 1000 | 40.0 | 84.4 | 51.5 | 0.120 | 0.514 |  |  | Linux x86_64 |
 | M1 cleaned OpenPII 10k | gretel_dev | 1000 | 40.2 | 84.2 | 51.2 | 0.120 | 0.519 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | gretel_dev | 1000 | 28.8 | 83.3 | 33.6 | 0.183 | 0.657 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | gretel_dev | 1000 | 29.3 | 84.3 | 30.8 | 0.186 | 0.667 |  |  | Linux x86_64 |
+| p1_lr1e-4 | gretel_dev | 1000 | 29.8 | 84.3 | 31.8 | 0.182 | 0.660 |  |  | Linux x86_64 |
+| p1_lr2e-4 | gretel_dev | 1000 | 29.5 | 84.1 | 29.8 | 0.186 | 0.673 |  |  | Linux x86_64 |
+| p1_lr4e-4 | gretel_dev | 1000 | 29.1 | 83.9 | 28.7 | 0.184 | 0.675 |  |  | Linux x86_64 |
+| p1_lr5e-5 | gretel_dev | 1000 | 29.6 | 83.4 | 37.7 | 0.171 | 0.645 |  |  | Linux x86_64 |
+| p1_lr6e-4 | gretel_dev | 1000 | 28.7 | 83.8 | 30.2 | 0.187 | 0.679 |  |  | Linux x86_64 |
 | Base LLM, zero-shot | gretel_en | 1000 | 62.0 | 87.9 | 38.4 | 0.138 | 0.508 | 1616 | 10752 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | gretel_en | 1000 | 44.1 | 85.1 | 46.6 | 0.135 | 0.522 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | gretel_en | 1000 | 40.5 | 84.9 | 47.0 | 0.135 | 0.534 |  |  | Linux x86_64 |
@@ -145,3 +155,20 @@ Qwen3-1.7B, QLoRA r=16, 1 epoch; only the training data differs. ¹ Nemotron tra
 | M1 cleaned OpenPII 10k | 0.8 / 0.5 | 40.2 / 51.2 | 0.8 / 0.5 | 2.3 / 1.4 | 18.7 / 5.8 | 19.5 / 3.3 | 40.4 / 47.2 | 41.7 / 52.9 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | 0.9 / 0.7 | 28.8 / 33.6 | 0.9 / 0.8 | 2.3 / 2.1 | 3.7 / 2.7 | 21.5 / 2.7 | 27.6 / 30.8 | 32.7 / 38.3 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | 0.7 / 0.5 | 29.3 / 30.8 | 0.8 / 0.5 | 2.1 / 1.8 | 3.7 / 2.6 | 18.3 / 2.0 | 28.7 / 29.0 | 33.1 / 33.6 |
+
+# Hyperparameter sweeps (eval/select.py)
+
+## Sweep: phase1_lr
+
+Primary: leakage on gretel_dev (mean). Tie band 1.0 pt; tie-breaks: over-redaction, then leakage on dev.
+
+| Run | Overrides | Primary leakage (%) | Over-redaction (%) | In-dist leakage (%) | Dropped values (%) | Hit token limit (%) | Sane | Missing |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| p1_lr6e-4 | output_dir=outputs/hpo/p1_lr6e-4 learning_rate=6e-4 | 28.70 | 30.23 | 0.68 | 30.5 | 2.5 | no |  |
+| p1_lr4e-4 **(winner)** | output_dir=outputs/hpo/p1_lr4e-4 learning_rate=4e-4 | 29.13 | 28.74 | 0.58 | 41.2 | 3.4 | no |  |
+| p1_lr2e-4 | output_dir=outputs/hpo/p1_lr2e-4 learning_rate=2e-4 | 29.54 | 29.76 | 0.67 | 36.5 | 3.1 | no |  |
+| p1_lr5e-5 | output_dir=outputs/hpo/p1_lr5e-5 learning_rate=5e-5 | 29.63 | 37.75 | 1.58 | 42.7 | 4.1 | no |  |
+| p1_lr1e-4 | output_dir=outputs/hpo/p1_lr1e-4 learning_rate=1e-4 | 29.80 | 31.82 | 0.99 | 38.0 | 3.4 | no |  |
+
+**Decision:** p1_lr4e-4: 4 candidates within 1.0 pt of the best leakage (28.70%); tie broken by over-redaction, then in-distribution leakage.
+
