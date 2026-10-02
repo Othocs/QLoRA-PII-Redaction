@@ -33,5 +33,6 @@ uv run python -c "import torch, vllm, trl, peft, bitsandbytes; print('torch', to
 [ -f data/processed/train_mix_20k.jsonl ] || uv run python data/prepare_train_mix.py
 [ -f data/processed/train_mix_30k.jsonl ] || uv run python data/prepare_train_mix.py phase2
 [ -f data/processed/train_mix_32k.jsonl ] || [ ! -f data/synthetic/targeted_2k.jsonl ] || uv run python data/prepare_train_mix.py targeted
+[ -f data/processed/abcd.jsonl ] || uv run python data/prepare_abcd.py
 [ -f data/processed/val_in_region.jsonl ] || uv run python data/prepare_eval_sets.py val_in_region
 echo "setup done: $(pwd)"

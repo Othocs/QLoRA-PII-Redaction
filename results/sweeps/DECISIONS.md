@@ -134,3 +134,18 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
   - Offline, the gateway leaks 1.51% on support_desk_val.
 - **Docker:** both images build in CI. The CPU image ran locally and in CI; the GPU image was built and its imports checked, but it was not run.
 - **Final model: M5** (r=16, learning rate 4e-4, `train_mix_32k`).
+
+## Final coverage run: rules set before running (2026-10-02)
+- **Model:** M5 is frozen and nothing is selected. The three seeds' adapters (13, 42, 3407) are scored once each on four sets:
+  - `nemotron` (3,000) and `gretel_en` (1,000): the official test splits of two training sources. They are **in-distribution** for M5, which trained on their train splits, so they show what it learned, not how it generalises.
+  - `test_holdout_regions` (2,000): OpenPII region IN, excluded from training. A clean unseen test.
+  - `abcd` (1,002): **real human-typed support chats** from ASAPP's ABCD test split (MIT licence), labelled from each conversation's fictional customer card (`data/abcd/README.md`). A clean unseen test.
+- **Baselines:** GLiNER-PII (NVIDIA), OpenMed and Presidio are re-scored on `abcd` and `nemotron`. The week-3 Nemotron predictions predate the duplicate-ID fix. The week-3 predictions on `test_holdout_regions` and `gretel_en` are still valid and are reused.
+- **ABCD labelling rules:**
+  - customer name → GIVENNAME / SURNAME; email, phone (with digit variants), street (BUILDINGNUM + STREET), city and zip → their labels;
+  - username, account ID, PIN, password and security answer → IGNORE;
+  - order ID, state, membership level, products and amounts → not labelled;
+  - extra rules: a house number before a labelled street, an agent's self-introduction → GIVENNAME, a typed username → IGNORE.
+- **ABCD filter:** drop a conversation whose delexicalised tokens show a value the matching missed. This dropped 2 of 1,004.
+- **ABCD caveat:** only 10 distinct customer names and 9 cities, so results are reported by label as well as overall.
+- **Statistics:** 95% CIs from 1,000 document resamples, seeds averaged. The model alone and the gateway (with validators) are both reported.

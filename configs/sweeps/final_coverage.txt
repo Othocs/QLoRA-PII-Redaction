@@ -1,0 +1,6 @@
+# Final coverage (after phase 4): M5's 3 seeds, eval only (adapters copied to the pod), on each
+# training source's own test split (nemotron, gretel_en: in-distribution for M5), the held-out
+# region (test_holdout_regions) and ABCD (real human-typed support chats). Scored once each.
+m5_targeted | configs/train/hpo/m4_base.yaml | learning_rate=4e-4 train_file=data/processed/train_mix_32k.jsonl          | test_holdout_regions,nemotron,gretel_en,abcd
+m5_s42      | configs/train/hpo/m4_base.yaml | learning_rate=4e-4 train_file=data/processed/train_mix_32k.jsonl seed=42   | test_holdout_regions,nemotron,gretel_en,abcd
+m5_s3407    | configs/train/hpo/m4_base.yaml | learning_rate=4e-4 train_file=data/processed/train_mix_32k.jsonl seed=3407 | test_holdout_regions,nemotron,gretel_en,abcd

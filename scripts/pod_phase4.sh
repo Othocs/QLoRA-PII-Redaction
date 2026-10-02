@@ -8,7 +8,7 @@ export PATH="$HOME/.local/bin:$PATH" HF_HOME="${WORKDIR:-/workspace}/hf-cache" U
 mkdir -p logs results/phase4
 bash scripts/pod_sweep.sh
 case "${ROLE:-}" in
-  baselines) TESTSETS=support_desk_300 bash scripts/pod_eval_baselines.sh ;;
+  baselines) TESTSETS="${BASELINE_SETS:-support_desk_300}" bash scripts/pod_eval_baselines.sh ;;
   gateway)
     # live gateway with M5 on this GPU; throwaway keys generated on the pod
     export PII_DETECTOR=lora PII_ADAPTER=outputs/hpo/m5_targeted
