@@ -2382,6 +2382,8 @@ serve = [
     { name = "cryptography" },
     { name = "fastapi", version = "0.136.3", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform != 'darwin' and sys_platform != 'emscripten' and sys_platform != 'win32' and extra == 'extra-11-pii-gateway-llm') or (sys_platform == 'darwin' and extra == 'extra-11-pii-gateway-gliner' and extra == 'extra-11-pii-gateway-llm') or (sys_platform == 'emscripten' and extra == 'extra-11-pii-gateway-gliner' and extra == 'extra-11-pii-gateway-llm') or (sys_platform == 'win32' and extra == 'extra-11-pii-gateway-gliner' and extra == 'extra-11-pii-gateway-llm')" },
     { name = "fastapi", version = "0.142.2", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or sys_platform == 'emscripten' or sys_platform == 'win32' or extra == 'extra-11-pii-gateway-gliner' or extra != 'extra-11-pii-gateway-llm'" },
+    { name = "httpx" },
+    { name = "phonenumbers" },
     { name = "uvicorn" },
 ]
 train = [
@@ -2412,10 +2414,12 @@ requires-dist = [
     { name = "en-core-web-sm", marker = "extra == 'presidio'", url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl" },
     { name = "fastapi", marker = "extra == 'serve'", specifier = ">=0.115" },
     { name = "gliner", marker = "extra == 'gliner'", specifier = ">=0.2.21" },
+    { name = "httpx", marker = "extra == 'serve'", specifier = ">=0.27" },
     { name = "huggingface-hub", marker = "extra == 'data'", specifier = ">=0.25" },
     { name = "numpy", specifier = ">=1.26" },
     { name = "numpy", marker = "extra == 'llm'", specifier = "<2.5" },
     { name = "peft", marker = "extra == 'train'", specifier = ">=0.15" },
+    { name = "phonenumbers", marker = "extra == 'serve'", specifier = ">=8.13" },
     { name = "presidio-analyzer", marker = "extra == 'presidio'", specifier = ">=2.2.358" },
     { name = "pyarrow", marker = "extra == 'data'", specifier = ">=15" },
     { name = "pyyaml", specifier = ">=6.0" },
