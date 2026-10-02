@@ -5,7 +5,7 @@ SYSTEMS ?= presidio,gliner_knowledgator,gliner_nvidia
 TESTSETS ?= dev
 EXTRAS ?= --extra data --extra presidio --extra presidio-lg --extra gliner --extra serve
 
-.PHONY: help setup data eval-data audit audit-score eval summary support-desk test test-all lint format train serve demo
+.PHONY: help setup data eval-data audit audit-score eval summary support-desk test test-all lint format serve demo figures docker-cpu docker-gpu docker-smoke
 
 help:
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-13s %s\n", $$1, $$2}'
@@ -48,9 +48,20 @@ format:
 	$(UV) run ruff format .
 	$(UV) run ruff check --fix .
 
-train: ## week 2
-	@echo "not implemented yet (week 2): training/train_lora.py"; exit 1
-serve: ## week 4
-	@echo "not implemented yet (week 4): src/pii_gateway/api.py"; exit 1
-demo: ## week 5
-	@echo "not implemented yet (week 5): demo/app.py"; exit 1
+serve: ## run the gateway locally (validators only; set PII_DETECTOR=lora on a GPU host)
+	$(UV) run uvicorn --factory pii_gateway.api:create_app --port 8000
+
+demo: ## Gradio demo (talks to the gateway at GATEWAY_URL, default http://127.0.0.1:8000)
+	$(UV) run --extra demo python demo/app.py
+
+figures: ## regenerate docs/figures/*.png from results/*.json
+	$(UV) run python -m eval.figures
+
+docker-cpu: ## build the CPU image (validators only)
+	docker build -f docker/Dockerfile.cpu -t pii-gateway:cpu .
+
+docker-gpu: ## build the GPU image (vLLM + LoRA; run on an NVIDIA host)
+	docker build -f docker/Dockerfile.gpu -t pii-gateway:gpu .
+
+docker-smoke: docker-cpu ## run the CPU image: health, redact, restore, proxy round trip, no logged values
+	bash scripts/docker_smoke.sh

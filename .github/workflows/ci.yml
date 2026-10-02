@@ -34,18 +34,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build the CPU image (validators only)
         run: docker build -f docker/Dockerfile.cpu -t pii-gateway:cpu .
-      - name: Smoke-test the CPU container
-        run: |
-          VK=$(python3 -c "import os,base64;print(base64.b64encode(os.urandom(32)).decode())")
-          docker run -d --name gw -p 8000:8000 --read-only --tmpfs /tmp --cap-drop ALL \
-            -e PII_VAULT_KEY="$VK" pii-gateway:cpu
-          for i in $(seq 1 60); do curl -sf localhost:8000/health && break; sleep 1; done
-          out=$(curl -sf -X POST localhost:8000/redact -H 'Content-Type: application/json' \
-            -d '{"text":"card 4111 1111 1111 1111, mail ann@example.com","policy":"strict"}')
-          echo "$out"
-          echo "$out" | grep -q '\[CREDITCARDNUMBER\]' && echo "$out" | grep -q '\[EMAIL\]'
-          ! echo "$out" | grep -q '4111 1111'
-          docker rm -f gw
+      - name: Smoke-test the CPU container (health, redact, restore, proxy round trip, logs)
+        run: IMG=pii-gateway:cpu bash scripts/docker_smoke.sh
       # The GPU image (CUDA 13 + vLLM + torch) needs ~25 GB during the build: clear the runner
       # first. It is built, not run (no GPU on the runner).
       - name: Free runner disk

@@ -20,6 +20,16 @@ curl -s localhost:8000/redact -H 'Content-Type: application/json' \
   -d '{"text": "Hi, I am Ann Lee, card 4111 1111 1111 1111", "policy": "support"}'
 ```
 
+## `/proxy`: the only outbound route
+
+With `PII_UPSTREAM_URL` set (an OpenAI-compatible API), `POST /proxy` works in three steps:
+
+1. it redacts each chat message;
+2. it sends **only the redacted text** to the upstream LLM;
+3. it restores the pseudonym tokens in the reply.
+
+Without `PII_UPSTREAM_URL` the route answers 404, and the container makes no outbound calls at all.
+
 ## Security
 
 - The CPU service runs with a read-only root filesystem, `cap_drop: ALL` and `no-new-privileges`. The GPU service has the same capability limits, but needs a writable `/cache`.
@@ -30,7 +40,7 @@ curl -s localhost:8000/redact -H 'Content-Type: application/json' \
 
 | Image | Tested where | What runs |
 | --- | --- | --- |
-| CPU | Locally and in CI (`.github/workflows/ci.yml`, job `docker`) | Builds and runs; `/health`, `/redact` and `/restore` are checked |
+| CPU | Locally (`make docker-smoke`) and in CI (`.github/workflows/ci.yml`, job `docker`) | Builds and runs `scripts/docker_smoke.sh`, which checks `/health`, `/redact`, `/restore` (and its key scope), `/proxy` (404 when disabled, plus a full round trip against `scripts/mock_llm.py`), and that no values appear in the container logs |
 | GPU | CI | Builds, and its Python stack imports (vLLM, the gateway). It is never *run* there, because the runner has no GPU |
 
 The GPU image's exact command (uvicorn + `PII_DETECTOR=lora`) was run against M5 on a RunPod A40 outside Docker. Its latency is in `results/phase4/gateway_latency.json`.
