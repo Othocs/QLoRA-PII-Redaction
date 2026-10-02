@@ -81,6 +81,13 @@ def _llm(with_adapter: bool) -> Callable[..., Detector]:
     return build
 
 
+def _validators(**kw) -> Detector:
+    """The gateway's deterministic fast path alone (CPU, no model)."""
+    from pii_gateway.detectors.validators import ValidatorDetector
+
+    return ValidatorDetector()
+
+
 SYSTEMS: dict[str, Callable[..., Detector]] = {
     "presidio": _presidio,
     "gliner_knowledgator": _gliner("gliner_knowledgator"),
@@ -88,6 +95,7 @@ SYSTEMS: dict[str, Callable[..., Detector]] = {
     "openmed": _openmed,
     "base_llm": _llm(with_adapter=False),
     "lora": _llm(with_adapter=True),
+    "validators": _validators,
 }
 
 

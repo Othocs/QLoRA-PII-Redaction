@@ -1,0 +1,33 @@
+# docker compose -f docker/compose.yaml --profile cpu up      # validators only, any machine
+# docker compose -f docker/compose.yaml --profile gpu up      # + the LoRA model, NVIDIA GPU
+# Secrets go in docker/gateway.env (gitignored; see gateway.env.example), never in the image.
+services:
+  gateway-cpu:
+    profiles: [cpu]
+    build: {context: .., dockerfile: docker/Dockerfile.cpu}
+    image: pii-gateway:cpu
+    ports: ["127.0.0.1:8000:8000"]
+    env_file: [{path: gateway.env, required: false}]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  gateway-gpu:
+    profiles: [gpu]
+    build: {context: .., dockerfile: docker/Dockerfile.gpu}
+    image: pii-gateway:gpu
+    ports: ["127.0.0.1:8000:8000"]
+    env_file: [{path: gateway.env, required: false}]
+    volumes:
+      - hf-cache:/cache
+      - ../outputs/hpo/m5_targeted:/models/adapter:ro
+    deploy:
+      resources:
+        reservations:
+          devices: [{driver: nvidia, count: 1, capabilities: [gpu]}]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+volumes:
+  hf-cache:

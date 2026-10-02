@@ -87,7 +87,7 @@ def test_bootstrap_ratios_and_interval():
     from eval.bootstrap import bootstrap, ci, ratios
 
     counts = np.array([[10, 2, 12, 4], [20, 0, 18, 0], [10, 5, 6, 1]], dtype=float)
-    leak, over = ratios(counts)  # sums: gold 40, leaked 7, pred 36, over 5
+    leak, over, _ = ratios(counts)  # sums: gold 40, leaked 7, pred 36, over 5
     assert leak == pytest.approx(7 / 40) and over == pytest.approx(5 / 36)
     lo, hi = ci(bootstrap(counts, 500)[:, 0])
     assert lo <= leak <= hi
@@ -156,3 +156,44 @@ def test_phase3_prefers_smaller_rank(tmp_path):
     finally:
         sel.paired_ci = orig
     assert {v for _, v, _, _ in rows} == {"A"} and winner.tag == "r32"
+
+
+def test_bootstrap_doc_leakage(tmp_path):
+    from eval.bootstrap import main as boot
+
+    _write_runs(tmp_path, "good", perfect=True)
+    _write_runs(tmp_path, "none", perfect=False)
+    good = boot(
+        ["--testset", "fixture", "--tags", "good", "--n", "100", "--results", str(tmp_path)]
+    )
+    none = boot(
+        ["--testset", "fixture", "--tags", "none", "--n", "100", "--results", str(tmp_path)]
+    )
+    assert good["doc_leakage_pct"] == 0 and none["doc_leakage_pct"] == pytest.approx(100)
+    assert none["doc_leakage_ci95_pct"] == pytest.approx([100, 100])
+
+
+def test_gateway_eval_union(tmp_path):
+    from eval.gateway_eval import gateway_spans
+    from eval.gateway_eval import main as gw_main
+    from pii_gateway.detectors.validators import ValidatorDetector
+    from pii_gateway.spans import Span
+
+    text = "Ann paid with 4111 1111 1111 1111 from ann@example.com"
+    model = [Span(0, 3, "GIVENNAME", source="llm"), Span(14, 23, "CREDITCARDNUMBER", source="llm")]
+    out = gateway_spans(text, model, ValidatorDetector())
+    assert [(s.label, s.text) for s in out] == [
+        ("GIVENNAME", "Ann"), ("CREDITCARDNUMBER", "4111 1111 1111 1111"),
+        ("EMAIL", "ann@example.com")]  # fmt: skip
+    _write_runs(tmp_path, "none", perfect=False)
+    rows = gw_main(["--tags", "none", "--testsets", "fixture", "--results", str(tmp_path)])
+    assert rows[0]["gateway_leak"] <= rows[0]["model_leak"] == pytest.approx(100)
+    assert (tmp_path / "none_gw__fixture.json").exists()
+    assert (tmp_path / "runs" / "none_gl__fixture.jsonl").exists()
+
+
+def test_validators_system_registered():
+    from pii_gateway.detectors.registry import build
+
+    det = build("validators")
+    assert [s.label for s in det.detect("mail a.b@example.com")] == ["EMAIL"]

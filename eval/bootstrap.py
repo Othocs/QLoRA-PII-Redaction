@@ -27,9 +27,11 @@ from eval.run_eval import load_testset
 from pii_gateway.spans import Span
 
 
-def doc_counts(tag: str, testset: str, results: Path) -> np.ndarray:
-    """Per-document [gold_chars, leaked_chars, pred_chars, over_chars], in test-set order."""
-    _, examples = load_testset(testset, None)
+def doc_counts(tag: str, testset: str, results: Path, gateway_labels: bool = False) -> np.ndarray:
+    """Per-document [gold_chars, leaked_chars, pred_chars, over_chars, has_gold, leaks],
+    in test-set order. The last two give document-level leakage (share of documents with
+    gold PII that leak any of it)."""
+    _, examples = load_testset(testset, None, gateway_labels)
     preds = {}
     with open(results / "runs" / f"{tag}__{testset}.jsonl", encoding="utf-8") as f:
         for line in f:
@@ -38,22 +40,25 @@ def doc_counts(tag: str, testset: str, results: Path) -> np.ndarray:
     rows = []
     for ex in examples:
         d = score_doc(ex.text, ex.spans, preds.get(ex.id, []))
-        rows.append([d.gold_chars, d.leaked_chars, d.pred_chars, d.over_chars])
+        rows.append([d.gold_chars, d.leaked_chars, d.pred_chars, d.over_chars,
+                     float(d.gold_chars > 0), float(d.leaks)])  # fmt: skip
     return np.asarray(rows, dtype=float)
 
 
-def ratios(c: np.ndarray) -> tuple[float, float]:
+def ratios(c: np.ndarray) -> tuple[float, float, float]:
+    """(character leakage, over-redaction, document leakage)."""
     s = c.sum(axis=0)
     leak = s[1] / s[0] if s[0] else 0.0
     over = s[3] / s[2] if s[2] else 0.0
-    return leak, over
+    doc = s[5] / s[4] if c.shape[1] > 5 and s[4] else 0.0
+    return leak, over, doc
 
 
 def bootstrap(counts: np.ndarray, n: int, seed: int = 0) -> np.ndarray:
-    """(n, 2) array of resampled (leakage, over-redaction)."""
+    """(n, 3) array of resampled (leakage, over-redaction, document leakage)."""
     rng = np.random.default_rng(seed)
     idx = rng.integers(0, len(counts), size=(n, len(counts)))
-    out = np.empty((n, 2))
+    out = np.empty((n, 3))
     for i in range(n):
         out[i] = ratios(counts[idx[i]])
     return out
@@ -70,11 +75,13 @@ def main(argv: list[str] | None = None) -> dict:
     ap.add_argument("--tags", required=True, help="comma-separated: seeds of one model")
     ap.add_argument("--paired", action="store_true", help="two tags: CI of leakage A - B")
     ap.add_argument("--n", type=int, default=2000)
+    ap.add_argument("--gateway-labels", action="store_true",
+                    help="score IBAN/IPADDRESS gold too (for *_gw / *_gl tags)")  # fmt: skip
     ap.add_argument("--results", default="results")
     args = ap.parse_args(argv)
     results = Path(args.results)
     tags = [t for t in args.tags.split(",") if t]
-    per_tag = {t: doc_counts(t, args.testset, results) for t in tags}
+    per_tag = {t: doc_counts(t, args.testset, results, args.gateway_labels) for t in tags}
 
     if args.paired:
         if len(tags) != 2:
@@ -91,7 +98,7 @@ def main(argv: list[str] | None = None) -> dict:
     else:
         mean_counts = np.mean([per_tag[t] for t in tags], axis=0)
         samples = bootstrap(mean_counts, args.n)
-        leak, over = ratios(mean_counts)
+        leak, over, doc = ratios(mean_counts)
         seed_leaks = [100 * ratios(per_tag[t])[0] for t in tags]
         out = {
             "testset": args.testset,
@@ -101,6 +108,8 @@ def main(argv: list[str] | None = None) -> dict:
             "leakage_ci95_pct": [100 * x for x in ci(samples[:, 0])],
             "over_redaction_pct": 100 * over,
             "over_redaction_ci95_pct": [100 * x for x in ci(samples[:, 1])],
+            "doc_leakage_pct": 100 * doc,
+            "doc_leakage_ci95_pct": [100 * x for x in ci(samples[:, 2])],
             "seed_leakage_pct": seed_leaks,
             "seed_spread_pct": max(seed_leaks) - min(seed_leaks),
         }

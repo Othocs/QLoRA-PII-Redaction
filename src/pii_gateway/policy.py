@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -27,7 +28,9 @@ from pii_gateway.spans import Span
 from pii_gateway.vault import Vault
 
 ACTIONS = ("mask", "pseudonymize", "hash", "keep")
-POLICY_DIR = Path(__file__).resolve().parents[2] / "configs" / "policy"
+POLICY_DIR = Path(
+    os.environ.get("PII_POLICY_DIR", Path(__file__).resolve().parents[2] / "configs" / "policy")
+)
 
 
 @dataclass

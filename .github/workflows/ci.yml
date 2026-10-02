@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   test:
@@ -26,3 +27,35 @@ jobs:
         run: uv run pytest -q
       - name: Eval smoke run on the fixture
         run: uv run python -m eval.run_eval --systems presidio --testsets fixture --out /tmp/results
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the CPU image (validators only)
+        run: docker build -f docker/Dockerfile.cpu -t pii-gateway:cpu .
+      - name: Smoke-test the CPU container
+        run: |
+          VK=$(python3 -c "import os,base64;print(base64.b64encode(os.urandom(32)).decode())")
+          docker run -d --name gw -p 8000:8000 --read-only --tmpfs /tmp --cap-drop ALL \
+            -e PII_VAULT_KEY="$VK" pii-gateway:cpu
+          for i in $(seq 1 60); do curl -sf localhost:8000/health && break; sleep 1; done
+          out=$(curl -sf -X POST localhost:8000/redact -H 'Content-Type: application/json' \
+            -d '{"text":"card 4111 1111 1111 1111, mail ann@example.com","policy":"strict"}')
+          echo "$out"
+          echo "$out" | grep -q '\[CREDITCARDNUMBER\]' && echo "$out" | grep -q '\[EMAIL\]'
+          ! echo "$out" | grep -q '4111 1111'
+          docker rm -f gw
+      # The GPU image (CUDA 13 + vLLM + torch) needs ~25 GB during the build: clear the runner
+      # first. It is built, not run (no GPU on the runner).
+      - name: Free runner disk
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          docker image prune -af
+          df -h /
+      - name: Build the GPU image (vLLM + LoRA gateway)
+        run: docker build -f docker/Dockerfile.gpu -t pii-gateway:gpu .
+      - name: Check the GPU image's Python stack imports (no GPU needed)
+        run: |
+          docker run --rm --entrypoint python pii-gateway:gpu -c \
+            "import vllm, fastapi, pii_gateway.api; print('vllm', vllm.__version__)"

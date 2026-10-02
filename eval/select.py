@@ -172,8 +172,8 @@ def paired_ci(results: Path, a: str, b: str, sets: list[str], n: int = 1000) -> 
     for ca, cb in pairs:
         idx = rng.integers(0, len(ca), size=(n, len(ca)))
         for i in range(n):
-            la, oa = ratios(ca[idx[i]])
-            lb, ob = ratios(cb[idx[i]])
+            la, oa, _ = ratios(ca[idx[i]])
+            lb, ob, _ = ratios(cb[idx[i]])
             dl[i] += 100 * (la - lb) / len(pairs)
             do[i] += 100 * (oa - ob) / len(pairs)
     q = lambda x: [float(v) for v in np.percentile(x, [2.5, 97.5])]  # noqa: E731

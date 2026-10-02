@@ -1,0 +1,26 @@
+# Gateway + the LoRA model (vLLM, in process) + validators, on an NVIDIA GPU (CUDA 13 host).
+#   docker build -f docker/Dockerfile.gpu -t pii-gateway:gpu .
+# The adapter is mounted at /models/adapter (read-only); the base model (Qwen/Qwen3-1.7B) is
+# downloaded into the /cache volume on first start. No weights are baked into the image.
+FROM nvidia/cuda:13.0.1-runtime-ubuntu24.04
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+COPY --from=ghcr.io/astral-sh/uv:0.8 /uv /usr/local/bin/uv
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PROJECT_ENVIRONMENT=/app/.venv \
+    UV_PYTHON_INSTALL_DIR=/opt/python
+RUN uv python install 3.12
+WORKDIR /app
+COPY pyproject.toml uv.lock README.md ./
+RUN uv sync --frozen --no-dev --extra llm --extra serve --no-install-project
+COPY src ./src
+COPY configs/policy ./configs/policy
+RUN uv sync --frozen --no-dev --extra llm --extra serve \
+ && useradd --create-home --uid 10001 gateway \
+ && mkdir -p /cache /models && chown gateway /cache
+USER gateway
+ENV PATH=/app/.venv/bin:$PATH HOME=/cache HF_HOME=/cache/hf PII_POLICY_DIR=/app/configs/policy \
+    PII_DETECTOR=lora PII_ADAPTER=/models/adapter VLLM_USE_FLASHINFER_SAMPLER=0
+VOLUME /cache
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=600s CMD python -c "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/health')"
+CMD ["uvicorn", "--factory", "pii_gateway.api:create_app", "--host", "0.0.0.0", "--port", "8000"]

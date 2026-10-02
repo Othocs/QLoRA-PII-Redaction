@@ -25,3 +25,4 @@ checkpoints/
 # Misc
 .DS_Store
 .env
+docker/gateway.env
