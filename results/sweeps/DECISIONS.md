@@ -65,3 +65,36 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
   - val_in_dist mean (dev, nemotron_dev, gretel_dev) within 1.0 pt;
   - sanity rule (invented ≤ 5%, token limit ≤ 2%).
 - **Outcome.** A pass makes M5 the phase 4 candidate. A fail keeps M4 and records which patterns didn't move.
+
+### Milestone 1 result (2026-10-02): M5 PASSES the gate
+- **Run:** one A40, 137 min of training ($1.12), about $1.30 for the pod in total. Seed 13, 2,000 steps on `train_mix_32k`. All data checksums matched the local files.
+- **Gate on support_desk_fresh**, M5 vs M4:
+
+  | Criterion | M4 | M5 | Result |
+  | --- | ---: | ---: | --- |
+  | Leakage < 5% | 27.65% | **4.57%** | pass |
+  | Leakage below M4, paired 95% CI excluding 0 | — | Δ −23.1 pt, CI [−32.5, −14.1] | pass |
+  | Over-redaction Δ ≤ +1.0 pt, CI not entirely above 0 | 8.71% | 3.12%: Δ −5.6 pt, CI [−9.5, −2.4] | pass (lower) |
+  | Loops: invented ≤ M4 + 2 pt, token limit ≤ M4 + 1 pt | 1/270 dropped, 0 truncated | 1/285 dropped, 0 truncated | pass |
+
+- **Guard rails, all pass:**
+
+  | Set | M4 leakage | M5 leakage | Δ | Limit |
+  | --- | ---: | ---: | ---: | ---: |
+  | support_desk_val | 1.12% | 1.58% | +0.46 pt | 1.0 pt |
+  | val_in_region | 0.68% | 0.62% | −0.06 pt | 1.0 pt |
+  | val_in_dist mean | 6.86% | 6.94% | +0.08 pt | 1.0 pt |
+
+  Over-redaction also dropped on support_desk_val (14.5% → 7.5%) and support_desk_hard (11.8% → 8.9%).
+- **Diagnostic on support_desk_hard, not gating:**
+  - Leakage 10.33% → **5.28%**.
+  - **M5 recovered 10 of the 21 spans M4 missed entirely.** These include spoken phone numbers ("plus four four seven seven double oh…", "zero two zero, seven nine four six…"), all four titles (Dr., Pvt., Mrs., Prof. Dr.) and the word-like name "will".
+  - **Still missed:** the line-split digit phone, the unspaced UK mobile, the compact NINO "QQ123456C", the 4-8-4 card, lowercase "ms", "100" as an age, "dot", "mark", "Lagos", and an Aadhaar and PAN.
+  - **7 new misses** that M4 had caught: CITY 3, ZIPCODE, CREDITCARDNUMBER, SEX, SURNAME.
+
+  The team's diagnostic target ("near 0% on the known misses") is **not met**. About half of the known failure formats are still missed, even though the targeted data covers them.
+- **Caveats:**
+  - Single seed.
+  - The fresh set is hard: M4 leaks 27.6% on it, above the team's 5–10% band for val_ood. Its leakage is dominated by spoken phone numbers and titles, where M5 gained most.
+  - Both the fresh set and the training data are LLM-written, by different models.
+- **Decision: M5 is the phase 4 candidate.** Phase 4 is waiting for the user's go (the rule set before the run).

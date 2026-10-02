@@ -14,6 +14,7 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M1 cleaned OpenPII 10k | dev | 2000 | 0.8 | 15.6 | 0.5 | 0.936 | 0.993 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | dev | 2000 | 0.9 | 17.8 | 0.7 | 0.909 | 0.992 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | dev | 2000 | 0.7 | 15.8 | 0.5 | 0.936 | 0.994 |  |  | Linux x86_64 |
+| m5_targeted | dev | 2000 | 0.6 | 12.9 | 0.5 | 0.947 | 0.995 | 4687 | 7990 | Linux x86_64 |
 | p1_lr1e-4 | dev | 2000 | 1.0 | 19.1 | 0.6 | 0.914 | 0.992 |  |  | Linux x86_64 |
 | p1_lr2e-4 | dev | 2000 | 0.7 | 15.7 | 0.5 | 0.932 | 0.994 |  |  | Linux x86_64 |
 | p1_lr4e-4 | dev | 2000 | 0.6 | 14.5 | 0.4 | 0.945 | 0.995 |  |  | Linux x86_64 |
@@ -30,6 +31,7 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M1 cleaned OpenPII 10k | gretel_dev | 1000 | 40.2 | 84.2 | 51.2 | 0.120 | 0.519 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | gretel_dev | 1000 | 28.8 | 83.3 | 33.6 | 0.183 | 0.657 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | gretel_dev | 1000 | 29.3 | 84.3 | 30.8 | 0.186 | 0.667 |  |  | Linux x86_64 |
+| m5_targeted | gretel_dev | 1000 | 17.1 | 76.9 | 13.7 | 0.316 | 0.842 | 621 | 2633 | Linux x86_64 |
 | p1_lr1e-4 | gretel_dev | 1000 | 29.8 | 84.3 | 31.8 | 0.182 | 0.660 |  |  | Linux x86_64 |
 | p1_lr2e-4 | gretel_dev | 1000 | 29.5 | 84.1 | 29.8 | 0.186 | 0.673 |  |  | Linux x86_64 |
 | p1_lr4e-4 | gretel_dev | 1000 | 29.1 | 83.9 | 28.7 | 0.184 | 0.675 |  |  | Linux x86_64 |
@@ -76,6 +78,7 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M3 cleaned OpenPII 10k + Nemotron 10k | nemotron | 3000 | 3.7 | 9.1 | 2.6 | 0.912 | 0.964 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | nemotron | 3000 | 2.4 | 7.9 | 7.0 | 0.864 | 0.942 | 254 | 694 | Linux x86_64 |
 | Presidio | nemotron | 3000 | 13.9 | 41.9 | 33.0 | 0.402 | 0.746 | 32 | 53 | Linux x86_64 |
+| m5_targeted | nemotron_dev | 1000 | 3.2 | 7.8 | 3.5 | 0.919 | 0.964 | 861 | 4235 | Linux x86_64 |
 | p1_lr4e-4 | nemotron_dev | 1000 | 2.2 | 5.1 | 1.7 | 0.936 | 0.977 |  |  | Linux x86_64 |
 | p2_m4_lr2.83e-4 | nemotron_dev | 1000 | 2.9 | 6.3 | 4.6 | 0.915 | 0.959 |  |  | Linux x86_64 |
 | p2_m4_lr2e-4 | nemotron_dev | 1000 | 3.0 | 6.9 | 3.7 | 0.920 | 0.967 |  |  | Linux x86_64 |
@@ -92,10 +95,14 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M2 cleaned OpenPII 5k + Nemotron 5k | openpii_xx | 3000 | 2.3 | 26.8 | 2.1 | 0.810 | 0.979 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | openpii_xx | 3000 | 2.1 | 25.3 | 1.8 | 0.835 | 0.982 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | openpii_xx | 3000 | 3.0 | 40.4 | 1.2 | 0.632 | 0.981 | 583 | 1146 | Linux x86_64 |
+| m5_targeted | support_desk_fresh | 100 | 4.6 | 13.0 | 3.1 | 0.915 | 0.961 | 7596 | 12604 | Linux x86_64 |
+| p2_m4_lr4e-4 | support_desk_fresh | 100 | 27.6 | 35.0 | 8.7 | 0.827 | 0.905 | 7585 | 11890 | Linux x86_64 |
+| m5_targeted | support_desk_hard | 100 | 5.3 | 15.0 | 8.9 | 0.808 | 0.938 | 7225 | 13732 | Linux x86_64 |
 | p2_m4_lr4e-4 | support_desk_hard | 100 | 10.3 | 19.0 | 11.7 | 0.772 | 0.926 | 7251 | 14637 | Linux x86_64 |
 | p3_r32_lr1.4e-4 | support_desk_hard | 100 | 10.6 | 22.0 | 11.8 | 0.762 | 0.921 | 7300 | 14342 | Linux x86_64 |
 | p3_r32_lr1e-4 | support_desk_hard | 100 | 10.9 | 21.0 | 13.3 | 0.742 | 0.915 | 7044 | 13178 | Linux x86_64 |
 | p3_r32_lr2e-4 | support_desk_hard | 100 | 10.2 | 21.0 | 12.3 | 0.763 | 0.920 | 7284 | 14987 | Linux x86_64 |
+| m5_targeted | support_desk_val | 100 | 1.6 | 3.0 | 7.5 | 0.840 | 0.962 | 4887 | 9694 | Linux x86_64 |
 | p1_lr4e-4 | support_desk_val | 100 | 1.4 | 6.0 | 12.1 | 0.792 | 0.902 |  |  | Linux x86_64 |
 | p2_m4_lr2.83e-4 | support_desk_val | 100 | 2.4 | 6.0 | 15.2 | 0.787 | 0.895 |  |  | Linux x86_64 |
 | p2_m4_lr2e-4 | support_desk_val | 100 | 1.4 | 5.0 | 13.7 | 0.804 | 0.905 |  |  | Linux x86_64 |
@@ -125,6 +132,7 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M3 cleaned OpenPII 10k + Nemotron 10k | test_holdout_regions | 2000 | 0.8 | 15.8 | 0.5 | 0.929 | 0.993 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | test_holdout_regions | 2000 | 0.8 | 27.5 | 1.4 | 0.657 | 0.987 | 587 | 1150 | Linux x86_64 |
 | Presidio | test_holdout_regions | 2000 | 35.7 | 89.9 | 19.0 | 0.223 | 0.709 | 43 | 72 | Linux x86_64 |
+| m5_targeted | val_in_region | 1000 | 0.6 | 14.2 | 0.3 | 0.938 | 0.995 | 4800 | 8553 | Linux x86_64 |
 | p1_lr4e-4 | val_in_region | 1000 | 0.6 | 13.1 | 0.3 | 0.938 | 0.996 |  |  | Linux x86_64 |
 | p2_m4_lr2.83e-4 | val_in_region | 1000 | 0.6 | 12.3 | 0.4 | 0.936 | 0.995 |  |  | Linux x86_64 |
 | p2_m4_lr2e-4 | val_in_region | 1000 | 0.7 | 13.2 | 0.5 | 0.932 | 0.995 |  |  | Linux x86_64 |
@@ -245,6 +253,67 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
 
   STREET/BUILDINGNUM have strict F1 0 but no leakage: the model folds the house number into STREET, a convention difference.
 - **Phase 4:** awaiting the user's decision.
+
+## Milestone 1: targeted failure-mode data (M5), rules set before generating data (2026-10-02)
+- **Candidate.** M5 = M4's recipe (r=16, α=32, learning rate 4e-4, 1 epoch, seed 13) on `train_mix_32k`: `train_mix_30k` + 2,000 targeted synthetic messages generated with the DeepSeek API (`data/synthetic/`).
+- **Gate set.** `support_desk_fresh`: 100 unseen hard messages, committed before any targeted data was generated. It was written from the pattern list by a different generator (Claude) than the training data.
+- **Promotion gate, all on support_desk_fresh, M5 vs M4:**
+  1. M5 character leakage < 5%;
+  2. M5 leakage lower than M4's, with the paired document-bootstrap 95% CI excluding 0;
+  3. no rise in over-redaction: point Δ ≤ +1.0 pt, and the CI not entirely above 0;
+  4. no extra loops: invented values ≤ M4 + 2 pt, and token-limit hits ≤ M4 + 1 pt.
+
+  If M4 is already under 5% on fresh, the gate is (2)–(4) only, flagged as weak.
+- **Diagnostic, reported but not gating.** On support_desk_hard: how many of the spans M4 missed entirely does M5 recover, and the overall hard-slice leakage.
+- **Guard rails.** These must hold or M5 is not promoted:
+  - support_desk_val and val_in_region leakage within 1.0 pt of M4;
+  - val_in_dist mean (dev, nemotron_dev, gretel_dev) within 1.0 pt;
+  - sanity rule (invented ≤ 5%, token limit ≤ 2%).
+- **Outcome.** A pass makes M5 the phase 4 candidate. A fail keeps M4 and records which patterns didn't move.
+
+### Milestone 1 result (2026-10-02): M5 PASSES the gate
+- **Run:** one A40, 137 min of training ($1.12), about $1.30 for the pod in total. Seed 13, 2,000 steps on `train_mix_32k`. All data checksums matched the local files.
+- **Gate on support_desk_fresh**, M5 vs M4:
+
+  | Criterion | M4 | M5 | Result |
+  | --- | ---: | ---: | --- |
+  | Leakage < 5% | 27.65% | **4.57%** | pass |
+  | Leakage below M4, paired 95% CI excluding 0 | — | Δ −23.1 pt, CI [−32.5, −14.1] | pass |
+  | Over-redaction Δ ≤ +1.0 pt, CI not entirely above 0 | 8.71% | 3.12%: Δ −5.6 pt, CI [−9.5, −2.4] | pass (lower) |
+  | Loops: invented ≤ M4 + 2 pt, token limit ≤ M4 + 1 pt | 1/270 dropped, 0 truncated | 1/285 dropped, 0 truncated | pass |
+
+- **Guard rails, all pass:**
+
+  | Set | M4 leakage | M5 leakage | Δ | Limit |
+  | --- | ---: | ---: | ---: | ---: |
+  | support_desk_val | 1.12% | 1.58% | +0.46 pt | 1.0 pt |
+  | val_in_region | 0.68% | 0.62% | −0.06 pt | 1.0 pt |
+  | val_in_dist mean | 6.86% | 6.94% | +0.08 pt | 1.0 pt |
+
+  Over-redaction also dropped on support_desk_val (14.5% → 7.5%) and support_desk_hard (11.8% → 8.9%).
+- **Diagnostic on support_desk_hard, not gating:**
+  - Leakage 10.33% → **5.28%**.
+  - **M5 recovered 10 of the 21 spans M4 missed entirely.** These include spoken phone numbers ("plus four four seven seven double oh…", "zero two zero, seven nine four six…"), all four titles (Dr., Pvt., Mrs., Prof. Dr.) and the word-like name "will".
+  - **Still missed:** the line-split digit phone, the unspaced UK mobile, the compact NINO "QQ123456C", the 4-8-4 card, lowercase "ms", "100" as an age, "dot", "mark", "Lagos", and an Aadhaar and PAN.
+  - **7 new misses** that M4 had caught: CITY 3, ZIPCODE, CREDITCARDNUMBER, SEX, SURNAME.
+
+  The team's diagnostic target ("near 0% on the known misses") is **not met**. About half of the known failure formats are still missed, even though the targeted data covers them.
+- **Caveats:**
+  - Single seed.
+  - The fresh set is hard: M4 leaks 27.6% on it, above the team's 5–10% band for val_ood. Its leakage is dominated by spoken phone numbers and titles, where M5 gained most.
+  - Both the fresh set and the training data are LLM-written, by different models.
+- **Decision: M5 is the phase 4 candidate.** Phase 4 is waiting for the user's go (the rule set before the run).
+
+## Sweep: m5_targeted
+
+Primary: leakage on support_desk_fresh (mean). Tie band 1.0 pt; tie-breaks: over-redaction, then leakage on dev + nemotron_dev + gretel_dev. Sanity rule on: dropped ≤ 5%, token-limit ≤ 2%.
+
+| Run | Overrides | Primary leakage (%) | Over-redaction (%) | In-dist leakage (%) | Dropped values (%) | Hit token limit (%) | Sane | Missing |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| m5_targeted **(winner)** | output_dir=outputs/hpo/m5_targeted learning_rate=4e-4 train_file=data/processed/train_mix_32k.jsonl | 4.57 | 3.12 | 6.94 | 0.4 | 0.0 | yes |  |
+| p2_m4_lr4e-4 | output_dir=outputs/hpo/p2_m4_lr4e-4 learning_rate=4e-4 | 27.65 | 8.71 | 6.86 | 0.4 | 0.0 | yes |  |
+
+**Decision:** m5_targeted: lowest primary leakage (4.57%), no other candidate within 1.0 pt.
 
 ## Sweep: phase1_lr
 
