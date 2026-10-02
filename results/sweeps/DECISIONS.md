@@ -18,6 +18,8 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
 
 ## Phase 3: rank 32/64 (rules set before running)
 - **Grid:** r ∈ {32, 64}, α = 2r, η ∈ {1e-4, 1.4e-4, 2e-4} (`phase3_rank.txt`). Baseline: M4 r=16 @ 4e-4.
+- **Budget cut (user, 2026-10-02, mid-run): r=64 dropped.** Only r=32 is run, at all three LRs (Phase 3 ≈ $4 instead of ≈ $8). r=64 is run later only if r=32 earns verdict A or B. If r=32 doesn't beat r=16, a further doubling is unlikely to pay off.
+- **Phase 4 is not automatic.** The user decides whether to run it after seeing the phase 3 results.
 - **Best LR per rank:** chosen with the general rule (val_ood leakage, then the tie band, then over-redaction).
 - **Decision matrix against the baseline**, on the val_ood mean, with paired document bootstraps:
   - **A, adopt:** relative leakage reduction of at least 20%, with the CI excluding 0.
