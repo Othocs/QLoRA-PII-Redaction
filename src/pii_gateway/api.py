@@ -24,6 +24,7 @@ from __future__ import annotations
 import hmac
 import logging
 import os
+import threading
 import uuid
 
 from fastapi import Depends, FastAPI, Header, HTTPException
@@ -69,6 +70,7 @@ def create_app(detector: Detector | None = None, vault: Vault | None = None,
         if vault is None and os.environ.get("PII_VAULT_KEY"):
             vault = Vault.from_env()
     validators = ValidatorDetector()
+    model_lock = threading.Lock()  # sync endpoints run in a thread pool; vLLM is not thread-safe
     hash_key = vault.subkey("policy-hash") if vault else None
     api_key = os.environ.get("PII_API_KEY") if use_env else None
     restore_key = os.environ.get("PII_RESTORE_KEY") if use_env else None
@@ -104,7 +106,8 @@ def create_app(detector: Detector | None = None, vault: Vault | None = None,
             norm = normalize(req.text)
             found = validators.detect(norm.text)
             if detector is not None:
-                found = found + detector.detect(norm.text)
+                with model_lock:
+                    found = found + detector.detect(norm.text)
             spans = recall_first_union(req.text, spans_to_original(norm, req.text, found))
             result = apply(req.text, spans, policy, vault=vault, tenant=req.tenant,
                            conversation=conversation, hash_key=hash_key)  # fmt: skip

@@ -208,3 +208,28 @@ def test_fail_closed_and_auth(client_factory):
 def test_vault_from_env(monkeypatch):
     monkeypatch.setenv("PII_VAULT_KEY", base64.b64encode(KEY).decode())
     assert Vault.from_env().token("t", "c", "EMAIL", "a@b.co") == "<EMAIL_1>"
+
+
+def test_model_calls_are_serialised(client_factory):
+    import threading
+    import time
+
+    class SlowStub(StubLLM):
+        active = 0
+        peak = 0
+
+        def detect(self, text):
+            SlowStub.active += 1
+            SlowStub.peak = max(SlowStub.peak, SlowStub.active)
+            time.sleep(0.02)
+            SlowStub.active -= 1
+            return super().detect(text)
+
+    c = client_factory(SlowStub())
+    body = {"json": {"text": "Priya"}}
+    threads = [threading.Thread(target=c.post, args=("/redact",), kwargs=body) for _ in range(8)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert SlowStub.peak == 1
