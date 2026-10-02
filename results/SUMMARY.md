@@ -255,6 +255,8 @@ M5 = Qwen3-1.7B + QLoRA r=16, lr 4e-4, train_mix_32k; seeds 13, 42, 3407 (per-do
 
 Seed leakage (13, 42, 3407): 15.05, 17.52, 15.17.
 
+M5 leakage by label (%, seed mean): CODE 94.3, DATE 5.3, LOC 58.0, NAME 16.8.
+
 | M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
 | --- | ---: | --- | ---: | --- |
 | gliner_nvidia | -3.38 | [-4.54, -2.22] | -12.32 | [-15.02, -9.77] |
@@ -283,6 +285,8 @@ Gateway − model: leakage -0.04 pt [-0.10, 0.00], over-redaction -0.00 pt [-0.0
 
 Seed leakage (13, 42, 3407): 0.68, 2.22, 2.20.
 
+M5 leakage by label (%, seed mean): AGE 1.8, BUILDINGNUM 1.3, CITY 5.7, CREDITCARDNUMBER 3.4, DATE 0.0, DRIVERLICENSENUM 0.0, EMAIL 2.7, GENDER 5.6, GIVENNAME 0.1, IDCARDNUM 0.0, PASSPORTNUM 0.0, SEX 16.7, SOCIALNUM 0.0, STREET 0.5, SURNAME 1.1, TAXNUM 32.3, TELEPHONENUM 0.0, TITLE 0.0, ZIPCODE 3.5.
+
 | M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
 | --- | ---: | --- | ---: | --- |
 | gliner_nvidia | -6.41 | [-9.46, -3.39] | -17.48 | [-20.77, -14.49] |
@@ -307,6 +311,8 @@ Gateway − model: leakage -2.96 pt [-5.30, -1.02], over-redaction -0.02 pt [-0.
 | validators | 83.68 | [83.33, 84.03] | 99.10 | [98.82, 99.36] | 0.96 | [0.69, 1.27] |
 
 Seed leakage (13, 42, 3407): 0.61, 0.61, 0.60.
+
+M5 leakage by label (%, seed mean): AGE 8.4, BUILDINGNUM 0.8, CITY 1.1, CREDITCARDNUMBER 0.7, DATE 0.1, DRIVERLICENSENUM 0.9, EMAIL 0.5, GENDER 0.2, GIVENNAME 0.9, IDCARDNUM 0.3, PASSPORTNUM 0.0, SEX 0.8, SOCIALNUM 0.1, STREET 0.4, SURNAME 1.0, TAXNUM 0.4, TELEPHONENUM 0.1, TITLE 0.5, ZIPCODE 0.2.
 
 | M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
 | --- | ---: | --- | ---: | --- |
@@ -508,6 +514,23 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
   - M5 is the best or tied-best system on OpenPII-style text (including the held-out region) and on LLM-written support text.
   - **On real human-typed support chats (ABCD), the encoder baselines leak less.** The support-desk advantage did not transfer.
   - This is the main open question for any deployment claim. Next steps would be real support data with human labels, and ABCD-style conversational training data.
+
+## Project conclusion (2026-10-03)
+- **Final model:** M5. Qwen3-1.7B + QLoRA r=16, α=32, learning rate 4e-4, 1 epoch on `train_mix_32k` (OpenPII, Nemotron and Gretel EN, 10k each, plus 2k targeted). The reference adapter is seed 13; it is documented in `MODEL_CARD.md` and not published.
+- **Claims the evidence supports:**
+  - best or tied-best on LLM-drafted support text, an unseen OpenPII region and Gretel-style documents, at low over-redaction;
+  - competitive on real legal text (TAB ties OpenMed);
+  - data diversity and targeted data matter far more than learning rate or rank.
+- **Claims it does not support:**
+  - best on real customer conversations. On ABCD's human-typed chats, GLiNER-PII and OpenMed leak less;
+  - absolute support-desk numbers as a forecast for real traffic, since those test sets are LLM-drafted.
+- **Open questions and next steps:**
+  1. conversational training data, judged on a fresh real-chat test;
+  2. a human-labelled set of real support messages;
+  3. a GLiNER-PII + M5 hybrid detector, which can be evaluated offline from saved predictions;
+  4. a Hub release and CPU latency of a quantised build.
+- **Deliverables:** `docs/REPORT.md`, `docs/EVALUATION.md`, `docs/DATASETS.md`, `docs/ARCHITECTURE.md`, `docs/figures/`, `MODEL_CARD.md`, the gateway (`src/pii_gateway/`, including `/proxy` and the canary test), Docker images, and the demo.
+- **Total cost:** about $21.30, including about $0.40 of API calls.
 
 ## Sweep: m5_targeted
 

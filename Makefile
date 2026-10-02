@@ -3,7 +3,7 @@ UV ?= uv
 EVAL_LIMIT ?= 200
 SYSTEMS ?= presidio,gliner_knowledgator,gliner_nvidia
 TESTSETS ?= dev
-EXTRAS ?= --extra data --extra presidio --extra presidio-lg --extra gliner --extra serve
+EXTRAS ?= --extra data --extra presidio --extra presidio-lg --extra gliner --extra serve --extra demo
 
 .PHONY: help setup data eval-data audit audit-score eval summary support-desk test test-all lint format serve demo figures docker-cpu docker-gpu docker-smoke
 

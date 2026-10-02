@@ -178,3 +178,20 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
   - M5 is the best or tied-best system on OpenPII-style text (including the held-out region) and on LLM-written support text.
   - **On real human-typed support chats (ABCD), the encoder baselines leak less.** The support-desk advantage did not transfer.
   - This is the main open question for any deployment claim. Next steps would be real support data with human labels, and ABCD-style conversational training data.
+
+## Project conclusion (2026-10-03)
+- **Final model:** M5. Qwen3-1.7B + QLoRA r=16, α=32, learning rate 4e-4, 1 epoch on `train_mix_32k` (OpenPII, Nemotron and Gretel EN, 10k each, plus 2k targeted). The reference adapter is seed 13; it is documented in `MODEL_CARD.md` and not published.
+- **Claims the evidence supports:**
+  - best or tied-best on LLM-drafted support text, an unseen OpenPII region and Gretel-style documents, at low over-redaction;
+  - competitive on real legal text (TAB ties OpenMed);
+  - data diversity and targeted data matter far more than learning rate or rank.
+- **Claims it does not support:**
+  - best on real customer conversations. On ABCD's human-typed chats, GLiNER-PII and OpenMed leak less;
+  - absolute support-desk numbers as a forecast for real traffic, since those test sets are LLM-drafted.
+- **Open questions and next steps:**
+  1. conversational training data, judged on a fresh real-chat test;
+  2. a human-labelled set of real support messages;
+  3. a GLiNER-PII + M5 hybrid detector, which can be evaluated offline from saved predictions;
+  4. a Hub release and CPU latency of a quantised build.
+- **Deliverables:** `docs/REPORT.md`, `docs/EVALUATION.md`, `docs/DATASETS.md`, `docs/ARCHITECTURE.md`, `docs/figures/`, `MODEL_CARD.md`, the gateway (`src/pii_gateway/`, including `/proxy` and the canary test), Docker images, and the demo.
+- **Total cost:** about $21.30, including about $0.40 of API calls.
