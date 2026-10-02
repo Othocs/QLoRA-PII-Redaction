@@ -78,5 +78,32 @@
   "nemotron_dev": {
     "rows": 1000,
     "excluded_training_docs": 8040
+  },
+  "train_mix_32k": {
+    "openpii": 10000,
+    "gretel_train": 10000,
+    "nemotron_train": 10000,
+    "targeted": 2000
+  },
+  "targeted": {
+    "rows": 2000,
+    "patterns": {
+      "title": 518,
+      "phone": 598,
+      "dob_age": 319,
+      "id_card": 398,
+      "negative": 167
+    },
+    "labels": {
+      "TITLE": 1203,
+      "GIVENNAME": 2529,
+      "SURNAME": 2473,
+      "TELEPHONENUM": 762,
+      "AGE": 208,
+      "SOCIALNUM": 198,
+      "CREDITCARDNUMBER": 205,
+      "EMAIL": 57,
+      "DATE": 224
+    }
   }
 }

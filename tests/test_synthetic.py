@@ -64,6 +64,13 @@ def test_label_message_every_occurrence_longest_first():
         assert text[s["start"] : s["end"]] == s["text"]
 
 
+def test_case_variants_are_labelled():
+    vals = _values(("TITLE", "Fr."), ("GIVENNAME", "Aaliyah"), ("SURNAME", "Ballantyne"))
+    rec, why = gen.validate("i'm fr. aaliyah ballantyne\n\nFr. Aaliyah Ballantyne", vals, [])
+    assert why == "" and [s["text"] for s in rec["spans"]] == [
+        "fr.", "aaliyah", "ballantyne", "Fr.", "Aaliyah", "Ballantyne"]  # fmt: skip
+
+
 def test_validate_accepts_and_rejects():
     vals = _values(("GIVENNAME", "Saoirse"), ("SURNAME", "Kerrigan"), ("AGE", "34M"))
     ok = "cust Saoirse Kerrigan, 34M, gift card 6034 9321 0075 5512 has no balance"
@@ -79,6 +86,25 @@ def test_validate_accepts_and_rejects():
     }
     for reason, text in cases.items():
         assert gen.validate(text, vals, [])[1] == reason, text
+
+
+def test_semantic_rejections():
+    tel = _values(("GIVENNAME", "Saoirse"), ("TELEPHONENUM", "oh one one three"))
+    assert gen.validate("Saoirse, please call us at oh one one three", tel, [])[1] == (
+        "phone given as the company's"
+    )
+    assert gen.validate("Saoirse here, ring me on oh one one three", tel, [])[1] == ""
+    dob = _values(("GIVENNAME", "Saoirse"), ("DATE", "9th Mar '09"))
+    assert gen.validate("From: Saoirse\nSent: 9th Mar '09\nhi", dob, [])[1] == (
+        "date used as a header date"
+    )
+    card = _values(
+        ("GIVENNAME", "Saoirse"),
+    )
+    msg = "Saoirse: my card number 4777 5307 3765 3044 was declined"
+    assert gen.validate(msg, card, ["4777 5307 3765 3044"])[1] == "look-alike presented as a card"
+    msg = "Saoirse: my gift card 4777 5307 3765 3044 is empty"
+    assert gen.validate(msg, card, ["4777 5307 3765 3044"])[1] == ""
 
 
 def test_wordlike_names_and_bare_numbers_must_be_unique():

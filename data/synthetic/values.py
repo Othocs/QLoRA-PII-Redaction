@@ -325,6 +325,54 @@ def email(rng: random.Random, given: str, sur: str) -> tuple[str, str, str]:
     return "EMAIL", f"{local}@{domain}", "plain"
 
 
+# ---------------------------------------------------------------- look-alikes (not PII)
+
+
+def _digits(rng: random.Random, n: int) -> str:
+    return str(rng.randint(1, 9)) + "".join(str(rng.randint(0, 9)) for _ in range(n - 1))
+
+
+def lookalike(rng: random.Random) -> str:
+    """A business string that resembles PII but is not personal (labelled keep)."""
+    kind = rng.choice(["order", "ticket", "tracking", "gift", "serial", "sku", "invoice",
+                       "promo", "price", "quantity", "case"])  # fmt: skip
+    if kind == "order":
+        return rng.choice([f"#{_digits(rng, 8)}", f"ORD-{_digits(rng, 6)}",
+                           f"{_digits(rng, 3)}-{_digits(rng, 7)}-{_digits(rng, 7)}"])  # fmt: skip
+    if kind == "ticket":
+        return rng.choice([f"INC{_digits(rng, 7)}", f"TCK-{_digits(rng, 5)}",
+                           f"#{_digits(rng, 4)}-{_digits(rng, 4)}"])  # fmt: skip
+    if kind == "tracking":
+        return rng.choice([f"1Z{rng.randint(100, 999)}AA1{_digits(rng, 10)}",
+                           " ".join(_digits(rng, 4) for _ in range(5)) + f" {_digits(rng, 2)}",
+                           f"JD{_digits(rng, 16)}"])  # fmt: skip
+    if kind == "gift":  # 16 digits that fail Luhn, so they cannot be card numbers
+        while True:
+            num = _digits(rng, 16)
+            if not luhn_ok(num):
+                break
+        return rng.choice([" ".join(num[i : i + 4] for i in range(0, 16, 4)), num,
+                           "GC-" + "-".join(num[i : i + 4] for i in range(0, 16, 4))])  # fmt: skip
+    if kind == "serial":
+        return rng.choice([f"SN {_digits(rng, 3)}{rng.choice('ABCDEFGHJK')}{_digits(rng, 6)}",
+                           f"S/N {rng.choice('XYZ')}{_digits(rng, 9)}"])  # fmt: skip
+    if kind == "sku":
+        return f"{rng.choice(['SKU', 'item', 'model'])} {_digits(rng, 3)}-{_digits(rng, 4)}"
+    if kind == "invoice":
+        return f"INV-{rng.randint(2023, 2026)}-{_digits(rng, 5)}"
+    if kind == "promo":
+        word = rng.choice(["SPRING", "WELCOME", "SAVE", "LOYAL", "FLASH", "XMAS"])
+        return f"{word}{rng.choice([10, 15, 20, 25, 30, 50])}"
+    if kind == "price":
+        cents = f"{rng.randint(5, 900)}.{rng.randint(0, 99):02d}"
+        return rng.choice([f"${cents}", f"£{cents}", f"Rs {rng.randint(100, 50000):,}",
+                           f"CA${rng.randint(5, 900)}"])  # fmt: skip
+    if kind == "quantity":
+        return rng.choice(["two boxes", "three of the six-packs", "a dozen", "four units",
+                           "twelve rolls", "both items", "five cartons"])  # fmt: skip
+    return f"case {_digits(rng, 2)}-{_digits(rng, 6)}"
+
+
 # ---------------------------------------------------------------- patterns
 
 PATTERNS = {  # pattern -> share of messages
