@@ -19,7 +19,8 @@ on the primary sets with the team's decision matrix, using paired document boots
   A  adopt: relative leakage reduction >= 20% and the leakage-difference CI excludes 0
   B  adopt: leakage within noise (|delta| < 0.15 pt) and over-redaction down >= 1.5 pt
      with its CI excluding 0
-  D  reject: leakage worse beyond noise, or more invented values / token-limit hits
+  D  reject: leakage worse beyond noise with its CI excluding 0, or more invented values /
+     token-limit hits
   C  keep the baseline otherwise (parsimony). Among adopted candidates the smaller rank wins.
 
 Writes results/sweeps/<name>.md (a table + the decision) and prints it.
@@ -194,7 +195,8 @@ def matrix(base: Candidate, c: Candidate, cis: dict | None) -> tuple[str, str]:
     ) + 0.01
     sig_leak = cis is not None and cis["leak"][1] < 0
     sig_over = cis is not None and cis["over"][1] < 0
-    if dl > NOISE or more_loops:
+    worse = dl > NOISE and (cis is None or cis["leak"][0] > 0)  # like A: the CI must exclude 0
+    if worse or more_loops:
         return "D", f"reject: leakage {dl:+.2f} pt" + (", more loops" if more_loops else "")
     if rel >= REL_GAIN and sig_leak:
         return "A", f"adopt: {100 * rel:.0f}% relative leakage reduction (CI excludes 0)"

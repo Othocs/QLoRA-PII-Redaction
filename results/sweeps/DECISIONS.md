@@ -28,3 +28,23 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
   - **D, reject:** leakage worse by more than 0.15 pt, or more invented values (+2 pt) or token-limit hits (+1 pt).
 - **Parsimony:** r=16 is the default. If two ranks qualify, the smaller wins. Seed variance is checked in phase 4 (3 seeds).
 - **Also reported:** leakage on the hard slice, invented values, token-limit hits, and p95 latency on support_desk_val.
+
+### Phase 3 result (2026-10-02)
+- **Runs:** r=32 at η ∈ {1e-4, 1.4e-4, 2e-4} (34.9M trainable parameters, ~128 min per run on an A40); r=16 baseline re-scored on the hardened `val_ood`. Cost about $3.80.
+- **Hardened `val_ood`:** baseline mean 4.04% (support_desk_val 1.1%, support_desk_hard 10.3%, val_in_region 0.7%). The hard slice falls in the team's 5–10% target band; the 3-set mean is just below it.
+- **Best r=32:** η = 1.4e-4 (4.24%). All four runs are within the 1-pt tie band; the table's "winner" row is the best-LR pick among them, not the phase decision.
+- **Decision matrix:**
+  - **Verdict C for every r=32 run.** Leakage Δ is +0.20 to +0.52 pt, with every 95% CI spanning 0. Over-redaction Δ is −0.16 to +0.31 pt, also within noise.
+  - Hard-slice leakage: r=32 is 10.2–10.9% vs 10.3% at r=16.
+  - No change in invented values (≤0.2%) or token-limit hits (0%).
+  - Latency p95 is unchanged: 9.4–10.0 s vs 9.2 s per 1k chars, for single requests on support_desk_val.
+- **Rule fix made while scoring:** D now also needs the leakage CI to exclude 0, symmetric with A. Before the fix, the point estimates alone labelled these runs D; either way r=16 is kept.
+- **Decision: keep r=16 (M4 @ 4e-4).** Per the gate set before running, r=64 is not run: r=32 earned neither A nor B.
+- **What still leaks:** the remaining errors look like data and convention gaps, not capacity. On support_desk_hard (baseline), the worst labels by character leakage are:
+  - TELEPHONENUM 43% (spelled-out and split numbers);
+  - TITLE 45%;
+  - SOCIALNUM 28% (3 spans);
+  - CREDITCARDNUMBER 20% (5 spans).
+
+  STREET/BUILDINGNUM have strict F1 0 but no leakage: the model folds the house number into STREET, a convention difference.
+- **Phase 4:** awaiting the user's decision.

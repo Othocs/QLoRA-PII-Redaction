@@ -21,7 +21,10 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | p1_lr6e-4 | dev | 2000 | 0.7 | 13.9 | 0.4 | 0.951 | 0.995 |  |  | Linux x86_64 |
 | p2_m4_lr2.83e-4 | dev | 2000 | 0.6 | 13.9 | 0.5 | 0.941 | 0.994 |  |  | Linux x86_64 |
 | p2_m4_lr2e-4 | dev | 2000 | 0.7 | 14.8 | 0.6 | 0.932 | 0.994 |  |  | Linux x86_64 |
-| p2_m4_lr4e-4 | dev | 2000 | 0.6 | 13.8 | 0.4 | 0.947 | 0.995 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | dev | 2000 | 0.6 | 13.9 | 0.4 | 0.946 | 0.994 | 4675 | 7955 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | dev | 2000 | 0.7 | 14.7 | 0.6 | 0.930 | 0.994 | 4682 | 7975 | Linux x86_64 |
+| p3_r32_lr1e-4 | dev | 2000 | 0.8 | 15.6 | 0.6 | 0.928 | 0.993 | 4603 | 7923 | Linux x86_64 |
+| p3_r32_lr2e-4 | dev | 2000 | 0.6 | 13.8 | 0.5 | 0.943 | 0.994 | 4682 | 7979 | Linux x86_64 |
 | Presidio | dev | 200 | 33.6 | 89.0 | 22.4 | 0.232 | 0.721 | 42 | 65 | Darwin arm64 |
 | M0 OpenPII 10k | gretel_dev | 1000 | 40.0 | 84.4 | 51.5 | 0.120 | 0.514 |  |  | Linux x86_64 |
 | M1 cleaned OpenPII 10k | gretel_dev | 1000 | 40.2 | 84.2 | 51.2 | 0.120 | 0.519 |  |  | Linux x86_64 |
@@ -34,7 +37,10 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | p1_lr6e-4 | gretel_dev | 1000 | 28.7 | 83.8 | 30.2 | 0.187 | 0.679 |  |  | Linux x86_64 |
 | p2_m4_lr2.83e-4 | gretel_dev | 1000 | 17.9 | 77.7 | 13.4 | 0.318 | 0.839 |  |  | Linux x86_64 |
 | p2_m4_lr2e-4 | gretel_dev | 1000 | 18.2 | 78.0 | 13.6 | 0.311 | 0.836 |  |  | Linux x86_64 |
-| p2_m4_lr4e-4 | gretel_dev | 1000 | 17.3 | 77.3 | 12.8 | 0.317 | 0.848 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | gretel_dev | 1000 | 17.0 | 77.0 | 12.9 | 0.318 | 0.849 | 577 | 3068 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | gretel_dev | 1000 | 18.4 | 77.9 | 13.8 | 0.312 | 0.836 | 585 | 2444 | Linux x86_64 |
+| p3_r32_lr1e-4 | gretel_dev | 1000 | 18.4 | 78.3 | 14.5 | 0.308 | 0.834 | 611 | 3008 | Linux x86_64 |
+| p3_r32_lr2e-4 | gretel_dev | 1000 | 17.2 | 77.0 | 14.0 | 0.318 | 0.843 | 596 | 3235 | Linux x86_64 |
 | Base LLM, zero-shot | gretel_en | 1000 | 62.0 | 87.9 | 38.4 | 0.138 | 0.508 | 1616 | 10752 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | gretel_en | 1000 | 44.1 | 85.1 | 46.6 | 0.135 | 0.522 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | gretel_en | 1000 | 40.5 | 84.9 | 47.0 | 0.135 | 0.534 |  |  | Linux x86_64 |
@@ -73,7 +79,10 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | p1_lr4e-4 | nemotron_dev | 1000 | 2.2 | 5.1 | 1.7 | 0.936 | 0.977 |  |  | Linux x86_64 |
 | p2_m4_lr2.83e-4 | nemotron_dev | 1000 | 2.9 | 6.3 | 4.6 | 0.915 | 0.959 |  |  | Linux x86_64 |
 | p2_m4_lr2e-4 | nemotron_dev | 1000 | 3.0 | 6.9 | 3.7 | 0.920 | 0.967 |  |  | Linux x86_64 |
-| p2_m4_lr4e-4 | nemotron_dev | 1000 | 2.8 | 6.4 | 3.5 | 0.920 | 0.965 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | nemotron_dev | 1000 | 2.9 | 6.5 | 3.5 | 0.919 | 0.964 | 849 | 4615 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | nemotron_dev | 1000 | 3.1 | 7.1 | 3.2 | 0.918 | 0.965 | 1057 | 4234 | Linux x86_64 |
+| p3_r32_lr1e-4 | nemotron_dev | 1000 | 3.3 | 7.3 | 3.0 | 0.917 | 0.968 | 1043 | 4321 | Linux x86_64 |
+| p3_r32_lr2e-4 | nemotron_dev | 1000 | 2.9 | 6.7 | 4.1 | 0.915 | 0.961 | 1029 | 4234 | Linux x86_64 |
 | Base LLM, zero-shot | openpii_xx | 3000 | 51.3 | 93.6 | 4.6 | 0.436 | 0.652 | 1836 | 12341 | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | openpii_xx | 3000 | 11.9 | 62.7 | 18.3 | 0.538 | 0.872 | 47 | 105 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | openpii_xx | 3000 | 8.4 | 57.2 | 6.6 | 0.644 | 0.943 | 126 | 301 | Linux x86_64 |
@@ -83,10 +92,17 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M2 cleaned OpenPII 5k + Nemotron 5k | openpii_xx | 3000 | 2.3 | 26.8 | 2.1 | 0.810 | 0.979 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | openpii_xx | 3000 | 2.1 | 25.3 | 1.8 | 0.835 | 0.982 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | openpii_xx | 3000 | 3.0 | 40.4 | 1.2 | 0.632 | 0.981 | 583 | 1146 | Linux x86_64 |
+| p2_m4_lr4e-4 | support_desk_hard | 100 | 10.3 | 19.0 | 11.7 | 0.772 | 0.926 | 7251 | 14637 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | support_desk_hard | 100 | 10.6 | 22.0 | 11.8 | 0.762 | 0.921 | 7300 | 14342 | Linux x86_64 |
+| p3_r32_lr1e-4 | support_desk_hard | 100 | 10.9 | 21.0 | 13.3 | 0.742 | 0.915 | 7044 | 13178 | Linux x86_64 |
+| p3_r32_lr2e-4 | support_desk_hard | 100 | 10.2 | 21.0 | 12.3 | 0.763 | 0.920 | 7284 | 14987 | Linux x86_64 |
 | p1_lr4e-4 | support_desk_val | 100 | 1.4 | 6.0 | 12.1 | 0.792 | 0.902 |  |  | Linux x86_64 |
 | p2_m4_lr2.83e-4 | support_desk_val | 100 | 2.4 | 6.0 | 15.2 | 0.787 | 0.895 |  |  | Linux x86_64 |
 | p2_m4_lr2e-4 | support_desk_val | 100 | 1.4 | 5.0 | 13.7 | 0.804 | 0.905 |  |  | Linux x86_64 |
-| p2_m4_lr4e-4 | support_desk_val | 100 | 1.1 | 4.0 | 14.2 | 0.797 | 0.907 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | support_desk_val | 100 | 1.1 | 4.0 | 14.4 | 0.795 | 0.905 | 5757 | 9232 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | support_desk_val | 100 | 1.5 | 6.0 | 13.8 | 0.801 | 0.902 | 5878 | 9410 | Linux x86_64 |
+| p3_r32_lr1e-4 | support_desk_val | 100 | 2.0 | 5.0 | 13.6 | 0.795 | 0.909 | 5790 | 10039 | Linux x86_64 |
+| p3_r32_lr2e-4 | support_desk_val | 100 | 2.8 | 7.0 | 14.3 | 0.795 | 0.902 | 5578 | 9593 | Linux x86_64 |
 | Base LLM, zero-shot | tab | 127 | 82.7 | 100.0 | 11.2 | 0.165 | 0.363 | 893 | 1886 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | tab | 127 | 22.8 | 100.0 | 2.9 | 0.449 | 0.882 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | tab | 127 | 19.0 | 100.0 | 3.1 | 0.450 | 0.906 |  |  | Linux x86_64 |
@@ -112,7 +128,10 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | p1_lr4e-4 | val_in_region | 1000 | 0.6 | 13.1 | 0.3 | 0.938 | 0.996 |  |  | Linux x86_64 |
 | p2_m4_lr2.83e-4 | val_in_region | 1000 | 0.6 | 12.3 | 0.4 | 0.936 | 0.995 |  |  | Linux x86_64 |
 | p2_m4_lr2e-4 | val_in_region | 1000 | 0.7 | 13.2 | 0.5 | 0.932 | 0.995 |  |  | Linux x86_64 |
-| p2_m4_lr4e-4 | val_in_region | 1000 | 0.7 | 12.1 | 0.3 | 0.944 | 0.995 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | val_in_region | 1000 | 0.7 | 11.8 | 0.3 | 0.944 | 0.995 | 4795 | 8559 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | val_in_region | 1000 | 0.6 | 12.7 | 0.4 | 0.934 | 0.995 | 4781 | 8278 | Linux x86_64 |
+| p3_r32_lr1e-4 | val_in_region | 1000 | 0.8 | 13.7 | 0.5 | 0.928 | 0.994 | 4755 | 8342 | Linux x86_64 |
+| p3_r32_lr2e-4 | val_in_region | 1000 | 0.6 | 11.7 | 0.3 | 0.943 | 0.996 | 4798 | 8322 | Linux x86_64 |
 
 ## Out-of-distribution leakage (%)
 
@@ -191,8 +210,13 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
 - **Decision (user, with the team's rationale): M4 @ 4e-4 goes forward.** When scaling capacity, a tie is broken in favour of the broader data mix (higher ranks need more data and diversity). In phase 4, a tie is broken in favour of lower over-redaction.
 - **Fix for saturation:** `support_desk_hard` was added (100 deliberately difficult messages). `val_ood` is now the mean leakage of support_desk_val, support_desk_hard and val_in_region.
 
+## Support-desk labels (2026-10-02)
+- **Decision (user):** the LLM-drafted labels in support_desk_val, support_desk_hard and support_desk_300 are accepted as correct without a human spot-check. They are validated by `check_support_desk.py` only. Reports on these sets carry this caveat.
+
 ## Phase 3: rank 32/64 (rules set before running)
 - **Grid:** r ∈ {32, 64}, α = 2r, η ∈ {1e-4, 1.4e-4, 2e-4} (`phase3_rank.txt`). Baseline: M4 r=16 @ 4e-4.
+- **Budget cut (user, 2026-10-02, mid-run): r=64 dropped.** Only r=32 is run, at all three LRs (Phase 3 ≈ $4 instead of ≈ $8). r=64 is run later only if r=32 earns verdict A or B. If r=32 doesn't beat r=16, a further doubling is unlikely to pay off.
+- **Phase 4 is not automatic.** The user decides whether to run it after seeing the phase 3 results.
 - **Best LR per rank:** chosen with the general rule (val_ood leakage, then the tie band, then over-redaction).
 - **Decision matrix against the baseline**, on the val_ood mean, with paired document bootstraps:
   - **A, adopt:** relative leakage reduction of at least 20%, with the CI excluding 0.
@@ -201,6 +225,26 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
   - **D, reject:** leakage worse by more than 0.15 pt, or more invented values (+2 pt) or token-limit hits (+1 pt).
 - **Parsimony:** r=16 is the default. If two ranks qualify, the smaller wins. Seed variance is checked in phase 4 (3 seeds).
 - **Also reported:** leakage on the hard slice, invented values, token-limit hits, and p95 latency on support_desk_val.
+
+### Phase 3 result (2026-10-02)
+- **Runs:** r=32 at η ∈ {1e-4, 1.4e-4, 2e-4} (34.9M trainable parameters, ~128 min per run on an A40); r=16 baseline re-scored on the hardened `val_ood`. Cost about $3.80.
+- **Hardened `val_ood`:** baseline mean 4.04% (support_desk_val 1.1%, support_desk_hard 10.3%, val_in_region 0.7%). The hard slice falls in the team's 5–10% target band; the 3-set mean is just below it.
+- **Best r=32:** η = 1.4e-4 (4.24%). All four runs are within the 1-pt tie band; the table's "winner" row is the best-LR pick among them, not the phase decision.
+- **Decision matrix:**
+  - **Verdict C for every r=32 run.** Leakage Δ is +0.20 to +0.52 pt, with every 95% CI spanning 0. Over-redaction Δ is −0.16 to +0.31 pt, also within noise.
+  - Hard-slice leakage: r=32 is 10.2–10.9% vs 10.3% at r=16.
+  - No change in invented values (≤0.2%) or token-limit hits (0%).
+  - Latency p95 is unchanged: 9.4–10.0 s vs 9.2 s per 1k chars, for single requests on support_desk_val.
+- **Rule fix made while scoring:** D now also needs the leakage CI to exclude 0, symmetric with A. Before the fix, the point estimates alone labelled these runs D; either way r=16 is kept.
+- **Decision: keep r=16 (M4 @ 4e-4).** Per the gate set before running, r=64 is not run: r=32 earned neither A nor B.
+- **What still leaks:** the remaining errors look like data and convention gaps, not capacity. On support_desk_hard (baseline), the worst labels by character leakage are:
+  - TELEPHONENUM 43% (spelled-out and split numbers);
+  - TITLE 45%;
+  - SOCIALNUM 28% (3 spans);
+  - CREDITCARDNUMBER 20% (5 spans).
+
+  STREET/BUILDINGNUM have strict F1 0 but no leakage: the model folds the house number into STREET, a convention difference.
+- **Phase 4:** awaiting the user's decision.
 
 ## Sweep: phase1_lr
 
@@ -228,4 +272,28 @@ Primary: leakage on support_desk_val + val_in_region (mean). Tie band 1.0 pt; ti
 | p2_m4_lr2.83e-4 | output_dir=outputs/hpo/p2_m4_lr2.83e-4 learning_rate=2.83e-4 | 1.53 | 7.83 | 7.15 | 0.1 | 0.0 | yes |  |
 
 **Decision:** p1_lr4e-4: 4 candidates within 1.0 pt of the best leakage (0.91%); tie broken by over-redaction, then in-distribution leakage.
+
+## Sweep: phase3_rank
+
+Primary: leakage on support_desk_val + support_desk_hard + val_in_region (mean). Tie band 1.0 pt; tie-breaks: over-redaction, then leakage on dev + nemotron_dev + gretel_dev. Sanity rule on: dropped ≤ 5%, token-limit ≤ 2%.
+
+| Run | Overrides | Primary leakage (%) | Over-redaction (%) | In-dist leakage (%) | Dropped values (%) | Hit token limit (%) | Sane | Missing |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| p2_m4_lr4e-4 | output_dir=outputs/hpo/p2_m4_lr4e-4 learning_rate=4e-4 | 4.04 | 8.83 | 6.86 | 0.1 | 0.0 | yes |  |
+| p3_r32_lr1.4e-4 **(winner)** | output_dir=outputs/hpo/p3_r32_lr1.4e-4 learning_rate=1.4e-4 lora.r=32 lora.alpha=64 | 4.24 | 8.67 | 7.41 | 0.2 | 0.0 | yes |  |
+| p3_r32_lr2e-4 | output_dir=outputs/hpo/p3_r32_lr2e-4 learning_rate=2e-4 lora.r=32 lora.alpha=64 | 4.54 | 8.99 | 6.93 | 0.1 | 0.0 | yes |  |
+| p3_r32_lr1e-4 | output_dir=outputs/hpo/p3_r32_lr1e-4 learning_rate=1e-4 lora.r=32 lora.alpha=64 | 4.56 | 9.14 | 7.50 | 0.2 | 0.0 | yes |  |
+
+**Decision:** p3_r32_lr1.4e-4: 4 candidates within 1.0 pt of the best leakage (4.04%); tie broken by over-redaction, then in-distribution leakage.
+
+### Phase 3 decision matrix vs baseline p2_m4_lr4e-4
+
+| Candidate | Rank | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI | Hard slice leakage (%) | Verdict |
+| --- | ---: | ---: | --- | ---: | --- | ---: | --- |
+| p3_r32_lr1e-4 | 32 | +0.52 | [-0.30, +1.59] | +0.31 | [-0.63, +1.42] | 10.9 | C: parity/noise (rel -13%, over +0.31 pt) |
+| p3_r32_lr1.4e-4 | 32 | +0.20 | [-0.44, +0.91] | -0.16 | [-1.14, +0.89] | 10.6 | C: parity/noise (rel -5%, over -0.16 pt) |
+| p3_r32_lr2e-4 | 32 | +0.49 | [-0.30, +1.44] | +0.16 | [-0.63, +1.00] | 10.2 | C: parity/noise (rel -12%, over +0.16 pt) |
+
+Baseline hard-slice leakage: 10.3%.
+**Phase 3 decision:** p2_m4_lr4e-4 (rank 16).
 

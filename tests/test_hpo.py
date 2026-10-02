@@ -134,7 +134,9 @@ def test_phase3_matrix_verdicts():
     assert matrix(base, cand("a2", 3.9, 10.0), insig)[0] == "C"  # same gain, CI spans 0
     assert matrix(base, cand("b", 5.1, 8.2), sig)[0] == "B"  # parity, -1.8 pt over
     assert matrix(base, cand("b2", 5.1, 9.0), sig)[0] == "C"  # over drop only 1.0 pt
-    assert matrix(base, cand("d", 5.4, 9.0), sig)[0] == "D"  # leakage worse beyond noise
+    worse = {"leak": [0.1, 0.7], "over": [-1.0, 1.0]}
+    assert matrix(base, cand("d", 5.4, 9.0), worse)[0] == "D"  # worse beyond noise, CI > 0
+    assert matrix(base, cand("d2", 5.4, 9.0), insig)[0] == "C"  # worse point estimate, CI spans 0
     assert matrix(base, cand("loops", 4.0, 9.0, dropped=0.05), sig)[0] == "D"  # more invented
 
 
