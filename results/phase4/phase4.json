@@ -199,6 +199,12 @@
             ]
           }
         }
+      },
+      "m5_per_label_leak": {
+        "CODE": 94.34,
+        "DATE": 5.35,
+        "LOC": 58.05,
+        "NAME": 16.75
       }
     },
     "support_desk_300": {
@@ -394,6 +400,27 @@
             ]
           }
         }
+      },
+      "m5_per_label_leak": {
+        "AGE": 1.8,
+        "BUILDINGNUM": 1.29,
+        "CITY": 5.65,
+        "CREDITCARDNUMBER": 3.37,
+        "DATE": 0.0,
+        "DRIVERLICENSENUM": 0.0,
+        "EMAIL": 2.69,
+        "GENDER": 5.56,
+        "GIVENNAME": 0.07,
+        "IDCARDNUM": 0.0,
+        "PASSPORTNUM": 0.0,
+        "SEX": 16.67,
+        "SOCIALNUM": 0.0,
+        "STREET": 0.52,
+        "SURNAME": 1.14,
+        "TAXNUM": 32.26,
+        "TELEPHONENUM": 0.0,
+        "TITLE": 0.0,
+        "ZIPCODE": 3.48
       }
     },
     "test_id": {
@@ -499,9 +526,31 @@
             ]
           }
         }
+      },
+      "m5_per_label_leak": {
+        "AGE": 8.43,
+        "BUILDINGNUM": 0.79,
+        "CITY": 1.15,
+        "CREDITCARDNUMBER": 0.69,
+        "DATE": 0.09,
+        "DRIVERLICENSENUM": 0.94,
+        "EMAIL": 0.54,
+        "GENDER": 0.25,
+        "GIVENNAME": 0.9,
+        "IDCARDNUM": 0.28,
+        "PASSPORTNUM": 0.0,
+        "SEX": 0.76,
+        "SOCIALNUM": 0.06,
+        "STREET": 0.44,
+        "SURNAME": 0.96,
+        "TAXNUM": 0.38,
+        "TELEPHONENUM": 0.07,
+        "TITLE": 0.51,
+        "ZIPCODE": 0.24
       }
     }
   },
+  "title": "Phase 4: final blind evaluation",
   "gateway_latency": {
     "testset": "support_desk_val",
     "policy": "analytics",

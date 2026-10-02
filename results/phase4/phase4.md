@@ -14,6 +14,8 @@ M5 = Qwen3-1.7B + QLoRA r=16, lr 4e-4, train_mix_32k; seeds 13, 42, 3407 (per-do
 
 Seed leakage (13, 42, 3407): 15.05, 17.52, 15.17.
 
+M5 leakage by label (%, seed mean): CODE 94.3, DATE 5.3, LOC 58.0, NAME 16.8.
+
 | M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
 | --- | ---: | --- | ---: | --- |
 | gliner_nvidia | -3.38 | [-4.54, -2.22] | -12.32 | [-15.02, -9.77] |
@@ -42,6 +44,8 @@ Gateway − model: leakage -0.04 pt [-0.10, 0.00], over-redaction -0.00 pt [-0.0
 
 Seed leakage (13, 42, 3407): 0.68, 2.22, 2.20.
 
+M5 leakage by label (%, seed mean): AGE 1.8, BUILDINGNUM 1.3, CITY 5.7, CREDITCARDNUMBER 3.4, DATE 0.0, DRIVERLICENSENUM 0.0, EMAIL 2.7, GENDER 5.6, GIVENNAME 0.1, IDCARDNUM 0.0, PASSPORTNUM 0.0, SEX 16.7, SOCIALNUM 0.0, STREET 0.5, SURNAME 1.1, TAXNUM 32.3, TELEPHONENUM 0.0, TITLE 0.0, ZIPCODE 3.5.
+
 | M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
 | --- | ---: | --- | ---: | --- |
 | gliner_nvidia | -6.41 | [-9.46, -3.39] | -17.48 | [-20.77, -14.49] |
@@ -66,6 +70,8 @@ Gateway − model: leakage -2.96 pt [-5.30, -1.02], over-redaction -0.02 pt [-0.
 | validators | 83.68 | [83.33, 84.03] | 99.10 | [98.82, 99.36] | 0.96 | [0.69, 1.27] |
 
 Seed leakage (13, 42, 3407): 0.61, 0.61, 0.60.
+
+M5 leakage by label (%, seed mean): AGE 8.4, BUILDINGNUM 0.8, CITY 1.1, CREDITCARDNUMBER 0.7, DATE 0.1, DRIVERLICENSENUM 0.9, EMAIL 0.5, GENDER 0.2, GIVENNAME 0.9, IDCARDNUM 0.3, PASSPORTNUM 0.0, SEX 0.8, SOCIALNUM 0.1, STREET 0.4, SURNAME 1.0, TAXNUM 0.4, TELEPHONENUM 0.1, TITLE 0.5, ZIPCODE 0.2.
 
 | M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
 | --- | ---: | --- | ---: | --- |

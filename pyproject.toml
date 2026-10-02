@@ -58,6 +58,7 @@ demo = [
 
 [dependency-groups]
 dev = [
+    "matplotlib>=3.11.2",
     "pytest>=8",
     "ruff>=0.6",
 ]
