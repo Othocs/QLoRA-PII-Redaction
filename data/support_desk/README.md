@@ -6,6 +6,7 @@ These sets are the closest thing we have to production text: short English suppo
 | --- | ---: | ---: | --- |
 | `support_desk_val.jsonl` | 100 | 205 | `val_ood`: model selection from phase 2 on |
 | `support_desk_hard.jsonl` | 100 | 371 | `val_ood` hard slice, added after phase 2 found `val_ood` saturated |
+| `support_desk_fresh.jsonl` | 100 | 280 | Milestone 1 gate for M5, written before any targeted training data existed |
 | `support_desk_300.jsonl` | 300 | 715 | `test_final`: touched once, in phase 4 |
 
 **How they were made.** Claude drafted all 395 new messages; the 5 original hand-written seeds are in `support_desk_300` as `sd-0001` to `sd-0005`. The messages were then split 100 / 295 by a seeded shuffle. Spot-check sheets exist (`spotcheck_50.csv`: 30 val, 20 test; `spotcheck_hard_20.csv`: 20 hard), but on 2026-10-02 the project owner accepted the labels as correct **without a human spot-check**. Every span passes `check_support_desk.py` (offsets, word boundaries, schema). Labels may still contain unreviewed LLM errors; results on these sets carry that caveat.
@@ -20,7 +21,13 @@ These sets are the closest thing we have to production text: short English suppo
 - non-English introductions;
 - dense agent shorthand; several people per message.
 
-Shorthand such as "28F" and "15yo" is labelled as a single AGE span. Until it's done, report these sets as "LLM-written and LLM-labelled".
+Shorthand such as "28F" and "15yo" is labelled as a single AGE span.
+
+**The fresh gate** (`support_desk_fresh`, `sd-f001` to `sd-f100`) is the promotion gate for the targeted-data model M5.
+- **Built before any targeted data existed**, from the failure-pattern list only: spelled-out, split and unspaced phone numbers; titles, including stacked, lowercase and military forms; SSN, NINO and SIN variants; odd card groupings; compact and spelled-out dates of birth; shorthand ages; look-alike numbers to keep.
+- **Not from the specific spans M4 missed on `support_desk_hard`.** One message whose spoken number matched a known miss was replaced.
+- **Written by Claude**, a different generator from the training data (DeepSeek), so a pass cannot come from learning one generator's style.
+- **Partial personal numbers are labelled** (false starts such as "QQ123…" or an old number cut short). Until it's done, report these sets as "LLM-written and LLM-labelled".
 
 **Coverage (400 messages):**
 - Channels: 52% chat, 26% email, 22% agent notes (more chat than the 40/40/20 target).

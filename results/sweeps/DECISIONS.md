@@ -48,3 +48,20 @@ Branch `hyperparameter_optimization`. Each decision is written down before the n
 
   STREET/BUILDINGNUM have strict F1 0 but no leakage: the model folds the house number into STREET, a convention difference.
 - **Phase 4:** awaiting the user's decision.
+
+## Milestone 1: targeted failure-mode data (M5), rules set before generating data (2026-10-02)
+- **Candidate.** M5 = M4's recipe (r=16, α=32, learning rate 4e-4, 1 epoch, seed 13) on `train_mix_32k`: `train_mix_30k` + 2,000 targeted synthetic messages generated with the DeepSeek API (`data/synthetic/`).
+- **Gate set.** `support_desk_fresh`: 100 unseen hard messages, committed before any targeted data was generated. It was written from the pattern list by a different generator (Claude) than the training data.
+- **Promotion gate, all on support_desk_fresh, M5 vs M4:**
+  1. M5 character leakage < 5%;
+  2. M5 leakage lower than M4's, with the paired document-bootstrap 95% CI excluding 0;
+  3. no rise in over-redaction: point Δ ≤ +1.0 pt, and the CI not entirely above 0;
+  4. no extra loops: invented values ≤ M4 + 2 pt, and token-limit hits ≤ M4 + 1 pt.
+
+  If M4 is already under 5% on fresh, the gate is (2)–(4) only, flagged as weak.
+- **Diagnostic, reported but not gating.** On support_desk_hard: how many of the spans M4 missed entirely does M5 recover, and the overall hard-slice leakage.
+- **Guard rails.** These must hold or M5 is not promoted:
+  - support_desk_val and val_in_region leakage within 1.0 pt of M4;
+  - val_in_dist mean (dev, nemotron_dev, gretel_dev) within 1.0 pt;
+  - sanity rule (invented ≤ 5%, token limit ≤ 2%).
+- **Outcome.** A pass makes M5 the phase 4 candidate. A fail keeps M4 and records which patterns didn't move.

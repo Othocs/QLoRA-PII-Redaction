@@ -12,6 +12,9 @@ build/
 data/raw/
 data/processed/*.jsonl
 
+# Synthetic generation: raw API responses (the accepted set is committed)
+data/synthetic/raw/
+
 # Experiment outputs
 results/runs/
 wandb/
