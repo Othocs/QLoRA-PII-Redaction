@@ -2,7 +2,7 @@
 
 A self-hosted gateway that finds personal data in English customer-support text and masks or pseudonymises it before the text is logged, analysed or sent to an external LLM. The detector is **M5**, Qwen3-1.7B fine-tuned with QLoRA for about $1 per run, backed by deterministic validators. It is benchmarked blind against Presidio, GLiNER-PII and OpenMed's privacy filter.
 
-> **Try the model:** [huggingface.co/spaces/Othocs/pii-gateway-demo](https://huggingface.co/spaces/Othocs/pii-gateway-demo). It's a hosted demo with M5 on a serverless GPU; use fictional data, and the first request may take ~3 min ([`docs/DEMO.md`](docs/DEMO.md)).
+> **Hosted demo (private for now, going public soon):** [huggingface.co/spaces/Othocs/pii-gateway-demo](https://huggingface.co/spaces/Othocs/pii-gateway-demo). It runs M5 on a serverless GPU; see [`docs/DEMO.md`](docs/DEMO.md).
 >
 > **Status: concluded (October 2026).**
 >

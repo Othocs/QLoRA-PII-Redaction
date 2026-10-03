@@ -1,6 +1,6 @@
 # Hosted demo
 
-**Try it:** <https://huggingface.co/spaces/Othocs/pii-gateway-demo>. Use fictional data only.
+**Space:** <https://huggingface.co/spaces/Othocs/pii-gateway-demo>. It is **private for now**; see "Going public" below. Use fictional data only.
 
 ## Architecture
 
@@ -49,3 +49,10 @@ make space-push                       # upload to Othocs/pii-gateway-demo (needs
 
 - **New adapter:** upload it to the private model repo, then cycle the endpoint's workers.
 - **Taking the demo offline:** set the Space to private or pause it, and set the endpoint's max workers to 0.
+
+## Going public
+
+1. In the Space's settings, switch visibility to **public**.
+2. Check the guardrails still match the budget you want: `DEMO_DAILY_CAP` (default 300 requests a day) and `DEMO_RATE_PER_MIN` (default 10), both set as Space variables.
+3. Check that the RunPod endpoint still has **max workers = 1** and min workers = 0.
+4. Open the page once to warm it up, and try an example.
