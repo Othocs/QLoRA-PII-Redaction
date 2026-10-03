@@ -7,7 +7,7 @@ authors:
     given-names: Othmane
 date-released: 2026-10-03
 license: Apache-2.0
-repository-code: "https://github.com/Othocs/pii-gateway"
+repository-code: "https://github.com/Othocs/QLoRA-PII-Redaction"
 abstract: >-
   A QLoRA-tuned Qwen3-1.7B PII span detector and a self-hosted redaction gateway
   (validators, normalisation, recall-first merge, policies, AES-256-GCM vault, FastAPI,

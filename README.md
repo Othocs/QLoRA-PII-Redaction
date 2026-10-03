@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://huggingface.co/spaces/Othocs/pii-gateway-demo"><img src="https://huggingface.co/datasets/huggingface/badges/resolve/main/open-in-hf-spaces-sm.svg" alt="Open in Spaces"></a>
-  <a href="https://github.com/Othocs/pii-gateway/actions/workflows/ci.yml"><img src="https://github.com/Othocs/pii-gateway/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/Othocs/QLoRA-PII-Redaction/actions/workflows/ci.yml"><img src="https://github.com/Othocs/QLoRA-PII-Redaction/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License: Apache-2.0"></a>
   <img src="https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white" alt="Python 3.12">
   <a href="MODEL_CARD.md"><img src="https://img.shields.io/badge/model%20card-M5%20(Qwen3--1.7B%20%2B%20QLoRA)-orange" alt="Model card"></a>
