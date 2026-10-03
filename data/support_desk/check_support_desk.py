@@ -4,9 +4,9 @@
     python data/support_desk/check_support_desk.py --fill     # add missing start/end, then validate
 
 When writing a message you may give spans as {"label", "text"} only; --fill finds
-each one in the message, left to right, and adds start/end. Checks:
+each one in the message as a whole word, left to right, and adds start/end. Checks:
   - ids are unique, labels are from our label set
-  - every span's offsets match its text, and spans don't overlap
+  - every span's offsets match its text, sit on word boundaries, and don't overlap
   - every `meta.keep` string occurs in the text and is not inside a span
 """
 
@@ -14,12 +14,20 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
 from pii_gateway.spans import LABELS
 
-PATH = Path(__file__).parent / "support_desk.jsonl"
+PATH = Path(__file__).parent / "support_desk_300.jsonl"
+
+
+def _find_word(text: str, value: str, pos: int) -> int:
+    """First occurrence of value at or after pos that doesn't start or end inside a word,
+    so a house number "9" is never matched inside "ORD-51290"."""
+    m = re.compile(r"(?<!\w)" + re.escape(value) + r"(?!\w)").search(text, pos)
+    return m.start() if m else -1
 
 
 def fill_offsets(rec: dict) -> None:
@@ -28,11 +36,11 @@ def fill_offsets(rec: dict) -> None:
         if "start" in sp and "end" in sp:
             pos = sp["end"]
             continue
-        i = text.find(sp["text"], pos)
+        i = _find_word(text, sp["text"], pos)
         if i == -1:
-            i = text.find(sp["text"])  # out of order: fall back to first occurrence
+            i = _find_word(text, sp["text"], 0)  # out of order: fall back to first occurrence
         if i == -1:
-            raise ValueError(f"{rec['id']}: span text {sp['text']!r} not found")
+            raise ValueError(f"{rec['id']}: span text {sp['text']!r} not found as a whole word")
         sp["start"], sp["end"] = i, i + len(sp["text"])
         pos = sp["end"]
     rec["spans"].sort(key=lambda s: s["start"])
@@ -49,6 +57,9 @@ def check(rec: dict) -> list[str]:
             continue
         if text[sp["start"] : sp["end"]] != sp.get("text", text[sp["start"] : sp["end"]]):
             errs.append(f"offsets of {sp['text']!r} point at {text[sp['start'] : sp['end']]!r}")
+        a, b = sp["start"], sp["end"]
+        if (a > 0 and text[a - 1].isalnum()) or (b < len(text) and text[b].isalnum()):
+            errs.append(f"span {sp.get('text')!r} starts or ends inside a word")
         if sp["start"] < prev_end:
             errs.append(f"span {sp.get('text')!r} overlaps the previous one")
         prev_end = sp["end"]

@@ -1,0 +1,23 @@
+# Gretel synthetic_pii_finance_multilingual label -> our label, for TRAINING (HPO plan, phase 2).
+# English rows only. `name` (a full name) is split by data/prepare_train_mix.py into
+# TITLE / GIVENNAME / SURNAME; street_address -> STREET as for Nemotron.
+map:
+  first_name: GIVENNAME
+  last_name: SURNAME
+  date: DATE
+  date_of_birth: DATE
+  date_time: DATE
+  street_address: STREET
+  email: EMAIL
+  phone_number: TELEPHONENUM
+  ssn: SOCIALNUM
+  driver_license_number: DRIVERLICENSENUM
+  passport_number: PASSPORTNUM
+  credit_card_number: CREDITCARDNUMBER
+split: [name]
+# Not personal data in our scope: left in the text, unlabelled.
+not_personal: [company, time]
+# Any other label (customer_id, employee_id, iban, bban, swift_bic_code, ipv4, ipv6,
+# password, api_key, account_pin, credit_card_security_code, user_name,
+# bank_routing_number, local_latlng) is personal data our schema cannot name: documents
+# with one are not used for training.

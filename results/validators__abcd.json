@@ -1,0 +1,163 @@
+{
+  "system": "validators",
+  "detector": "validators",
+  "adapter": null,
+  "detector_config": null,
+  "testset": "abcd",
+  "n_examples": 1002,
+  "limit": null,
+  "metrics": {
+    "docs": 1002,
+    "n_gold_spans": 2791,
+    "n_pred_spans": 685,
+    "leakage_chars": 0.7421675562775586,
+    "leakage_docs": 0.7844311377245509,
+    "over_redaction": 0.44007660518092934,
+    "strict": {
+      "precision": 0.41751824817518246,
+      "recall": 0.10247223217484773,
+      "f1": 0.16455696202531647
+    },
+    "partial": {
+      "precision": 0.42043795620437957,
+      "recall": 0.10354711572912935,
+      "f1": 0.16616938168627024
+    },
+    "per_label": {
+      "BUILDINGNUM": {
+        "n_gold": 114,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "CITY": {
+        "n_gold": 126,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "CREDITCARDNUMBER": {
+        "n_gold": 0,
+        "n_pred": 2,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "EMAIL": {
+        "n_gold": 230,
+        "n_pred": 267,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.8614232209737828,
+          "recall": 1.0,
+          "f1": 0.9255533199195172
+        }
+      },
+      "GIVENNAME": {
+        "n_gold": 1097,
+        "n_pred": 0,
+        "leakage_chars": 0.9978460654796094,
+        "partial_recall": 0.0018231540565177757,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "STREET": {
+        "n_gold": 115,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "SURNAME": {
+        "n_gold": 866,
+        "n_pred": 0,
+        "leakage_chars": 0.9986533282031551,
+        "partial_recall": 0.0011547344110854503,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "TELEPHONENUM": {
+        "n_gold": 71,
+        "n_pred": 416,
+        "leakage_chars": 0.2108050847457627,
+        "partial_recall": 0.7887323943661971,
+        "strict": {
+          "precision": 0.1346153846153846,
+          "recall": 0.7887323943661971,
+          "f1": 0.2299794661190965
+        }
+      },
+      "ZIPCODE": {
+        "n_gold": 172,
+        "n_pred": 0,
+        "leakage_chars": 1.0,
+        "partial_recall": 0.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      }
+    },
+    "per_language": {
+      "en": {
+        "docs": 1002,
+        "leakage_chars": 0.7421675562775586,
+        "leakage_docs": 0.7844311377245509,
+        "over_redaction": 0.44007660518092934,
+        "strict": {
+          "precision": 0.41751824817518246,
+          "recall": 0.10247223217484773,
+          "f1": 0.16455696202531647
+        },
+        "partial": {
+          "precision": 0.42043795620437957,
+          "recall": 0.10354711572912935,
+          "f1": 0.16616938168627024
+        }
+      }
+    }
+  },
+  "latency": {
+    "p50_ms_per_1k_chars": 0.4234327248473586,
+    "p95_ms_per_1k_chars": 1.165341048085143,
+    "chars_per_sec": 1743331.1485368996,
+    "n_errors": 0,
+    "errors": []
+  },
+  "env": {
+    "device": "default",
+    "platform": "Darwin arm64",
+    "processor": "arm",
+    "python": "3.12.8",
+    "git_sha": "68fa9d1",
+    "model_load_s": 0.0,
+    "peak_rss_mb": 59.3,
+    "timestamp": "2026-10-02T22:45:08+00:00"
+  }
+}

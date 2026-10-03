@@ -2,32 +2,33 @@
   "system": "openmed",
   "detector": "openmed",
   "adapter": null,
+  "detector_config": null,
   "testset": "nemotron",
   "n_examples": 3000,
   "limit": null,
   "metrics": {
     "docs": 3000,
     "n_gold_spans": 12743,
-    "n_pred_spans": 13926,
-    "leakage_chars": 0.0243591655257486,
-    "leakage_docs": 0.07933333333333334,
-    "over_redaction": 0.06960450370676784,
+    "n_pred_spans": 13739,
+    "leakage_chars": 0.013250464274579443,
+    "leakage_docs": 0.065,
+    "over_redaction": 0.04224749850337809,
     "strict": {
-      "precision": 0.82758868303892,
-      "recall": 0.9044181119045751,
-      "f1": 0.8642993738047919
+      "precision": 0.8504257951815998,
+      "recall": 0.9168955504983128,
+      "f1": 0.8824106940563401
     },
     "partial": {
-      "precision": 0.9077983627746661,
-      "recall": 0.9788118967276151,
-      "f1": 0.9419686263638918
+      "precision": 0.9280879248853628,
+      "recall": 0.9871301891234403,
+      "f1": 0.9566989807731721
     },
     "per_label": {
       "ADDRESS": {
         "n_gold": 519,
         "n_pred": 0,
-        "leakage_chars": 0.016778155499506526,
-        "partial_recall": 0.9961464354527938,
+        "leakage_chars": 0.011953065029060204,
+        "partial_recall": 0.9980732177263969,
         "strict": {
           "precision": 1.0,
           "recall": 0.0,
@@ -36,13 +37,13 @@
       },
       "AGE": {
         "n_gold": 209,
-        "n_pred": 242,
-        "leakage_chars": 0.07416267942583732,
-        "partial_recall": 0.9282296650717703,
+        "n_pred": 246,
+        "leakage_chars": 0.06220095693779904,
+        "partial_recall": 0.937799043062201,
         "strict": {
-          "precision": 0.768595041322314,
-          "recall": 0.8899521531100478,
-          "f1": 0.8248337028824835
+          "precision": 0.7764227642276422,
+          "recall": 0.9138755980861244,
+          "f1": 0.8395604395604396
         }
       },
       "BUILDINGNUM": {
@@ -58,35 +59,35 @@
       },
       "CITY": {
         "n_gold": 572,
-        "n_pred": 531,
-        "leakage_chars": 0.05199828104856038,
-        "partial_recall": 0.9597902097902098,
+        "n_pred": 536,
+        "leakage_chars": 0.03373442200257843,
+        "partial_recall": 0.9790209790209791,
         "strict": {
-          "precision": 0.8926553672316384,
-          "recall": 0.8286713286713286,
-          "f1": 0.8594741613780598
+          "precision": 0.9104477611940298,
+          "recall": 0.8531468531468531,
+          "f1": 0.8808664259927798
         }
       },
       "CREDITCARDNUMBER": {
         "n_gold": 404,
-        "n_pred": 406,
-        "leakage_chars": 0.01820340324495449,
-        "partial_recall": 0.9826732673267327,
+        "n_pred": 408,
+        "leakage_chars": 0.0006595435958316845,
+        "partial_recall": 1.0,
         "strict": {
-          "precision": 0.9605911330049262,
-          "recall": 0.9653465346534653,
-          "f1": 0.962962962962963
+          "precision": 0.9754901960784313,
+          "recall": 0.9851485148514851,
+          "f1": 0.9802955665024631
         }
       },
       "DATE": {
         "n_gold": 3402,
-        "n_pred": 3397,
-        "leakage_chars": 0.045061854616092425,
-        "partial_recall": 0.9653145208700764,
+        "n_pred": 3403,
+        "leakage_chars": 0.03297208874348226,
+        "partial_recall": 0.9753086419753086,
         "strict": {
-          "precision": 0.9478952016485134,
-          "recall": 0.9465020576131687,
-          "f1": 0.9471981173702017
+          "precision": 0.9609168380840435,
+          "recall": 0.9611992945326279,
+          "f1": 0.9610580455547392
         }
       },
       "DRIVERLICENSENUM": {
@@ -103,39 +104,39 @@
       "EMAIL": {
         "n_gold": 1620,
         "n_pred": 1622,
-        "leakage_chars": 0.014762849584278155,
-        "partial_recall": 0.9851851851851852,
+        "leakage_chars": 0.0018660241874527588,
+        "partial_recall": 0.9962962962962963,
         "strict": {
-          "precision": 0.9734895191122072,
-          "recall": 0.9746913580246913,
-          "f1": 0.974090067859346
+          "precision": 0.9895191122071517,
+          "recall": 0.9907407407407407,
+          "f1": 0.9901295496607032
         }
       },
       "GENDER": {
         "n_gold": 213,
-        "n_pred": 214,
-        "leakage_chars": 0.04824561403508772,
-        "partial_recall": 0.9577464788732394,
+        "n_pred": 213,
+        "leakage_chars": 0.03859649122807018,
+        "partial_recall": 0.9671361502347418,
         "strict": {
-          "precision": 0.8925233644859814,
-          "recall": 0.8967136150234741,
-          "f1": 0.8946135831381733
+          "precision": 0.9154929577464789,
+          "recall": 0.9154929577464789,
+          "f1": 0.9154929577464789
         }
       },
       "GIVENNAME": {
         "n_gold": 2530,
-        "n_pred": 2637,
-        "leakage_chars": 0.015859881395669562,
-        "partial_recall": 0.9865612648221344,
+        "n_pred": 2628,
+        "leakage_chars": 0.009722796855606123,
+        "partial_recall": 0.990909090909091,
         "strict": {
-          "precision": 0.931361395525218,
-          "recall": 0.9707509881422924,
-          "f1": 0.9506483452680472
+          "precision": 0.9429223744292238,
+          "recall": 0.9794466403162055,
+          "f1": 0.960837533927879
         }
       },
       "IPADDRESS": {
         "n_gold": 0,
-        "n_pred": 5,
+        "n_pred": 4,
         "leakage_chars": 0.0,
         "partial_recall": 1.0,
         "strict": {
@@ -146,7 +147,7 @@
       },
       "OTHER": {
         "n_gold": 0,
-        "n_pred": 1054,
+        "n_pred": 878,
         "leakage_chars": 0.0,
         "partial_recall": 1.0,
         "strict": {
@@ -157,7 +158,7 @@
       },
       "SEX": {
         "n_gold": 0,
-        "n_pred": 27,
+        "n_pred": 24,
         "leakage_chars": 0.0,
         "partial_recall": 1.0,
         "strict": {
@@ -168,18 +169,18 @@
       },
       "SOCIALNUM": {
         "n_gold": 181,
-        "n_pred": 232,
-        "leakage_chars": 0.016574585635359115,
-        "partial_recall": 0.9834254143646409,
+        "n_pred": 237,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
         "strict": {
-          "precision": 0.7629310344827587,
-          "recall": 0.9779005524861878,
-          "f1": 0.8571428571428572
+          "precision": 0.7637130801687764,
+          "recall": 1.0,
+          "f1": 0.8660287081339713
         }
       },
       "STREET": {
         "n_gold": 0,
-        "n_pred": 558,
+        "n_pred": 557,
         "leakage_chars": 0.0,
         "partial_recall": 1.0,
         "strict": {
@@ -190,20 +191,20 @@
       },
       "SURNAME": {
         "n_gold": 1809,
-        "n_pred": 1799,
-        "leakage_chars": 0.009308283518360376,
-        "partial_recall": 0.9894969596462134,
+        "n_pred": 1789,
+        "leakage_chars": 0.007087959009393681,
+        "partial_recall": 0.9911553344389166,
         "strict": {
-          "precision": 0.9555308504724848,
-          "recall": 0.9502487562189055,
-          "f1": 0.9528824833702881
+          "precision": 0.965902738960313,
+          "recall": 0.9552238805970149,
+          "f1": 0.9605336297943302
         }
       },
       "TAXNUM": {
         "n_gold": 38,
         "n_pred": 0,
-        "leakage_chars": 0.05592841163310962,
-        "partial_recall": 0.9473684210526315,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
         "strict": {
           "precision": 1.0,
           "recall": 0.0,
@@ -212,13 +213,13 @@
       },
       "TELEPHONENUM": {
         "n_gold": 976,
-        "n_pred": 988,
-        "leakage_chars": 0.013428120063191154,
-        "partial_recall": 0.9887295081967213,
+        "n_pred": 983,
+        "leakage_chars": 0.00047393364928909954,
+        "partial_recall": 1.0,
         "strict": {
-          "precision": 0.9665991902834008,
-          "recall": 0.9784836065573771,
-          "f1": 0.9725050916496945
+          "precision": 0.9867751780264497,
+          "recall": 0.9938524590163934,
+          "f1": 0.9903011740684022
         }
       },
       "TITLE": {
@@ -234,73 +235,73 @@
       },
       "ZIPCODE": {
         "n_gold": 188,
-        "n_pred": 195,
-        "leakage_chars": 0.014300306435137897,
-        "partial_recall": 0.9840425531914894,
+        "n_pred": 192,
+        "leakage_chars": 0.009193054136874362,
+        "partial_recall": 0.9893617021276596,
         "strict": {
-          "precision": 0.9128205128205128,
-          "recall": 0.9468085106382979,
-          "f1": 0.9295039164490861
+          "precision": 0.9375,
+          "recall": 0.9574468085106383,
+          "f1": 0.9473684210526315
         }
       }
     },
     "per_region": {
       "intl": {
         "docs": 1501,
-        "leakage_chars": 0.02357440277760306,
-        "leakage_docs": 0.08194536975349767,
-        "over_redaction": 0.06628252475068869,
+        "leakage_chars": 0.012302970072836601,
+        "leakage_docs": 0.06795469686875416,
+        "over_redaction": 0.04056943850430745,
         "strict": {
-          "precision": 0.8293340905863978,
-          "recall": 0.9148003132341426,
-          "f1": 0.8699731903485255
+          "precision": 0.8497773948010915,
+          "recall": 0.9267032106499609,
+          "f1": 0.8865747677554691
         },
         "partial": {
-          "precision": 0.9057219934686923,
-          "recall": 0.9805794831636648,
-          "f1": 0.9416653862044267
+          "precision": 0.9235961510843027,
+          "recall": 0.9887235708692248,
+          "f1": 0.9550508464225687
         }
       },
       "us": {
         "docs": 1499,
-        "leakage_chars": 0.025275904127907832,
-        "leakage_docs": 0.07671781187458306,
-        "over_redaction": 0.07346203274291781,
+        "leakage_chars": 0.014357301356375553,
+        "leakage_docs": 0.06204136090727151,
+        "over_redaction": 0.0442044061903269,
         "strict": {
-          "precision": 0.8258027023100393,
-          "recall": 0.8939918213274615,
-          "f1": 0.8585454270825467
+          "precision": 0.8510920897284534,
+          "recall": 0.9070462409562755,
+          "f1": 0.8781787726511344
         },
         "partial": {
-          "precision": 0.9099229986924307,
-          "recall": 0.9770368040264235,
-          "f1": 0.9422863775599484
+          "precision": 0.9327036599763873,
+          "recall": 0.9855300408933627,
+          "f1": 0.9583894556133993
         }
       }
     },
     "per_language": {
       "en": {
         "docs": 3000,
-        "leakage_chars": 0.0243591655257486,
-        "leakage_docs": 0.07933333333333334,
-        "over_redaction": 0.06960450370676784,
+        "leakage_chars": 0.013250464274579443,
+        "leakage_docs": 0.065,
+        "over_redaction": 0.04224749850337809,
         "strict": {
-          "precision": 0.82758868303892,
-          "recall": 0.9044181119045751,
-          "f1": 0.8642993738047919
+          "precision": 0.8504257951815998,
+          "recall": 0.9168955504983128,
+          "f1": 0.8824106940563401
         },
         "partial": {
-          "precision": 0.9077983627746661,
-          "recall": 0.9788118967276151,
-          "f1": 0.9419686263638918
+          "precision": 0.9280879248853628,
+          "recall": 0.9871301891234403,
+          "f1": 0.9566989807731721
         }
       }
     }
   },
   "latency": {
-    "p50_ms_per_1k_chars": 254.04339644084376,
-    "p95_ms_per_1k_chars": 694.3258018291359,
-    "chars_per_sec": 4546.405303565791,
+    "p50_ms_per_1k_chars": 249.40009715721715,
+    "p95_ms_per_1k_chars": 679.8791124163187,
+    "chars_per_sec": 4590.005363149056,
     "n_errors": 0,
     "errors": []
   },
@@ -309,9 +310,9 @@
     "platform": "Linux x86_64",
     "processor": "x86_64",
     "python": "3.12.3",
-    "git_sha": "b831474",
-    "model_load_s": 7.74,
-    "peak_rss_mb": 3876.8,
-    "timestamp": "2026-10-01T12:53:34+00:00"
+    "git_sha": "68fa9d1",
+    "model_load_s": 15.48,
+    "peak_rss_mb": 3966.3,
+    "timestamp": "2026-10-02T22:39:48+00:00"
   }
 }

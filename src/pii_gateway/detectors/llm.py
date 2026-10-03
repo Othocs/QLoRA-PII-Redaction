@@ -205,8 +205,13 @@ def align_spans(
 class LLMDetector:
     """Base LLM (+ optional LoRA adapter) as a Detector.
 
-    backend="vllm": GPU, batched, JSON-schema-constrained decoding (every output parses).
-    backend="hf":   transformers generate, unconstrained; for CPU/MPS smoke tests.
+    backend="vllm":   GPU, batched, JSON-schema-constrained decoding (every output parses).
+    backend="hf":     transformers generate, unconstrained; for CPU/MPS smoke tests.
+    backend="openai": a remote OpenAI-compatible vLLM server (e.g. a RunPod Serverless
+                      endpoint at https://api.runpod.ai/v2/<id>/openai/v1) serving the base
+                      model with the adapter under the name `adapter` (e.g. "m5"). The same
+                      prompt, JSON schema, greedy decoding and thinking-off chat template as
+                      the in-process backend, so it returns what the evaluated model returns.
     """
 
     def __init__(
@@ -224,6 +229,10 @@ class LLMDetector:
         gpu_memory_utilization: float = 0.85,
         fuzzy_align: bool = True,
         log_raw: bool = False,
+        api_base: str | None = None,
+        api_key: str | None = None,
+        timeout_s: float = 300.0,
+        concurrency: int = 4,
     ):
         self.name = name
         self.fuzzy_align, self.log_raw = fuzzy_align, log_raw
@@ -251,6 +260,8 @@ class LLMDetector:
             self._init_vllm(max_model_len, gpu_memory_utilization)
         elif backend == "hf":
             self._init_hf(device)
+        elif backend == "openai":
+            self._init_openai(api_base, api_key, timeout_s, concurrency)
         else:
             raise ValueError(f"unknown backend {backend!r}")
 
@@ -311,8 +322,63 @@ class LLMDetector:
             model = PeftModel.from_pretrained(model, self.adapter)
         self.model = model.to(self.device).eval()
 
+    def _init_openai(self, api_base, api_key, timeout_s: float, concurrency: int) -> None:
+        import httpx
+
+        if not api_base:
+            raise ValueError("backend 'openai' needs api_base (the server's /v1 URL)")
+        headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
+        self.client = httpx.Client(base_url=api_base.rstrip("/"), headers=headers,
+                                   timeout=timeout_s)  # fmt: skip
+        self.concurrency = concurrency
+        # the served model name: the LoRA module name (or the base model without one)
+        self.served_model = self.adapter or self.base_model
+        self.tokenizer = None  # chat template applied server-side
+
+    def _remote_one(self, chunk: str, retries: int = 3) -> tuple[str, bool]:
+        import time
+
+        import httpx
+
+        body = {
+            "model": self.served_model,
+            "messages": build_messages(chunk),
+            "temperature": 0.0,
+            "max_tokens": self.max_new_tokens,
+            # identical to prompt_text(): Qwen3's thinking switched off
+            "chat_template_kwargs": {"enable_thinking": False},
+        }
+        if self.constrained:
+            body["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {"name": "pii_spans", "schema": output_schema()},
+            }
+        for attempt in range(retries):
+            try:
+                r = self.client.post("/chat/completions", json=body)
+                if r.status_code in (429, 502, 503, 504) and attempt < retries - 1:
+                    time.sleep(5 * (attempt + 1))  # cold start / scaling: wait and retry
+                    continue
+                r.raise_for_status()
+                choice = r.json()["choices"][0]
+                return choice["message"]["content"] or "", choice.get("finish_reason") == "length"
+            except (httpx.TimeoutException, httpx.TransportError):
+                if attempt == retries - 1:
+                    raise
+                time.sleep(5 * (attempt + 1))
+        raise RuntimeError("remote LLM: retries exhausted")
+
+    def _prompt(self, chunk: str) -> str:
+        """What _generate receives per chunk: the chat prompt locally, the raw chunk remotely."""
+        return chunk if self.backend == "openai" else prompt_text(self.tokenizer, chunk)
+
     def _generate(self, prompts: list[str]) -> list[tuple[str, bool]]:
         """Returns (text, hit_token_limit) per prompt."""
+        if self.backend == "openai":
+            from concurrent.futures import ThreadPoolExecutor
+
+            with ThreadPoolExecutor(max(1, min(self.concurrency, len(prompts)))) as pool:
+                return list(pool.map(self._remote_one, prompts))
         if self.backend == "vllm":
             outs = self.llm.generate(
                 prompts, self.sampling, lora_request=self.lora_request, use_tqdm=False
@@ -343,7 +409,7 @@ class LLMDetector:
         for ti, text in enumerate(texts):
             for off, chunk in chunk_text(text, self.max_chars, self.overlap):
                 jobs.append((ti, off, chunk))
-        raws = self._generate([prompt_text(self.tokenizer, c) for _, _, c in jobs])
+        raws = self._generate([self._prompt(c) for _, _, c in jobs])
         per_text: list[list[Span]] = [[] for _ in texts]
         for (ti, off, chunk), (raw, truncated) in zip(jobs, raws, strict=True):
             parsed = parse_output(raw)

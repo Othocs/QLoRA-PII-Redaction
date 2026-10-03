@@ -1,0 +1,7 @@
+# Phase 2: LR re-tune on M4 data (train_mix_30k), grid {eta*/2, eta*/sqrt2, eta*} with eta* = 4e-4
+# from phase 1, plus M3 at eta* (adapter from phase 1, eval only) on the same selection sets.
+# val_ood = support_desk_val + val_in_region; val_in_dist = dev + nemotron_dev + gretel_dev
+p2_m4_lr2e-4    | configs/train/hpo/m4_base.yaml | learning_rate=2e-4    | support_desk_val,val_in_region,dev,nemotron_dev,gretel_dev
+p2_m4_lr2.83e-4 | configs/train/hpo/m4_base.yaml | learning_rate=2.83e-4 | support_desk_val,val_in_region,dev,nemotron_dev,gretel_dev
+p2_m4_lr4e-4    | configs/train/hpo/m4_base.yaml | learning_rate=4e-4    | support_desk_val,val_in_region,dev,nemotron_dev,gretel_dev
+p1_lr4e-4       | configs/train/hpo/m3_base.yaml | learning_rate=4e-4    | support_desk_val,val_in_region,dev,nemotron_dev,gretel_dev

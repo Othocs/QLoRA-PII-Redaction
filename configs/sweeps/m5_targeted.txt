@@ -1,0 +1,5 @@
+# Milestone 1: M5 = M4 recipe (r=16, alpha=32, lr 4e-4) on train_mix_32k (30k + 2k targeted).
+# Gate: support_desk_fresh (unseen); support_desk_hard is the diagnostic. The M4 line is
+# eval-only (adapter copied to the pod): it adds support_desk_fresh to M4's results.
+m5_targeted  | configs/train/hpo/m4_base.yaml | learning_rate=4e-4 train_file=data/processed/train_mix_32k.jsonl | support_desk_fresh,support_desk_hard,support_desk_val,val_in_region,dev,nemotron_dev,gretel_dev
+p2_m4_lr4e-4 | configs/train/hpo/m4_base.yaml | learning_rate=4e-4                                              | support_desk_fresh

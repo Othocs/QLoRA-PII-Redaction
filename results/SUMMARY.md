@@ -5,6 +5,13 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 
 | System | Test set | N | Leakage chars % | Docs leaking % | Over-redaction % | Strict F1 | Partial F1 | p50 ms | p95 ms | Platform |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| GLiNER-PII (NVIDIA) | abcd | 1002 | 0.3 | 0.6 | 32.4 | 0.756 | 0.824 | 47 | 69 | Linux x86_64 |
+| m5_s3407 | abcd | 1002 | 3.1 | 5.3 | 50.0 | 0.612 | 0.667 | 733 | 1670 | Linux x86_64 |
+| m5_s42 | abcd | 1002 | 1.5 | 3.4 | 48.0 | 0.616 | 0.681 | 896 | 1505 | Linux x86_64 |
+| m5_targeted | abcd | 1002 | 3.0 | 6.1 | 47.2 | 0.621 | 0.687 | 785 | 1303 | Linux x86_64 |
+| OpenMed privacy filter v2 | abcd | 1002 | 0.7 | 3.6 | 42.4 | 0.599 | 0.673 | 218 | 350 | Linux x86_64 |
+| Presidio | abcd | 1002 | 8.8 | 18.3 | 59.6 | 0.073 | 0.490 | 31 | 38 | Linux x86_64 |
+| validators | abcd | 1002 | 74.2 | 78.4 | 44.0 | 0.165 | 0.166 | 0 | 1 | Darwin arm64 |
 | Base LLM, zero-shot | dev | 2000 | 45.2 | 93.0 | 3.3 | 0.482 | 0.706 | 2020 | 5361 | Linux x86_64 |
 | diagB_chunk1200_tok2048 | dev | 2000 | 0.7 | 13.7 | 0.4 | 0.938 | 0.994 |  |  | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | dev | 200 | 11.7 | 57.0 | 11.5 | 0.641 | 0.897 | 321 | 725 | Darwin arm64 |
@@ -14,11 +21,35 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M1 cleaned OpenPII 10k | dev | 2000 | 0.8 | 15.6 | 0.5 | 0.936 | 0.993 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | dev | 2000 | 0.9 | 17.8 | 0.7 | 0.909 | 0.992 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | dev | 2000 | 0.7 | 15.8 | 0.5 | 0.936 | 0.994 |  |  | Linux x86_64 |
+| m5_targeted | dev | 2000 | 0.6 | 12.9 | 0.5 | 0.947 | 0.995 | 4687 | 7990 | Linux x86_64 |
+| p1_lr1e-4 | dev | 2000 | 1.0 | 19.1 | 0.6 | 0.914 | 0.992 |  |  | Linux x86_64 |
+| p1_lr2e-4 | dev | 2000 | 0.7 | 15.7 | 0.5 | 0.932 | 0.994 |  |  | Linux x86_64 |
+| p1_lr4e-4 | dev | 2000 | 0.6 | 14.5 | 0.4 | 0.945 | 0.995 |  |  | Linux x86_64 |
+| p1_lr5e-5 | dev | 2000 | 1.6 | 26.5 | 0.8 | 0.875 | 0.988 |  |  | Linux x86_64 |
+| p1_lr6e-4 | dev | 2000 | 0.7 | 13.9 | 0.4 | 0.951 | 0.995 |  |  | Linux x86_64 |
+| p2_m4_lr2.83e-4 | dev | 2000 | 0.6 | 13.9 | 0.5 | 0.941 | 0.994 |  |  | Linux x86_64 |
+| p2_m4_lr2e-4 | dev | 2000 | 0.7 | 14.8 | 0.6 | 0.932 | 0.994 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | dev | 2000 | 0.6 | 13.9 | 0.4 | 0.946 | 0.994 | 4675 | 7955 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | dev | 2000 | 0.7 | 14.7 | 0.6 | 0.930 | 0.994 | 4682 | 7975 | Linux x86_64 |
+| p3_r32_lr1e-4 | dev | 2000 | 0.8 | 15.6 | 0.6 | 0.928 | 0.993 | 4603 | 7923 | Linux x86_64 |
+| p3_r32_lr2e-4 | dev | 2000 | 0.6 | 13.8 | 0.5 | 0.943 | 0.994 | 4682 | 7979 | Linux x86_64 |
 | Presidio | dev | 200 | 33.6 | 89.0 | 22.4 | 0.232 | 0.721 | 42 | 65 | Darwin arm64 |
 | M0 OpenPII 10k | gretel_dev | 1000 | 40.0 | 84.4 | 51.5 | 0.120 | 0.514 |  |  | Linux x86_64 |
 | M1 cleaned OpenPII 10k | gretel_dev | 1000 | 40.2 | 84.2 | 51.2 | 0.120 | 0.519 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | gretel_dev | 1000 | 28.8 | 83.3 | 33.6 | 0.183 | 0.657 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | gretel_dev | 1000 | 29.3 | 84.3 | 30.8 | 0.186 | 0.667 |  |  | Linux x86_64 |
+| m5_targeted | gretel_dev | 1000 | 17.1 | 76.9 | 13.7 | 0.316 | 0.842 | 621 | 2633 | Linux x86_64 |
+| p1_lr1e-4 | gretel_dev | 1000 | 29.8 | 84.3 | 31.8 | 0.182 | 0.660 |  |  | Linux x86_64 |
+| p1_lr2e-4 | gretel_dev | 1000 | 29.5 | 84.1 | 29.8 | 0.186 | 0.673 |  |  | Linux x86_64 |
+| p1_lr4e-4 | gretel_dev | 1000 | 29.1 | 83.9 | 28.7 | 0.184 | 0.675 |  |  | Linux x86_64 |
+| p1_lr5e-5 | gretel_dev | 1000 | 29.6 | 83.4 | 37.7 | 0.171 | 0.645 |  |  | Linux x86_64 |
+| p1_lr6e-4 | gretel_dev | 1000 | 28.7 | 83.8 | 30.2 | 0.187 | 0.679 |  |  | Linux x86_64 |
+| p2_m4_lr2.83e-4 | gretel_dev | 1000 | 17.9 | 77.7 | 13.4 | 0.318 | 0.839 |  |  | Linux x86_64 |
+| p2_m4_lr2e-4 | gretel_dev | 1000 | 18.2 | 78.0 | 13.6 | 0.311 | 0.836 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | gretel_dev | 1000 | 17.0 | 77.0 | 12.9 | 0.318 | 0.849 | 577 | 3068 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | gretel_dev | 1000 | 18.4 | 77.9 | 13.8 | 0.312 | 0.836 | 585 | 2444 | Linux x86_64 |
+| p3_r32_lr1e-4 | gretel_dev | 1000 | 18.4 | 78.3 | 14.5 | 0.308 | 0.834 | 611 | 3008 | Linux x86_64 |
+| p3_r32_lr2e-4 | gretel_dev | 1000 | 17.2 | 77.0 | 14.0 | 0.318 | 0.843 | 596 | 3235 | Linux x86_64 |
 | Base LLM, zero-shot | gretel_en | 1000 | 62.0 | 87.9 | 38.4 | 0.138 | 0.508 | 1616 | 10752 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | gretel_en | 1000 | 44.1 | 85.1 | 46.6 | 0.135 | 0.522 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | gretel_en | 1000 | 40.5 | 84.9 | 47.0 | 0.135 | 0.534 |  |  | Linux x86_64 |
@@ -29,8 +60,12 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M1 cleaned OpenPII 10k | gretel_en | 1000 | 40.4 | 85.3 | 47.2 | 0.136 | 0.539 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | gretel_en | 1000 | 27.6 | 83.8 | 30.8 | 0.205 | 0.681 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | gretel_en | 1000 | 28.7 | 84.2 | 29.0 | 0.213 | 0.695 |  |  | Linux x86_64 |
+| m5_s3407 | gretel_en | 1000 | 11.0 | 75.6 | 9.9 | 0.398 | 0.903 | 533 | 4175 | Linux x86_64 |
+| m5_s42 | gretel_en | 1000 | 11.9 | 76.1 | 10.0 | 0.391 | 0.898 | 542 | 4169 | Linux x86_64 |
+| m5_targeted | gretel_en | 1000 | 11.4 | 74.9 | 9.7 | 0.392 | 0.902 | 562 | 4158 | Linux x86_64 |
 | OpenMed privacy filter v2 | gretel_en | 1000 | 29.2 | 83.2 | 34.4 | 0.148 | 0.659 | 162 | 496 | Linux x86_64 |
 | Presidio | gretel_en | 1000 | 29.0 | 75.6 | 58.5 | 0.351 | 0.600 | 27 | 57 | Linux x86_64 |
+| validators | gretel_en | 1000 | 88.5 | 88.3 | 23.9 | 0.153 | 0.166 | 1 | 6 | Darwin arm64 |
 | Base LLM, zero-shot | gretel_xx | 2629 | 65.5 | 86.7 | 47.5 | 0.105 | 0.449 | 959 | 8800 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | gretel_xx | 2629 | 44.9 | 84.5 | 52.9 | 0.104 | 0.486 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | gretel_xx | 2629 | 42.4 | 84.4 | 54.4 | 0.102 | 0.484 |  |  | Linux x86_64 |
@@ -46,14 +81,26 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | diagA_chunk2000_tok1024 | nemotron | 3000 | 21.8 | 44.4 | 5.1 | 0.738 | 0.821 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | nemotron | 3000 | 18.8 | 41.9 | 6.1 | 0.740 | 0.824 |  |  | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | nemotron | 3000 | 15.0 | 31.9 | 15.6 | 0.756 | 0.818 | 25 | 56 | Linux x86_64 |
-| GLiNER-PII (NVIDIA) | nemotron | 3000 | 6.2 | 12.6 | 13.4 | 0.851 | 0.928 | 54 | 133 | Linux x86_64 |
+| GLiNER-PII (NVIDIA) | nemotron | 3000 | 5.0 | 11.2 | 11.9 | 0.865 | 0.939 | 56 | 134 | Linux x86_64 |
 | LoRA r16, 10k (Qwen3-1.7B) | nemotron | 3000 | 21.7 | 44.2 | 5.1 | 0.740 | 0.820 | 1829 | 5844 | Linux x86_64 |
 | M0 OpenPII 10k | nemotron | 3000 | 19.0 | 42.2 | 6.0 | 0.741 | 0.825 |  |  | Linux x86_64 |
 | M1 cleaned OpenPII 10k | nemotron | 3000 | 18.7 | 42.0 | 5.8 | 0.756 | 0.836 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | nemotron | 3000 | 3.7 | 8.9 | 2.7 | 0.908 | 0.964 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | nemotron | 3000 | 3.7 | 9.1 | 2.6 | 0.912 | 0.964 |  |  | Linux x86_64 |
-| OpenMed privacy filter v2 | nemotron | 3000 | 2.4 | 7.9 | 7.0 | 0.864 | 0.942 | 254 | 694 | Linux x86_64 |
-| Presidio | nemotron | 3000 | 13.9 | 41.9 | 33.0 | 0.402 | 0.746 | 32 | 53 | Linux x86_64 |
+| m5_s3407 | nemotron | 3000 | 2.7 | 8.0 | 3.6 | 0.915 | 0.965 | 2040 | 5110 | Linux x86_64 |
+| m5_s42 | nemotron | 3000 | 2.7 | 8.6 | 3.1 | 0.919 | 0.966 | 1949 | 5378 | Linux x86_64 |
+| m5_targeted | nemotron | 3000 | 2.5 | 7.9 | 3.8 | 0.912 | 0.963 | 1629 | 5639 | Linux x86_64 |
+| OpenMed privacy filter v2 | nemotron | 3000 | 1.3 | 6.5 | 4.2 | 0.882 | 0.957 | 249 | 680 | Linux x86_64 |
+| Presidio | nemotron | 3000 | 12.9 | 41.1 | 31.6 | 0.410 | 0.756 | 30 | 47 | Linux x86_64 |
+| validators | nemotron | 3000 | 63.7 | 88.9 | 0.7 | 0.320 | 0.323 | 1 | 3 | Darwin arm64 |
+| m5_targeted | nemotron_dev | 1000 | 3.2 | 7.8 | 3.5 | 0.919 | 0.964 | 861 | 4235 | Linux x86_64 |
+| p1_lr4e-4 | nemotron_dev | 1000 | 2.2 | 5.1 | 1.7 | 0.936 | 0.977 |  |  | Linux x86_64 |
+| p2_m4_lr2.83e-4 | nemotron_dev | 1000 | 2.9 | 6.3 | 4.6 | 0.915 | 0.959 |  |  | Linux x86_64 |
+| p2_m4_lr2e-4 | nemotron_dev | 1000 | 3.0 | 6.9 | 3.7 | 0.920 | 0.967 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | nemotron_dev | 1000 | 2.9 | 6.5 | 3.5 | 0.919 | 0.964 | 849 | 4615 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | nemotron_dev | 1000 | 3.1 | 7.1 | 3.2 | 0.918 | 0.965 | 1057 | 4234 | Linux x86_64 |
+| p3_r32_lr1e-4 | nemotron_dev | 1000 | 3.3 | 7.3 | 3.0 | 0.917 | 0.968 | 1043 | 4321 | Linux x86_64 |
+| p3_r32_lr2e-4 | nemotron_dev | 1000 | 2.9 | 6.7 | 4.1 | 0.915 | 0.961 | 1029 | 4234 | Linux x86_64 |
 | Base LLM, zero-shot | openpii_xx | 3000 | 51.3 | 93.6 | 4.6 | 0.436 | 0.652 | 1836 | 12341 | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | openpii_xx | 3000 | 11.9 | 62.7 | 18.3 | 0.538 | 0.872 | 47 | 105 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | openpii_xx | 3000 | 8.4 | 57.2 | 6.6 | 0.644 | 0.943 | 126 | 301 | Linux x86_64 |
@@ -63,6 +110,28 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M2 cleaned OpenPII 5k + Nemotron 5k | openpii_xx | 3000 | 2.3 | 26.8 | 2.1 | 0.810 | 0.979 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | openpii_xx | 3000 | 2.1 | 25.3 | 1.8 | 0.835 | 0.982 |  |  | Linux x86_64 |
 | OpenMed privacy filter v2 | openpii_xx | 3000 | 3.0 | 40.4 | 1.2 | 0.632 | 0.981 | 583 | 1146 | Linux x86_64 |
+| GLiNER-PII (NVIDIA) | support_desk_300 | 300 | 8.1 | 11.7 | 23.2 | 0.709 | 0.855 | 400 | 1023 | Linux x86_64 |
+| m5_s3407 | support_desk_300 | 300 | 2.2 | 3.7 | 5.5 | 0.858 | 0.972 | 4187 | 11136 | Linux x86_64 |
+| m5_s42 | support_desk_300 | 300 | 2.2 | 4.0 | 5.7 | 0.857 | 0.969 | 4189 | 11199 | Linux x86_64 |
+| m5_targeted | support_desk_300 | 300 | 0.7 | 2.0 | 6.1 | 0.858 | 0.971 | 4549 | 10967 | Linux x86_64 |
+| OpenMed privacy filter v2 | support_desk_300 | 300 | 3.5 | 11.3 | 16.1 | 0.639 | 0.874 | 1370 | 2310 | Linux x86_64 |
+| Presidio | support_desk_300 | 300 | 18.9 | 31.7 | 23.1 | 0.170 | 0.740 | 76 | 145 | Linux x86_64 |
+| validators | support_desk_300 | 300 | 69.3 | 61.7 | 1.3 | 0.225 | 0.230 | 1 | 6 | Darwin arm64 |
+| m5_targeted | support_desk_fresh | 100 | 4.6 | 13.0 | 3.1 | 0.915 | 0.961 | 7596 | 12604 | Linux x86_64 |
+| p2_m4_lr4e-4 | support_desk_fresh | 100 | 27.6 | 35.0 | 8.7 | 0.827 | 0.905 | 7585 | 11890 | Linux x86_64 |
+| m5_targeted | support_desk_hard | 100 | 5.3 | 15.0 | 8.9 | 0.808 | 0.938 | 7225 | 13732 | Linux x86_64 |
+| p2_m4_lr4e-4 | support_desk_hard | 100 | 10.3 | 19.0 | 11.7 | 0.772 | 0.926 | 7251 | 14637 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | support_desk_hard | 100 | 10.6 | 22.0 | 11.8 | 0.762 | 0.921 | 7300 | 14342 | Linux x86_64 |
+| p3_r32_lr1e-4 | support_desk_hard | 100 | 10.9 | 21.0 | 13.3 | 0.742 | 0.915 | 7044 | 13178 | Linux x86_64 |
+| p3_r32_lr2e-4 | support_desk_hard | 100 | 10.2 | 21.0 | 12.3 | 0.763 | 0.920 | 7284 | 14987 | Linux x86_64 |
+| m5_targeted | support_desk_val | 100 | 1.6 | 3.0 | 7.5 | 0.840 | 0.962 | 4887 | 9694 | Linux x86_64 |
+| p1_lr4e-4 | support_desk_val | 100 | 1.4 | 6.0 | 12.1 | 0.792 | 0.902 |  |  | Linux x86_64 |
+| p2_m4_lr2.83e-4 | support_desk_val | 100 | 2.4 | 6.0 | 15.2 | 0.787 | 0.895 |  |  | Linux x86_64 |
+| p2_m4_lr2e-4 | support_desk_val | 100 | 1.4 | 5.0 | 13.7 | 0.804 | 0.905 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | support_desk_val | 100 | 1.1 | 4.0 | 14.4 | 0.795 | 0.905 | 5757 | 9232 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | support_desk_val | 100 | 1.5 | 6.0 | 13.8 | 0.801 | 0.902 | 5878 | 9410 | Linux x86_64 |
+| p3_r32_lr1e-4 | support_desk_val | 100 | 2.0 | 5.0 | 13.6 | 0.795 | 0.909 | 5790 | 10039 | Linux x86_64 |
+| p3_r32_lr2e-4 | support_desk_val | 100 | 2.8 | 7.0 | 14.3 | 0.795 | 0.902 | 5578 | 9593 | Linux x86_64 |
 | Base LLM, zero-shot | tab | 127 | 82.7 | 100.0 | 11.2 | 0.165 | 0.363 | 893 | 1886 | Linux x86_64 |
 | diagA_chunk2000_tok1024 | tab | 127 | 22.8 | 100.0 | 2.9 | 0.449 | 0.882 |  |  | Linux x86_64 |
 | diagB_chunk1200_tok2048 | tab | 127 | 19.0 | 100.0 | 3.1 | 0.450 | 0.906 |  |  | Linux x86_64 |
@@ -73,8 +142,12 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M1 cleaned OpenPII 10k | tab | 127 | 19.5 | 100.0 | 3.3 | 0.436 | 0.904 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | tab | 127 | 21.5 | 100.0 | 2.7 | 0.486 | 0.891 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | tab | 127 | 18.3 | 100.0 | 2.0 | 0.461 | 0.909 |  |  | Linux x86_64 |
+| m5_s3407 | tab | 127 | 15.2 | 100.0 | 5.3 | 0.481 | 0.903 | 633 | 1291 | Linux x86_64 |
+| m5_s42 | tab | 127 | 17.5 | 100.0 | 4.7 | 0.499 | 0.890 | 599 | 1134 | Linux x86_64 |
+| m5_targeted | tab | 127 | 15.0 | 100.0 | 5.7 | 0.484 | 0.903 | 606 | 1597 | Linux x86_64 |
 | OpenMed privacy filter v2 | tab | 127 | 14.9 | 100.0 | 6.8 | 0.402 | 0.897 | 128 | 160 | Linux x86_64 |
 | Presidio | tab | 127 | 11.2 | 100.0 | 34.1 | 0.494 | 0.699 | 24 | 29 | Linux x86_64 |
+| validators | tab | 127 | 100.0 | 100.0 | 0.0 | 0.000 | 0.001 | 1 | 2 | Darwin arm64 |
 | Base LLM, zero-shot | test_holdout_regions | 2000 | 46.8 | 92.5 | 3.3 | 0.481 | 0.704 | 1615 | 4881 | Linux x86_64 |
 | GLiNER-PII (Knowledgator) | test_holdout_regions | 2000 | 12.7 | 64.6 | 11.1 | 0.628 | 0.903 | 49 | 109 | Linux x86_64 |
 | GLiNER-PII (NVIDIA) | test_holdout_regions | 2000 | 6.3 | 53.3 | 5.7 | 0.703 | 0.949 | 121 | 293 | Linux x86_64 |
@@ -83,8 +156,24 @@ PII characters left unmasked (lower is better). Latency is per 1,000 characters.
 | M1 cleaned OpenPII 10k | test_holdout_regions | 2000 | 0.8 | 15.9 | 0.5 | 0.927 | 0.993 |  |  | Linux x86_64 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | test_holdout_regions | 2000 | 0.9 | 17.3 | 0.8 | 0.900 | 0.992 |  |  | Linux x86_64 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | test_holdout_regions | 2000 | 0.8 | 15.8 | 0.5 | 0.929 | 0.993 |  |  | Linux x86_64 |
+| m5_s3407 | test_holdout_regions | 2000 | 0.7 | 13.7 | 0.6 | 0.935 | 0.994 | 4431 | 9229 | Linux x86_64 |
+| m5_s42 | test_holdout_regions | 2000 | 0.7 | 14.5 | 0.6 | 0.935 | 0.993 | 4774 | 9142 | Linux x86_64 |
+| m5_targeted | test_holdout_regions | 2000 | 0.7 | 13.9 | 0.5 | 0.936 | 0.993 | 4356 | 9152 | Linux x86_64 |
 | OpenMed privacy filter v2 | test_holdout_regions | 2000 | 0.8 | 27.5 | 1.4 | 0.657 | 0.987 | 587 | 1150 | Linux x86_64 |
 | Presidio | test_holdout_regions | 2000 | 35.7 | 89.9 | 19.0 | 0.223 | 0.709 | 43 | 72 | Linux x86_64 |
+| validators | test_holdout_regions | 2000 | 84.0 | 98.9 | 0.7 | 0.144 | 0.213 | 1 | 3 | Darwin arm64 |
+| m5_s3407 | test_id | 5000 | 0.6 | 13.7 | 0.5 | 0.947 | 0.994 | 4101 | 9693 | Linux x86_64 |
+| m5_s42 | test_id | 5000 | 0.6 | 13.9 | 0.5 | 0.948 | 0.994 | 4211 | 9684 | Linux x86_64 |
+| m5_targeted | test_id | 5000 | 0.6 | 13.9 | 0.5 | 0.944 | 0.994 | 4105 | 10221 | Linux x86_64 |
+| validators | test_id | 5000 | 83.7 | 99.1 | 1.0 | 0.149 | 0.208 | 1 | 3 | Darwin arm64 |
+| m5_targeted | val_in_region | 1000 | 0.6 | 14.2 | 0.3 | 0.938 | 0.995 | 4800 | 8553 | Linux x86_64 |
+| p1_lr4e-4 | val_in_region | 1000 | 0.6 | 13.1 | 0.3 | 0.938 | 0.996 |  |  | Linux x86_64 |
+| p2_m4_lr2.83e-4 | val_in_region | 1000 | 0.6 | 12.3 | 0.4 | 0.936 | 0.995 |  |  | Linux x86_64 |
+| p2_m4_lr2e-4 | val_in_region | 1000 | 0.7 | 13.2 | 0.5 | 0.932 | 0.995 |  |  | Linux x86_64 |
+| p2_m4_lr4e-4 | val_in_region | 1000 | 0.7 | 11.8 | 0.3 | 0.944 | 0.995 | 4795 | 8559 | Linux x86_64 |
+| p3_r32_lr1.4e-4 | val_in_region | 1000 | 0.6 | 12.7 | 0.4 | 0.934 | 0.995 | 4781 | 8278 | Linux x86_64 |
+| p3_r32_lr1e-4 | val_in_region | 1000 | 0.8 | 13.7 | 0.5 | 0.928 | 0.994 | 4755 | 8342 | Linux x86_64 |
+| p3_r32_lr2e-4 | val_in_region | 1000 | 0.6 | 11.7 | 0.3 | 0.943 | 0.996 | 4798 | 8322 | Linux x86_64 |
 
 ## Out-of-distribution leakage (%)
 
@@ -96,14 +185,18 @@ Each cell is leakage / partial F1; n/a means not run (Presidio is English-only h
 | diagA_chunk2000_tok1024 | n/a | 21.8 / 0.82 | 22.8 / 0.88 | 44.1 / 0.52 | 44.9 / 0.49 | n/a |
 | diagB_chunk1200_tok2048 | n/a | 18.8 / 0.82 | 19.0 / 0.91 | 40.5 / 0.53 | 42.4 / 0.48 | n/a |
 | GLiNER-PII (Knowledgator) | 12.7 / 0.90 | 15.0 / 0.82 | 58.1 / 0.47 | 46.7 / 0.58 | 44.9 / 0.50 | 11.9 / 0.87 |
-| GLiNER-PII (NVIDIA) | 6.3 / 0.95 | 6.2 / 0.93 | 19.3 / 0.86 | 25.5 / 0.73 | 29.5 / 0.69 | 8.4 / 0.94 |
+| GLiNER-PII (NVIDIA) | 6.3 / 0.95 | 5.0 / 0.94 | 19.3 / 0.86 | 25.5 / 0.73 | 29.5 / 0.69 | 8.4 / 0.94 |
 | LoRA r16, 10k (Qwen3-1.7B) | 0.9 / 0.99 | 21.7 / 0.82 | 23.2 / 0.88 | 44.1 / 0.52 | 45.0 / 0.49 | 2.4 / 0.98 |
 | M0 OpenPII 10k | 0.8 / 0.99 | 19.0 / 0.83 | 18.5 / 0.91 | 40.7 / 0.53 | 42.4 / 0.49 | 2.3 / 0.98 |
 | M1 cleaned OpenPII 10k | 0.8 / 0.99 | 18.7 / 0.84 | 19.5 / 0.90 | 40.4 / 0.54 | 41.7 / 0.51 | 2.3 / 0.98 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | 0.9 / 0.99 | 3.7 / 0.96 | 21.5 / 0.89 | 27.6 / 0.68 | 32.7 / 0.62 | 2.3 / 0.98 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | 0.8 / 0.99 | 3.7 / 0.96 | 18.3 / 0.91 | 28.7 / 0.70 | 33.1 / 0.64 | 2.1 / 0.98 |
-| OpenMed privacy filter v2 | 0.8 / 0.99 | 2.4 / 0.94 | 14.9 / 0.90 | 29.2 / 0.66 | 39.1 / 0.62 | 3.0 / 0.98 |
-| Presidio | 35.7 / 0.71 | 13.9 / 0.75 | 11.2 / 0.70 | 29.0 / 0.60 | n/a | n/a |
+| m5_s3407 | 0.7 / 0.99 | 2.7 / 0.97 | 15.2 / 0.90 | 11.0 / 0.90 | n/a | n/a |
+| m5_s42 | 0.7 / 0.99 | 2.7 / 0.97 | 17.5 / 0.89 | 11.9 / 0.90 | n/a | n/a |
+| m5_targeted | 0.7 / 0.99 | 2.5 / 0.96 | 15.0 / 0.90 | 11.4 / 0.90 | n/a | n/a |
+| OpenMed privacy filter v2 | 0.8 / 0.99 | 1.3 / 0.96 | 14.9 / 0.90 | 29.2 / 0.66 | 39.1 / 0.62 | 3.0 / 0.98 |
+| Presidio | 35.7 / 0.71 | 12.9 / 0.76 | 11.2 / 0.70 | 29.0 / 0.60 | n/a | n/a |
+| validators | 84.0 / 0.21 | 63.7 / 0.32 | 100.0 / 0.00 | 88.5 / 0.17 | n/a | n/a |
 
 ### Gretel non-EN: leakage (%) by language
 
@@ -145,3 +238,359 @@ Qwen3-1.7B, QLoRA r=16, 1 epoch; only the training data differs. ¹ Nemotron tra
 | M1 cleaned OpenPII 10k | 0.8 / 0.5 | 40.2 / 51.2 | 0.8 / 0.5 | 2.3 / 1.4 | 18.7 / 5.8 | 19.5 / 3.3 | 40.4 / 47.2 | 41.7 / 52.9 |
 | M2 cleaned OpenPII 5k + Nemotron 5k | 0.9 / 0.7 | 28.8 / 33.6 | 0.9 / 0.8 | 2.3 / 2.1 | 3.7 / 2.7 | 21.5 / 2.7 | 27.6 / 30.8 | 32.7 / 38.3 |
 | M3 cleaned OpenPII 10k + Nemotron 10k | 0.7 / 0.5 | 29.3 / 30.8 | 0.8 / 0.5 | 2.1 / 1.8 | 3.7 / 2.6 | 18.3 / 2.0 | 28.7 / 29.0 | 33.1 / 33.6 |
+
+# Phase 4: final blind evaluation
+
+M5 = Qwen3-1.7B + QLoRA r=16, lr 4e-4, train_mix_32k; seeds 13, 42, 3407 (per-document counts averaged over seeds). 95% CIs: 1000 document resamples. Each test set was scored once per system.
+
+### tab (127 documents)
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | 95% CI | Over-redaction (%) | 95% CI |
+| --- | ---: | --- | ---: | --- | ---: | --- |
+| **M5, model alone** | 15.91 | [13.92, 18.42] | 100.00 | [100.00, 100.00] | 5.24 | [4.30, 6.32] |
+| gliner_nvidia | 19.29 | [17.02, 21.72] | 100.00 | [100.00, 100.00] | 17.55 | [15.18, 20.10] |
+| openmed | 14.91 | [13.43, 16.44] | 100.00 | [100.00, 100.00] | 6.75 | [5.80, 7.81] |
+| presidio | 11.23 | [9.32, 13.70] | 100.00 | [100.00, 100.00] | 34.12 | [31.74, 36.36] |
+| validators | 99.95 | [99.88, 100.00] | 100.00 | [100.00, 100.00] | 0.00 | [0.00, 0.00] |
+
+Seed leakage (13, 42, 3407): 15.05, 17.52, 15.17.
+
+M5 leakage by label (%, seed mean): CODE 94.3, DATE 5.3, LOC 58.0, NAME 16.8.
+
+| M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
+| --- | ---: | --- | ---: | --- |
+| gliner_nvidia | -3.38 | [-4.54, -2.22] | -12.32 | [-15.02, -9.77] |
+| openmed | +1.01 | [-0.85, 3.31] | -1.51 | [-2.71, -0.25] |
+| presidio | +4.69 | [2.92, 6.46] | -28.88 | [-31.02, -26.77] |
+| validators | -84.04 | [-86.04, -81.55] | +5.24 | [4.30, 6.32] |
+
+Gateway label scope (IBAN, IPADDRESS counted):
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | Over-redaction (%) |
+| --- | ---: | --- | ---: | ---: |
+| M5 model alone | 15.91 | [13.92, 18.42] | 100.00 | 5.24 |
+| **M5 + validators (gateway)** | 15.87 | [13.86, 18.39] | 100.00 | 5.24 |
+
+Gateway − model: leakage -0.04 pt [-0.10, 0.00], over-redaction -0.00 pt [-0.01, 0.00].
+
+### support_desk_300 (300 documents)
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | 95% CI | Over-redaction (%) | 95% CI |
+| --- | ---: | --- | ---: | --- | ---: | --- |
+| **M5, model alone** | 1.70 | [0.82, 2.78] | 4.58 | [2.70, 7.15] | 5.75 | [4.02, 7.77] |
+| gliner_nvidia | 8.11 | [5.18, 11.03] | 16.59 | [11.68, 22.01] | 23.23 | [20.13, 26.40] |
+| openmed | 3.54 | [2.09, 5.27] | 16.11 | [11.00, 21.17] | 16.05 | [13.47, 18.65] |
+| presidio | 18.91 | [15.23, 22.37] | 45.02 | [38.28, 51.42] | 23.10 | [19.68, 26.37] |
+| validators | 69.31 | [64.17, 74.46] | 87.68 | [83.09, 91.98] | 1.32 | [0.00, 4.02] |
+
+Seed leakage (13, 42, 3407): 0.68, 2.22, 2.20.
+
+M5 leakage by label (%, seed mean): AGE 1.8, BUILDINGNUM 1.3, CITY 5.7, CREDITCARDNUMBER 3.4, DATE 0.0, DRIVERLICENSENUM 0.0, EMAIL 2.7, GENDER 5.6, GIVENNAME 0.1, IDCARDNUM 0.0, PASSPORTNUM 0.0, SEX 16.7, SOCIALNUM 0.0, STREET 0.5, SURNAME 1.1, TAXNUM 32.3, TELEPHONENUM 0.0, TITLE 0.0, ZIPCODE 3.5.
+
+| M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
+| --- | ---: | --- | ---: | --- |
+| gliner_nvidia | -6.41 | [-9.46, -3.39] | -17.48 | [-20.77, -14.49] |
+| openmed | -1.84 | [-3.76, -0.03] | -10.30 | [-12.82, -7.92] |
+| presidio | -17.21 | [-20.78, -13.36] | -17.34 | [-20.71, -14.29] |
+| validators | -67.61 | [-72.93, -62.37] | +4.43 | [1.91, 6.94] |
+
+Gateway label scope (IBAN, IPADDRESS counted):
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | Over-redaction (%) |
+| --- | ---: | --- | ---: | ---: |
+| M5 model alone | 4.21 | [2.12, 6.53] | 7.51 | 5.74 |
+| **M5 + validators (gateway)** | 1.25 | [0.50, 2.14] | 4.23 | 5.72 |
+
+Gateway − model: leakage -2.96 pt [-5.30, -1.02], over-redaction -0.02 pt [-0.26, 0.24].
+
+### test_id (5000 documents)
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | 95% CI | Over-redaction (%) | 95% CI |
+| --- | ---: | --- | ---: | --- | ---: | --- |
+| **M5, model alone** | 0.60 | [0.54, 0.69] | 13.84 | [13.00, 14.77] | 0.48 | [0.42, 0.55] |
+| validators | 83.68 | [83.33, 84.03] | 99.10 | [98.82, 99.36] | 0.96 | [0.69, 1.27] |
+
+Seed leakage (13, 42, 3407): 0.61, 0.61, 0.60.
+
+M5 leakage by label (%, seed mean): AGE 8.4, BUILDINGNUM 0.8, CITY 1.1, CREDITCARDNUMBER 0.7, DATE 0.1, DRIVERLICENSENUM 0.9, EMAIL 0.5, GENDER 0.2, GIVENNAME 0.9, IDCARDNUM 0.3, PASSPORTNUM 0.0, SEX 0.8, SOCIALNUM 0.1, STREET 0.4, SURNAME 1.0, TAXNUM 0.4, TELEPHONENUM 0.1, TITLE 0.5, ZIPCODE 0.2.
+
+| M5 − baseline | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI |
+| --- | ---: | --- | ---: | --- |
+| validators | -83.08 | [-83.44, -82.72] | -0.48 | [-0.77, -0.21] |
+
+Gateway label scope (IBAN, IPADDRESS counted):
+
+| System | Char leakage (%) | 95% CI | Doc leakage (%) | Over-redaction (%) |
+| --- | ---: | --- | ---: | ---: |
+| M5 model alone | 0.60 | [0.54, 0.69] | 13.84 | 0.48 |
+| **M5 + validators (gateway)** | 0.55 | [0.49, 0.63] | 13.70 | 0.59 |
+
+Gateway − model: leakage -0.05 pt [-0.08, -0.03], over-redaction +0.11 pt [0.08, 0.14].
+
+### Live gateway (M5 + validators, one A40, single requests)
+
+100 support_desk_val messages, HTTP {'200': 100}: latency p50 0.38 s, p95 1.08 s per request; restore exact 100/100.
+
+
+# Hyperparameter sweeps (eval/select.py)
+
+# HPO plan: decisions log
+
+Branch `hyperparameter_optimization`. Each decision is written down before the next phase starts.
+
+## Phase 1: learning rate on M3 data (2026-10-02)
+- **Rule:** lowest `gretel_dev` leakage; a difference under 1.0 pt is a tie, broken by over-redaction.
+- **Result:** gretel_dev leakage is flat at 28.7–29.8% over η 5e-5 to 6e-4; dev leakage is 1.6% at 5e-5 and 0.6–0.7% from 2e-4 up.
+- **Decision: η\* = 4e-4.** Four LRs tie; 4e-4 has the lowest over-redaction (`phase1_lr.md`).
+
+## Phase 2: M4 (+ Gretel EN, 30k) vs M3 (2026-10-02)
+- **Rule:** lowest `val_ood` leakage (mean of support_desk_val and val_in_region), with the 1-pt tie band.
+- **Result:** `val_ood` is saturated. All candidates leak 0.9–1.5%, and M4@4e-4 (0.91) vs M3@4e-4 (0.99) is noise. The literal tie-break on over-redaction would pick M3.
+- **Decision (user, with the team's rationale): M4 @ 4e-4 goes forward.** When scaling capacity, a tie is broken in favour of the broader data mix (higher ranks need more data and diversity). In phase 4, a tie is broken in favour of lower over-redaction.
+- **Fix for saturation:** `support_desk_hard` was added (100 deliberately difficult messages). `val_ood` is now the mean leakage of support_desk_val, support_desk_hard and val_in_region.
+
+## Support-desk labels (2026-10-02)
+- **Decision (user):** the LLM-drafted labels in support_desk_val, support_desk_hard and support_desk_300 are accepted as correct without a human spot-check. They are validated by `check_support_desk.py` only. Reports on these sets carry this caveat.
+
+## Phase 3: rank 32/64 (rules set before running)
+- **Grid:** r ∈ {32, 64}, α = 2r, η ∈ {1e-4, 1.4e-4, 2e-4} (`phase3_rank.txt`). Baseline: M4 r=16 @ 4e-4.
+- **Budget cut (user, 2026-10-02, mid-run): r=64 dropped.** Only r=32 is run, at all three LRs (Phase 3 ≈ $4 instead of ≈ $8). r=64 is run later only if r=32 earns verdict A or B. If r=32 doesn't beat r=16, a further doubling is unlikely to pay off.
+- **Phase 4 is not automatic.** The user decides whether to run it after seeing the phase 3 results.
+- **Best LR per rank:** chosen with the general rule (val_ood leakage, then the tie band, then over-redaction).
+- **Decision matrix against the baseline**, on the val_ood mean, with paired document bootstraps:
+  - **A, adopt:** relative leakage reduction of at least 20%, with the CI excluding 0.
+  - **B, adopt:** leakage within ±0.15 pt, and over-redaction down at least 1.5 pt with the CI excluding 0.
+  - **C, keep r=16:** parity or noise.
+  - **D, reject:** leakage worse by more than 0.15 pt, or more invented values (+2 pt) or token-limit hits (+1 pt).
+- **Parsimony:** r=16 is the default. If two ranks qualify, the smaller wins. Seed variance is checked in phase 4 (3 seeds).
+- **Also reported:** leakage on the hard slice, invented values, token-limit hits, and p95 latency on support_desk_val.
+
+### Phase 3 result (2026-10-02)
+- **Runs:** r=32 at η ∈ {1e-4, 1.4e-4, 2e-4} (34.9M trainable parameters, ~128 min per run on an A40); r=16 baseline re-scored on the hardened `val_ood`. Cost about $3.80.
+- **Hardened `val_ood`:** baseline mean 4.04% (support_desk_val 1.1%, support_desk_hard 10.3%, val_in_region 0.7%). The hard slice falls in the team's 5–10% target band; the 3-set mean is just below it.
+- **Best r=32:** η = 1.4e-4 (4.24%). All four runs are within the 1-pt tie band; the table's "winner" row is the best-LR pick among them, not the phase decision.
+- **Decision matrix:**
+  - **Verdict C for every r=32 run.** Leakage Δ is +0.20 to +0.52 pt, with every 95% CI spanning 0. Over-redaction Δ is −0.16 to +0.31 pt, also within noise.
+  - Hard-slice leakage: r=32 is 10.2–10.9% vs 10.3% at r=16.
+  - No change in invented values (≤0.2%) or token-limit hits (0%).
+  - Latency p95 is unchanged: 9.4–10.0 s vs 9.2 s per 1k chars, for single requests on support_desk_val.
+- **Rule fix made while scoring:** D now also needs the leakage CI to exclude 0, symmetric with A. Before the fix, the point estimates alone labelled these runs D; either way r=16 is kept.
+- **Decision: keep r=16 (M4 @ 4e-4).** Per the gate set before running, r=64 is not run: r=32 earned neither A nor B.
+- **What still leaks:** the remaining errors look like data and convention gaps, not capacity. On support_desk_hard (baseline), the worst labels by character leakage are:
+  - TELEPHONENUM 43% (spelled-out and split numbers);
+  - TITLE 45%;
+  - SOCIALNUM 28% (3 spans);
+  - CREDITCARDNUMBER 20% (5 spans).
+
+  STREET/BUILDINGNUM have strict F1 0 but no leakage: the model folds the house number into STREET, a convention difference.
+- **Phase 4:** awaiting the user's decision.
+
+## Milestone 1: targeted failure-mode data (M5), rules set before generating data (2026-10-02)
+- **Candidate.** M5 = M4's recipe (r=16, α=32, learning rate 4e-4, 1 epoch, seed 13) on `train_mix_32k`: `train_mix_30k` + 2,000 targeted synthetic messages generated with the DeepSeek API (`data/synthetic/`).
+- **Gate set.** `support_desk_fresh`: 100 unseen hard messages, committed before any targeted data was generated. It was written from the pattern list by a different generator (Claude) than the training data.
+- **Promotion gate, all on support_desk_fresh, M5 vs M4:**
+  1. M5 character leakage < 5%;
+  2. M5 leakage lower than M4's, with the paired document-bootstrap 95% CI excluding 0;
+  3. no rise in over-redaction: point Δ ≤ +1.0 pt, and the CI not entirely above 0;
+  4. no extra loops: invented values ≤ M4 + 2 pt, and token-limit hits ≤ M4 + 1 pt.
+
+  If M4 is already under 5% on fresh, the gate is (2)–(4) only, flagged as weak.
+- **Diagnostic, reported but not gating.** On support_desk_hard: how many of the spans M4 missed entirely does M5 recover, and the overall hard-slice leakage.
+- **Guard rails.** These must hold or M5 is not promoted:
+  - support_desk_val and val_in_region leakage within 1.0 pt of M4;
+  - val_in_dist mean (dev, nemotron_dev, gretel_dev) within 1.0 pt;
+  - sanity rule (invented ≤ 5%, token limit ≤ 2%).
+- **Outcome.** A pass makes M5 the phase 4 candidate. A fail keeps M4 and records which patterns didn't move.
+
+### Milestone 1 result (2026-10-02): M5 PASSES the gate
+- **Run:** one A40, 137 min of training ($1.12), about $1.30 for the pod in total. Seed 13, 2,000 steps on `train_mix_32k`. All data checksums matched the local files.
+- **Gate on support_desk_fresh**, M5 vs M4:
+
+  | Criterion | M4 | M5 | Result |
+  | --- | ---: | ---: | --- |
+  | Leakage < 5% | 27.65% | **4.57%** | pass |
+  | Leakage below M4, paired 95% CI excluding 0 | — | Δ −23.1 pt, CI [−32.5, −14.1] | pass |
+  | Over-redaction Δ ≤ +1.0 pt, CI not entirely above 0 | 8.71% | 3.12%: Δ −5.6 pt, CI [−9.5, −2.4] | pass (lower) |
+  | Loops: invented ≤ M4 + 2 pt, token limit ≤ M4 + 1 pt | 1/270 dropped, 0 truncated | 1/285 dropped, 0 truncated | pass |
+
+- **Guard rails, all pass:**
+
+  | Set | M4 leakage | M5 leakage | Δ | Limit |
+  | --- | ---: | ---: | ---: | ---: |
+  | support_desk_val | 1.12% | 1.58% | +0.46 pt | 1.0 pt |
+  | val_in_region | 0.68% | 0.62% | −0.06 pt | 1.0 pt |
+  | val_in_dist mean | 6.86% | 6.94% | +0.08 pt | 1.0 pt |
+
+  Over-redaction also dropped on support_desk_val (14.5% → 7.5%) and support_desk_hard (11.8% → 8.9%).
+- **Diagnostic on support_desk_hard, not gating:**
+  - Leakage 10.33% → **5.28%**.
+  - **M5 recovered 10 of the 21 spans M4 missed entirely.** These include spoken phone numbers ("plus four four seven seven double oh…", "zero two zero, seven nine four six…"), all four titles (Dr., Pvt., Mrs., Prof. Dr.) and the word-like name "will".
+  - **Still missed:** the line-split digit phone, the unspaced UK mobile, the compact NINO "QQ123456C", the 4-8-4 card, lowercase "ms", "100" as an age, "dot", "mark", "Lagos", and an Aadhaar and PAN.
+  - **7 new misses** that M4 had caught: CITY 3, ZIPCODE, CREDITCARDNUMBER, SEX, SURNAME.
+
+  The team's diagnostic target ("near 0% on the known misses") is **not met**. About half of the known failure formats are still missed, even though the targeted data covers them.
+- **Caveats:**
+  - Single seed.
+  - The fresh set is hard: M4 leaks 27.6% on it, above the team's 5–10% band for val_ood. Its leakage is dominated by spoken phone numbers and titles, where M5 gained most.
+  - Both the fresh set and the training data are LLM-written, by different models.
+- **Decision: M5 is the phase 4 candidate.** Phase 4 is waiting for the user's go (the rule set before the run).
+
+## Phase 4: final blind evaluation of M5 (2026-10-02)
+- **Run:** two A40 pods, about $3.30. Seeds 42 and 3407 were trained (135 min each); seed 13 is the milestone 1 adapter. Each of TAB, support_desk_300 and test_id was scored **once** per system.
+- **Baselines:** GLiNER-PII (NVIDIA), OpenMed and Presidio on support_desk_300. Their TAB numbers are from week 3, and they were not run on test_id. Validators alone ran on all three sets.
+- **Statistics:** 95% CIs from 1,000 document resamples, with per-document counts averaged over the seeds (`eval/phase4_report.py` → `results/phase4/phase4.md`).
+- **Support desk (300).** M5 leaks **1.70% [0.82, 2.78]**, with document leakage 4.6% and over-redaction 5.8%. The full gateway leaks **1.25% [0.50, 2.14]** under the gateway scope, against 4.21% for the model alone in that scope (Δ −2.96 [−5.30, −1.02]). Paired against each baseline:
+
+  | M5 − baseline | Leakage Δ (pt) | Over-redaction Δ (pt) |
+  | --- | --- | --- |
+  | OpenMed (3.54%) | −1.84 [−3.76, −0.03] | −10.3 |
+  | GLiNER-PII (8.11%) | −6.41 [−9.46, −3.39] | −17.5 |
+  | Presidio (18.91%) | −17.21 [−20.78, −13.36] | −17.3 |
+
+- **TAB (127).** M5 leaks 15.91% [13.92, 18.42], with over-redaction 5.2%. Against the baselines:
+  - OpenMed (14.91%): +1.01 [−0.85, +3.31], a tie;
+  - GLiNER-PII (19.29%): −3.38 [−4.54, −2.22], better;
+  - Presidio (11.23%): +4.69 [+2.92, +6.46], worse on leakage, though Presidio over-redacts 34.1%.
+
+  The validators add nothing on TAB, and every system leaks some PII in every document.
+- **test_id (5,000).** M5 leaks 0.60% [0.54, 0.69], with document leakage 13.8%; the gateway leaks 0.55%.
+- **Seed spread:**
+
+  | Test set | Seed 13 | Seed 42 | Seed 3407 |
+  | --- | ---: | ---: | ---: |
+  | support_desk_300 | 0.68% | 2.22% | 2.20% |
+  | TAB | 15.05% | 17.52% | 15.17% |
+  | test_id | 0.61% | 0.61% | 0.60% |
+
+  Seed 13 is the run that passed the milestone 1 gate, so single-seed numbers on support text vary by about 1.5 pt. This is why seed-averaged numbers are reported.
+- **Live gateway** (M5 + validators, uvicorn, one A40): 100 support_desk_val requests, all returned 200.
+  - Latency was 0.38 s at the median and 1.08 s at p95 per request.
+  - All 100 restores were exact, and the server log contained 0 values.
+  - 31 of 205 gold values remained in the output, but 29 of those are AGE, SEX or CITY, which the analytics policy deliberately keeps.
+  - Offline, the gateway leaks 1.51% on support_desk_val.
+- **Docker:** both images build in CI. The CPU image ran locally and in CI; the GPU image was built and its imports checked, but it was not run.
+- **Final model: M5** (r=16, learning rate 4e-4, `train_mix_32k`).
+
+## Final coverage run: rules set before running (2026-10-02)
+- **Model:** M5 is frozen and nothing is selected. The three seeds' adapters (13, 42, 3407) are scored once each on four sets:
+  - `nemotron` (3,000) and `gretel_en` (1,000): the official test splits of two training sources. They are **in-distribution** for M5, which trained on their train splits, so they show what it learned, not how it generalises.
+  - `test_holdout_regions` (2,000): OpenPII region IN, excluded from training. A clean unseen test.
+  - `abcd` (1,002): **real human-typed support chats** from ASAPP's ABCD test split (MIT licence), labelled from each conversation's fictional customer card (`data/abcd/README.md`). A clean unseen test.
+- **Baselines:** GLiNER-PII (NVIDIA), OpenMed and Presidio are re-scored on `abcd` and `nemotron`. The week-3 Nemotron predictions predate the duplicate-ID fix. The week-3 predictions on `test_holdout_regions` and `gretel_en` are still valid and are reused.
+- **ABCD labelling rules:**
+  - customer name → GIVENNAME / SURNAME; email, phone (with digit variants), street (BUILDINGNUM + STREET), city and zip → their labels;
+  - username, account ID, PIN, password and security answer → IGNORE;
+  - order ID, state, membership level, products and amounts → not labelled;
+  - extra rules: a house number before a labelled street, an agent's self-introduction → GIVENNAME, a typed username → IGNORE.
+- **ABCD filter:** drop a conversation whose delexicalised tokens show a value the matching missed. This dropped 2 of 1,004.
+- **ABCD caveat:** only 10 distinct customer names and 9 cities, so results are reported by label as well as overall.
+- **Statistics:** 95% CIs from 1,000 document resamples, seeds averaged. The model alone and the gateway (with validators) are both reported.
+
+### Final coverage result (2026-10-03)
+- **Run:** one A40, about $0.50. 3 seeds × 4 sets, plus the baselines on ABCD and Nemotron, each scored once. 95% CIs, seeds averaged (`results/phase4/final_coverage.md`).
+- **Clean unseen sets:**
+
+  | Set | M5 leakage | OpenMed | GLiNER-PII | Presidio |
+  | --- | --- | --- | --- | --- |
+  | test_holdout_regions (region IN) | **0.70% [0.60, 0.82]** | 0.80% | 6.31% | 35.67% |
+  | ABCD (real human chats) | 2.55% [2.04, 3.15] | 0.73% | **0.26%** | 8.76% |
+
+  - **test_holdout_regions: M5 ties OpenMed** (Δ −0.10 [−0.24, +0.04]) and beats the others. Over-redaction: M5 0.56%, OpenMed 1.35%.
+  - **ABCD: M5 is worse than GLiNER-PII** (+2.30 [+1.74, +2.94]) **and OpenMed** (+1.82 [+1.20, +2.45]), and better than Presidio. Seeds vary: 2.98, 1.55, 3.13.
+  - **ABCD over-redaction** is high for every system: M5 48.4%, GLiNER 32.4%, OpenMed 42.5%, Presidio 59.6%, validators 44.0%.
+    - Most of M5's comes from masking purchase and order dates, which our conventions treat as not personal.
+    - Most of GLiNER's and the validators' comes from ABCD's unlabelled 10-digit order IDs.
+  - **M5's ABCD misses:** about 45 spans missed entirely per seed, mostly ZIPCODE and CITY in typed addresses. At least one is a gold error: a store's city that matched the customer's card. The labelling rules were fixed before running and are not changed after seeing results.
+- **Training sources' own test splits** (in-distribution for M5):
+
+  | Set | M5 | OpenMed | GLiNER-PII | Presidio |
+  | --- | --- | --- | --- | --- |
+  | nemotron | 2.64% | **1.33%** (M5 +1.32) | 5.02% | 12.87% |
+  | gretel_en | **11.43%** | 29.23% | 25.51% | 29.05% |
+
+  On Nemotron, M5 beats GLiNER-PII and Presidio. On Gretel EN it beats every baseline by 14–18 pt.
+- **Gateway vs model:** the validators lower leakage by only 0.04–0.23 pt on these sets. They help mainly on IBAN- and card-heavy support text.
+- **Conclusion:**
+  - M5 is the best or tied-best system on OpenPII-style text (including the held-out region) and on LLM-written support text.
+  - **On real human-typed support chats (ABCD), the encoder baselines leak less.** The support-desk advantage did not transfer.
+  - This is the main open question for any deployment claim. Next steps would be real support data with human labels, and ABCD-style conversational training data.
+
+## Project conclusion (2026-10-03)
+- **Final model:** M5. Qwen3-1.7B + QLoRA r=16, α=32, learning rate 4e-4, 1 epoch on `train_mix_32k` (OpenPII, Nemotron and Gretel EN, 10k each, plus 2k targeted). The reference adapter is seed 13; it is documented in `MODEL_CARD.md` and not published.
+- **Claims the evidence supports:**
+  - best or tied-best on LLM-drafted support text, an unseen OpenPII region and Gretel-style documents, at low over-redaction;
+  - competitive on real legal text (TAB ties OpenMed);
+  - data diversity and targeted data matter far more than learning rate or rank.
+- **Claims it does not support:**
+  - best on real customer conversations. On ABCD's human-typed chats, GLiNER-PII and OpenMed leak less;
+  - absolute support-desk numbers as a forecast for real traffic, since those test sets are LLM-drafted.
+- **Open questions and next steps:**
+  1. conversational training data, judged on a fresh real-chat test;
+  2. a human-labelled set of real support messages;
+  3. a GLiNER-PII + M5 hybrid detector, which can be evaluated offline from saved predictions;
+  4. a Hub release and CPU latency of a quantised build.
+- **Deliverables:** `docs/REPORT.md`, `docs/EVALUATION.md`, `docs/DATASETS.md`, `docs/ARCHITECTURE.md`, `docs/figures/`, `MODEL_CARD.md`, the gateway (`src/pii_gateway/`, including `/proxy` and the canary test), Docker images, and the demo.
+- **Total cost:** about $21.30, including about $0.40 of API calls.
+
+## Sweep: m5_targeted
+
+Primary: leakage on support_desk_fresh (mean). Tie band 1.0 pt; tie-breaks: over-redaction, then leakage on dev + nemotron_dev + gretel_dev. Sanity rule on: dropped ≤ 5%, token-limit ≤ 2%.
+
+| Run | Overrides | Primary leakage (%) | Over-redaction (%) | In-dist leakage (%) | Dropped values (%) | Hit token limit (%) | Sane | Missing |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| m5_targeted **(winner)** | output_dir=outputs/hpo/m5_targeted learning_rate=4e-4 train_file=data/processed/train_mix_32k.jsonl | 4.57 | 3.12 | 6.94 | 0.4 | 0.0 | yes |  |
+| p2_m4_lr4e-4 | output_dir=outputs/hpo/p2_m4_lr4e-4 learning_rate=4e-4 | 27.65 | 8.71 | 6.86 | 0.4 | 0.0 | yes |  |
+
+**Decision:** m5_targeted: lowest primary leakage (4.57%), no other candidate within 1.0 pt.
+
+## Sweep: phase1_lr
+
+Primary: leakage on gretel_dev (mean). Tie band 1.0 pt; tie-breaks: over-redaction, then leakage on dev.
+
+| Run | Overrides | Primary leakage (%) | Over-redaction (%) | In-dist leakage (%) | Dropped values (%) | Hit token limit (%) | Sane | Missing |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| p1_lr6e-4 | output_dir=outputs/hpo/p1_lr6e-4 learning_rate=6e-4 | 28.70 | 30.23 | 0.68 | 30.5 | 2.5 | no |  |
+| p1_lr4e-4 **(winner)** | output_dir=outputs/hpo/p1_lr4e-4 learning_rate=4e-4 | 29.13 | 28.74 | 0.58 | 41.2 | 3.4 | no |  |
+| p1_lr2e-4 | output_dir=outputs/hpo/p1_lr2e-4 learning_rate=2e-4 | 29.54 | 29.76 | 0.67 | 36.5 | 3.1 | no |  |
+| p1_lr5e-5 | output_dir=outputs/hpo/p1_lr5e-5 learning_rate=5e-5 | 29.63 | 37.75 | 1.58 | 42.7 | 4.1 | no |  |
+| p1_lr1e-4 | output_dir=outputs/hpo/p1_lr1e-4 learning_rate=1e-4 | 29.80 | 31.82 | 0.99 | 38.0 | 3.4 | no |  |
+
+**Decision:** p1_lr4e-4: 4 candidates within 1.0 pt of the best leakage (28.70%); tie broken by over-redaction, then in-distribution leakage.
+
+## Sweep: phase2_m4
+
+Primary: leakage on support_desk_val + val_in_region (mean). Tie band 1.0 pt; tie-breaks: over-redaction, then leakage on dev + nemotron_dev + gretel_dev. Sanity rule on: dropped ≤ 5%, token-limit ≤ 2%.
+
+| Run | Overrides | Primary leakage (%) | Over-redaction (%) | In-dist leakage (%) | Dropped values (%) | Hit token limit (%) | Sane | Missing |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| p2_m4_lr4e-4 | output_dir=outputs/hpo/p2_m4_lr4e-4 learning_rate=4e-4 | 0.91 | 7.26 | 6.89 | 0.1 | 0.0 | yes |  |
+| p1_lr4e-4 **(winner)** | output_dir=outputs/hpo/p1_lr4e-4 learning_rate=4e-4 | 0.99 | 6.21 | 10.64 | 0.1 | 0.0 | yes |  |
+| p2_m4_lr2e-4 | output_dir=outputs/hpo/p2_m4_lr2e-4 learning_rate=2e-4 | 1.09 | 7.06 | 7.30 | 0.2 | 0.0 | yes |  |
+| p2_m4_lr2.83e-4 | output_dir=outputs/hpo/p2_m4_lr2.83e-4 learning_rate=2.83e-4 | 1.53 | 7.83 | 7.15 | 0.1 | 0.0 | yes |  |
+
+**Decision:** p1_lr4e-4: 4 candidates within 1.0 pt of the best leakage (0.91%); tie broken by over-redaction, then in-distribution leakage.
+
+## Sweep: phase3_rank
+
+Primary: leakage on support_desk_val + support_desk_hard + val_in_region (mean). Tie band 1.0 pt; tie-breaks: over-redaction, then leakage on dev + nemotron_dev + gretel_dev. Sanity rule on: dropped ≤ 5%, token-limit ≤ 2%.
+
+| Run | Overrides | Primary leakage (%) | Over-redaction (%) | In-dist leakage (%) | Dropped values (%) | Hit token limit (%) | Sane | Missing |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| p2_m4_lr4e-4 | output_dir=outputs/hpo/p2_m4_lr4e-4 learning_rate=4e-4 | 4.04 | 8.83 | 6.86 | 0.1 | 0.0 | yes |  |
+| p3_r32_lr1.4e-4 **(winner)** | output_dir=outputs/hpo/p3_r32_lr1.4e-4 learning_rate=1.4e-4 lora.r=32 lora.alpha=64 | 4.24 | 8.67 | 7.41 | 0.2 | 0.0 | yes |  |
+| p3_r32_lr2e-4 | output_dir=outputs/hpo/p3_r32_lr2e-4 learning_rate=2e-4 lora.r=32 lora.alpha=64 | 4.54 | 8.99 | 6.93 | 0.1 | 0.0 | yes |  |
+| p3_r32_lr1e-4 | output_dir=outputs/hpo/p3_r32_lr1e-4 learning_rate=1e-4 lora.r=32 lora.alpha=64 | 4.56 | 9.14 | 7.50 | 0.2 | 0.0 | yes |  |
+
+**Decision:** p3_r32_lr1.4e-4: 4 candidates within 1.0 pt of the best leakage (4.04%); tie broken by over-redaction, then in-distribution leakage.
+
+### Phase 3 decision matrix vs baseline p2_m4_lr4e-4
+
+| Candidate | Rank | Leakage Δ (pt) | 95% CI | Over-redaction Δ (pt) | 95% CI | Hard slice leakage (%) | Verdict |
+| --- | ---: | ---: | --- | ---: | --- | ---: | --- |
+| p3_r32_lr1e-4 | 32 | +0.52 | [-0.30, +1.59] | +0.31 | [-0.63, +1.42] | 10.9 | C: parity/noise (rel -13%, over +0.31 pt) |
+| p3_r32_lr1.4e-4 | 32 | +0.20 | [-0.44, +0.91] | -0.16 | [-1.14, +0.89] | 10.6 | C: parity/noise (rel -5%, over -0.16 pt) |
+| p3_r32_lr2e-4 | 32 | +0.49 | [-0.30, +1.44] | +0.16 | [-0.63, +1.00] | 10.2 | C: parity/noise (rel -12%, over +0.16 pt) |
+
+Baseline hard-slice leakage: 10.3%.
+**Phase 3 decision:** p2_m4_lr4e-4 (rank 16).
+

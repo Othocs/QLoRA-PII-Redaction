@@ -115,3 +115,58 @@ def test_training_windows_never_cut_a_span():
         for s in w.spans:
             assert w.text[s.start : s.end] == "Ann Lee"
     assert sum(len(w.spans) for w in ws) == 1  # the span lands in exactly one window
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        ("Nancy", [("Nancy", "GIVENNAME")]),
+        ("Dr. A. Patel", [("Dr.", "TITLE"), ("A.", "GIVENNAME"), ("Patel", "SURNAME")]),
+        ("Dr. Patel", [("Dr.", "TITLE"), ("Patel", "SURNAME")]),
+        ("Lorraine June Holt", [("Lorraine June", "GIVENNAME"), ("Holt", "SURNAME")]),
+        ("Lise van Alenburg", [("Lise", "GIVENNAME"), ("van Alenburg", "SURNAME")]),
+        ("Noa González-Huerta", [("Noa", "GIVENNAME"), ("González-Huerta", "SURNAME")]),
+        ("Partner A", None),
+        ("123456789", None),
+        ("Calogero_Calcedonio_Casini", None),
+        ("Mr.", None),
+    ],
+)
+def test_split_gretel_full_names(value, expected):
+    from prepare_train_mix import split_name
+
+    text = f"Signed by {value}, today."
+    start = text.index(value)
+    got = split_name(text, start, start + len(value))
+    if expected is None:
+        assert got is None
+    else:
+        assert [(text[a:b], lab) for a, b, lab in got] == expected
+
+
+PROCESSED = Path(__file__).parents[1] / "data" / "processed"
+
+
+def _ids(name):
+    return {ex.id for ex in read_examples(PROCESSED / f"{name}.jsonl")}
+
+
+@pytest.mark.skipif(not (PROCESSED / "train_mix_30k.jsonl").exists(), reason="needs make data")
+def test_no_overlap_between_training_and_selection_sets():
+    gretel_docs = {i.rsplit("-w", 1)[0] for i in _ids("train_gretel_10k")}
+    assert not gretel_docs & _ids("gretel_dev")
+    nemo_train = {i.removeprefix("nemotrain-").rsplit("-w", 1)[0] for i in _ids("train_nemo_10k")}
+    nemo_dev = {i.removeprefix("nemodev-").rsplit("-w", 1)[0] for i in _ids("nemotron_dev")}
+    assert not nemo_train & nemo_dev
+    assert not _ids("val_in_region") & _ids("test_holdout_regions")
+    assert sum(1 for _ in read_examples(PROCESSED / "train_mix_30k.jsonl")) == 30000
+
+
+@pytest.mark.skipif(not (PROCESSED / "nemotron.jsonl").exists(), reason="needs make eval-data")
+@pytest.mark.parametrize(
+    "name", ["dev", "test_id", "test_holdout_regions", "nemotron", "nemotron_dev", "tab",
+             "gretel_en", "gretel_xx", "gretel_dev", "openpii_xx", "val_in_region"],
+)  # fmt: skip
+def test_eval_sets_have_unique_ids(name):
+    ids = [ex.id for ex in read_examples(PROCESSED / f"{name}.jsonl")]
+    assert len(ids) == len(set(ids))

@@ -1,0 +1,143 @@
+file,id,channel,text_with_labels,must_keep,author_note,labels_correct (y/n),missed_or_wrong,comment
+support_desk_val,sd-v033,chat,my email is [EMAIL: ben dot carter at example dot com],,spelled-out email,,,
+support_desk_val,sd-v042,chat,my username is gamer_steve88 but the email is [EMAIL: s.harlow@example.com],,username not in label set: not labelled,,,
+support_desk_val,sd-v026,agent_note,"Spoke w/ [TITLE: Mrs.] [GIVENNAME: Patricia] [SURNAME: Gómez], [AGE: 71] y/o, re: hearing aid batteries. Prefers phone contact: [TELEPHONENUM: +1 305 555 0119].",,age in shorthand,,,
+support_desk_val,sd-v031,email,"Hi,
+
+Is it possible to change the delivery from Saturday to Monday? Order WEB-77129.
+
+Thanks",WEB-77129,no PII,,,
+support_desk_val,sd-v025,email,"Hello,
+
+My daughter [GIVENNAME: Lily] (she's [AGE: 8]) has an allergy and I need to check the ingredients of product CK-330 before ordering.
+
+Thanks,
+[GIVENNAME: Rose] [SURNAME: Martinez]",CK-330,allergy mention not labelled (out of scope),,,
+support_desk_val,sd-v015,chat,obrigado! the size swap was super fast,,"Portuguese snippet, no PII",,,
+support_desk_val,sd-v038,chat,"hi, [TITLE: Dr.] [GIVENNAME: Ruth] [SURNAME: Feldman] here, i need a VAT receipt for order 66012",66012,,,,
+support_desk_val,sd-v061,chat,"hi i'm moving on the 1st of next month, can you hold my subscription box?",,"relative date, no PII",,,
+support_desk_val,sd-v072,email,"Hello,
+
+My tax ID for the business invoice is [TAXNUM: 12-3456789]. Company: Bright Lane Studio LLC. Contact: [GIVENNAME: Erin] [SURNAME: Walsh].
+
+Thanks",,company name not PII,,,
+support_desk_val,sd-v079,chat,do you have this jacket in navy,,no PII,,,
+support_desk_val,sd-v097,chat,can u price match a competitor's online price,,no PII,,,
+support_desk_val,sd-v019,chat,is the 20% off code still working? SPRING20 says invalid,SPRING20,"promo code, no PII",,,
+support_desk_val,sd-v092,agent_note,"Escalated: cx ([SEX: male], [AGE: 34], [CITY: Nottingham]) reported product caught fire. Safety team informed. Cx name: [GIVENNAME: Dean] [SURNAME: Cooper].",,,,,
+support_desk_val,sd-v081,agent_note,Spoke to cx's daughter ([GIVENNAME: Grace]) with cx's verbal consent. Daughter's number: [TELEPHONENUM: 07700 900 994].,,,,,
+support_desk_val,sd-v085,email,"Hi,
+
+I'm [AGE: 63], retired, and the font on your app is too small. Is there an accessibility setting?
+
+Thanks,
+[GIVENNAME: Gordon]",,,,,
+support_desk_val,sd-v065,email,"Hello,
+
+I'm applying for your loyalty credit card. My income is £42,000 and my date of birth is the [DATE: 3rd of April 1990].
+
+Thanks,
+[GIVENNAME: Kelvin] [SURNAME: Osei-Bonsu]",,income not labelled,,,
+support_desk_val,sd-v001,chat,do u ship to PO boxes,,no PII,,,
+support_desk_val,sd-v036,chat,can u change the name on my order to [GIVENNAME: Jordan] [SURNAME: Blake]? its a gift,,,,,
+support_desk_val,sd-v004,email,"Hi,
+
+My name is [GIVENNAME: Olumide] [SURNAME: Bankole] and I'd like to cancel my gym membership (GYM-30992). My last day will be 31 October.
+
+Thanks",GYM-30992,contract end date not tied to identity: not labelled,,,
+support_desk_val,sd-v064,agent_note,Returned item received at warehouse (RMA-30177). Refund issued to original payment method.,RMA-30177,no PII,,,
+support_desk_val,sd-v023,email,"Dear Support,
+
+Please see below my order and personal details as requested:
+
+Order: 66190
+Name: [TITLE: Mr] [GIVENNAME: Patrick] [SURNAME: Doyle]
+DOB: [DATE: 01/01/1960]
+Address: [BUILDINGNUM: 5] [STREET: Main Street], [CITY: Kilkenny]
+
+Regards",66190,form-like email,,,
+support_desk_val,sd-v096,chat,whats the warranty on refurbished items,,no PII,,,
+support_desk_val,sd-v086,chat,"the discount wasnt applied at checkout, cart total was £84.99 instead of £67.99",,"money amounts, no PII",,,
+support_desk_val,sd-v050,email,"Dear Customer Service,
+
+My tax reference (UTR) is [TAXNUM: 12345 67890] for the freelancer invoice you need.
+
+Kind regards,
+[GIVENNAME: Malik] [SURNAME: Johnson]",,,,,
+support_desk_val,sd-v024,chat,"the serial on the back is SN-77A3-K991-0P2Z, is it still under warranty",SN-77A3-K991-0P2Z,product serial number: business key,,,
+support_desk_val,sd-v043,email,"Good morning,
+
+I am [TITLE: Dr.] [GIVENNAME: Hannah] [SURNAME: Weiss]. I ordered a lab coat (order #A-20931) to my clinic but it should go to my home: [BUILDINGNUM: 47] [STREET: Birchwood Drive], [CITY: Evanston], IL [ZIPCODE: 60201].
+
+Thank you,
+[TITLE: Dr.] [SURNAME: Weiss]",#A-20931,title + surname repeated,,,
+support_desk_val,sd-v099,email,"Dear Support,
+
+I want to claim the refund to my account: sort code 20-00-00, IBAN [IBAN: GB82 WEST 1234 5698 7654 32]. Name: [GIVENNAME: Helena] [SURNAME: Novak].
+
+Best regards",,sort code not in label set,,,
+support_desk_val,sd-v016,chat,"here are my details:
+- name: [GIVENNAME: Zara] [SURNAME: Ahmed]
+- phone: [TELEPHONENUM: 07700 900 333]
+- postcode: [ZIPCODE: M4 1HN]",,list format,,,
+support_desk_val,sd-v012,chat,"my phone plan bill is wrong, account 88-4410-22. number on the plan is [TELEPHONENUM: 647 555 0133]",88-4410-22,CA number,,,
+support_desk_val,sd-v071,email,"Hello,
+
+My driving licence number is [DRIVERLICENSENUM: MORGA753116SM9IJ], needed for the van hire booking (BK-55102).
+
+Thanks,
+[GIVENNAME: Simon] [SURNAME: Morgan]",BK-55102,DVLA sample format,,,
+support_desk_300,sd-0130,chat,how do i delete my account and all my data? GDPR request,,no PII,,,
+support_desk_300,sd-0167,agent_note,"VIP account flag added for cx [GIVENNAME: Miles] [SURNAME: Davenport] (lifetime spend over £10k). Contact pref: email only, [EMAIL: miles.d@example.com].",,,,,
+support_desk_300,sd-0102,email,"Hello,
+
+My card was charged but the order didn't go through. Last four digits 1117, amount £58.20, at 14:32 today.
+
+Cheers,
+[GIVENNAME: Ruby]",1117,last four only,,,
+support_desk_300,sd-0124,chat,can u split my order into two deliveries,,no PII,,,
+support_desk_300,sd-0099,email,"Hello,
+
+I'd like to know if you have any jobs available in your Leeds warehouse. My CV is attached.
+
+Best,
+[GIVENNAME: Callum] [SURNAME: Reid]
+[TELEPHONENUM: 07700 900 812]",,warehouse city is the company's: not labelled,,,
+support_desk_300,sd-0059,email,"Hi,
+
+Could you confirm whether your company is GDPR compliant and where customer data is stored?
+
+Regards,
+IT Department",,no PII,,,
+support_desk_300,sd-0150,agent_note,Cx passport GB [PASSPORTNUM: 123456789] used for international shipping customs form. Cx: [GIVENNAME: Arthur] [SURNAME: Penrose].,,country prefix not part of the number,,,
+support_desk_300,sd-0244,chat,can i speak to a human pls,,no PII,,,
+support_desk_300,sd-0286,agent_note,Called cx ([GIVENNAME: Lena] [SURNAME: Hoffmann]) — no answer. Left voicemail on [TELEPHONENUM: 0049 30 1234 5678]. Will retry tomorrow.,,international prefix 00,,,
+support_desk_300,sd-0122,email,"Dear Support,
+
+Please find attached the return form for order ORD-73302. The item code is HB-220-GRY and the return authorisation is RA-55190.
+
+Regards",ORD-73302; HB-220-GRY; RA-55190,"three business keys, no PII",,,
+support_desk_300,sd-0075,chat,"hi its [GIVENNAME: maria] [SURNAME: lopez], i ordered the blue one but got green :( order WX-11902",WX-11902,lowercase full name,,,
+support_desk_300,sd-0285,chat,what does 'dispatched' vs 'shipped' mean,,no PII,,,
+support_desk_300,sd-0257,agent_note,Duplicate charge refunded. Card used: Visa ending 1111. Transaction TX-77120 reversed.,ending 1111; TX-77120,last four only,,,
+support_desk_300,sd-0002,chat,"hey its [GIVENNAME: tom] [SURNAME: okafor] again, still waiting on the refund for SKU BX-2210-M. call me [TELEPHONENUM: 07700 900 123] pls, im free after 5",BX-2210-M,"lowercase name, spaced UK mobile, product code to keep",,,
+support_desk_300,sd-0144,email,"Dear Customer Service,
+
+I'm writing from [BUILDINGNUM: 2] [STREET: Rue de Rivoli], [CITY: Paris] [ZIPCODE: 75004] — can you ship to France? My name is [GIVENNAME: Isabelle] [SURNAME: Laurent].
+
+Bien cordialement",,French address in English message,,,
+support_desk_300,sd-0015,agent_note,Cx refused to give DOB; could not verify. Advised to visit branch with photo ID. No changes made.,,no PII,,,
+support_desk_300,sd-0255,chat,is there a phone number for the warehouse,,no PII,,,
+support_desk_300,sd-0089,chat,my passport number is [PASSPORTNUM: X1234567] for the duty free form,,,,,
+support_desk_300,sd-0098,email,"Dear Sir,
+
+I wish to report that my flat at [BUILDINGNUM: 16-18] [STREET: Station Road], [CITY: Croydon] [ZIPCODE: CR0 2RB] has not received the router (order RT-10091). Please resend.
+
+Regards,
+[GIVENNAME: Yusuf] [SURNAME: Ali]",RT-10091,range building number,,,
+support_desk_300,sd-0260,email,"Dear team,
+
+I'm a teacher at a school in [CITY: Glasgow] and want to order 30 calculators (model FX-85GT). Can you invoice the school?
+
+Best wishes,
+[GIVENNAME: Fiona] [SURNAME: MacLeod]",FX-85GT,city tied to the person's work,,,

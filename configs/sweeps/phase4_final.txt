@@ -1,0 +1,6 @@
+# Phase 4: final blind evaluation of M5 (r=16, lr 4e-4, train_mix_32k), 3 seeds, each test set
+# scored ONCE per system. Seed 13 is the milestone-1 adapter (m5_targeted, eval only; adapter
+# copied to the pod). Shards (k % 2): 0 = pod A (s42 + s13 eval), 1 = pod B (s3407).
+m5_s42      | configs/train/hpo/m4_base.yaml | learning_rate=4e-4 train_file=data/processed/train_mix_32k.jsonl seed=42   | tab,support_desk_300,test_id
+m5_s3407    | configs/train/hpo/m4_base.yaml | learning_rate=4e-4 train_file=data/processed/train_mix_32k.jsonl seed=3407 | tab,support_desk_300,test_id
+m5_targeted | configs/train/hpo/m4_base.yaml | learning_rate=4e-4 train_file=data/processed/train_mix_32k.jsonl          | tab,support_desk_300,test_id

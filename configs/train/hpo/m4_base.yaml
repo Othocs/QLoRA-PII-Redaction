@@ -1,0 +1,22 @@
+# Team HPO plan, phases 2-3: M4 data (cleaned OpenPII 10k + Nemotron 10k + Gretel EN 10k).
+# The sweep sets learning_rate (and output_dir) per run via `train_lora.py --set`.
+base_model: Qwen/Qwen3-1.7B
+train_file: data/processed/train_mix_30k.jsonl
+eval_file: data/processed/dev.jsonl
+eval_limit: 200
+eval_steps: 100
+output_dir: outputs/hpo/m4_base
+lora:
+  r: 16
+  alpha: 32                    # alpha = 2r
+  dropout: 0.0
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+quantization: nf4              # 4-bit QLoRA, bf16 compute
+learning_rate: 2.0e-4          # overridden per run
+epochs: 1                      # cosine schedule, 3% warmup (train_lora.py)
+batch_size: 4                  # per device
+grad_accum: 4                  # effective batch 16
+max_seq_length: 1536
+completion_only_loss: true
+seed: 13
+gpu_price_per_hour: 0.49

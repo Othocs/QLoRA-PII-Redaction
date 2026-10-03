@@ -23,7 +23,7 @@ fi
 cd pii-gateway
 
 export HF_HOME="$WORKDIR/hf-cache" UV_CACHE_DIR="$WORKDIR/uv-cache"
-uv sync --extra data --extra train --extra llm
+uv sync --extra data --extra train --extra llm --extra serve
 export UV_NO_SYNC=1  # later `uv run`s must not re-sync without the extras
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 uv run python -c "import torch, vllm, trl, peft, bitsandbytes; print('torch', torch.__version__, 'cuda', torch.cuda.is_available(), '| vllm', vllm.__version__, '| trl', trl.__version__)"
@@ -31,4 +31,8 @@ uv run python -c "import torch, vllm, trl, peft, bitsandbytes; print('torch', to
 [ -f data/processed/nemotron.jsonl ] || uv run python data/prepare_eval_sets.py
 [ -f data/processed/train_clean_10k.jsonl ] || uv run python data/clean_labels.py
 [ -f data/processed/train_mix_20k.jsonl ] || uv run python data/prepare_train_mix.py
+[ -f data/processed/train_mix_30k.jsonl ] || uv run python data/prepare_train_mix.py phase2
+[ -f data/processed/train_mix_32k.jsonl ] || [ ! -f data/synthetic/targeted_2k.jsonl ] || uv run python data/prepare_train_mix.py targeted
+[ -f data/processed/abcd.jsonl ] || uv run python data/prepare_abcd.py
+[ -f data/processed/val_in_region.jsonl ] || uv run python data/prepare_eval_sets.py val_in_region
 echo "setup done: $(pwd)"

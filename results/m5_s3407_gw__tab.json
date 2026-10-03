@@ -1,0 +1,178 @@
+{
+  "system": "m5_s3407_gw",
+  "detector": "gateway",
+  "source_predictions": "m5_s3407",
+  "testset": "tab",
+  "n_examples": 127,
+  "gateway_labels": true,
+  "metrics": {
+    "docs": 127,
+    "n_gold_spans": 4063,
+    "n_pred_spans": 5190,
+    "leakage_chars": 0.15148757714828295,
+    "leakage_docs": 1.0,
+    "over_redaction": 0.05279894004637297,
+    "strict": {
+      "precision": 0.4298651252408478,
+      "recall": 0.549101649027812,
+      "f1": 0.48222198205987243
+    },
+    "partial": {
+      "precision": 0.9470134874759152,
+      "recall": 0.8638936746246616,
+      "f1": 0.9035460002993201
+    },
+    "per_label": {
+      "AGE": {
+        "n_gold": 0,
+        "n_pred": 1,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "CITY": {
+        "n_gold": 0,
+        "n_pred": 141,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "CODE": {
+        "n_gold": 322,
+        "n_pred": 0,
+        "leakage_chars": 0.9162345432788193,
+        "partial_recall": 0.11490683229813664,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "DATE": {
+        "n_gold": 2488,
+        "n_pred": 2546,
+        "leakage_chars": 0.05254960595582967,
+        "partial_recall": 0.9590032154340836,
+        "strict": {
+          "precision": 0.8762765121759623,
+          "recall": 0.8967041800643086,
+          "f1": 0.8863726658720699
+        }
+      },
+      "DRIVERLICENSENUM": {
+        "n_gold": 0,
+        "n_pred": 1,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "GIVENNAME": {
+        "n_gold": 0,
+        "n_pred": 884,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "LOC": {
+        "n_gold": 295,
+        "n_pred": 0,
+        "leakage_chars": 0.5690978886756238,
+        "partial_recall": 0.511864406779661,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "NAME": {
+        "n_gold": 958,
+        "n_pred": 0,
+        "leakage_chars": 0.1478620474406991,
+        "partial_recall": 0.9770354906054279,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "STREET": {
+        "n_gold": 0,
+        "n_pred": 19,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "SURNAME": {
+        "n_gold": 0,
+        "n_pred": 788,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "TELEPHONENUM": {
+        "n_gold": 0,
+        "n_pred": 2,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "TITLE": {
+        "n_gold": 0,
+        "n_pred": 808,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      }
+    },
+    "per_language": {
+      "en": {
+        "docs": 127,
+        "leakage_chars": 0.15148757714828295,
+        "leakage_docs": 1.0,
+        "over_redaction": 0.05279894004637297,
+        "strict": {
+          "precision": 0.4298651252408478,
+          "recall": 0.549101649027812,
+          "f1": 0.48222198205987243
+        },
+        "partial": {
+          "precision": 0.9470134874759152,
+          "recall": 0.8638936746246616,
+          "f1": 0.9035460002993201
+        }
+      }
+    }
+  }
+}

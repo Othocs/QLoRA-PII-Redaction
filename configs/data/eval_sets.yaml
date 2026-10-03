@@ -19,3 +19,6 @@ gretel:              # different generator (Gretel), finance documents
 openpii_xx:          # same generator as training, other languages
   languages: [fr, de, es, it, nl, bg]
   n_per_language: 500
+val_in_region:       # HPO plan val_ood: held-out region, disjoint from test_holdout_regions
+  regions: [IN]
+  n: 1000

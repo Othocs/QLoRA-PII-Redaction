@@ -1,0 +1,199 @@
+"""HPO tooling: config overrides and the sweep selection rules."""
+
+import json
+
+import pytest
+
+from eval.select import choose, load_candidate, main
+from training.train_lora import apply_overrides
+
+
+def test_overrides_types_and_nesting():
+    cfg = {"learning_rate": 2e-4, "lora": {"r": 16, "alpha": 32}}
+    apply_overrides(
+        cfg, ["learning_rate=1e-4", "lora.r=32", "lora.alpha=64", "seed=7",
+              "output_dir=outputs/hpo/x", "lora.target_modules=[q_proj, v_proj]"]
+    )  # fmt: skip
+    assert cfg["learning_rate"] == pytest.approx(1e-4) and isinstance(cfg["learning_rate"], float)
+    assert cfg["lora"] == {"r": 32, "alpha": 64, "target_modules": ["q_proj", "v_proj"]}
+    assert cfg["seed"] == 7 and cfg["output_dir"] == "outputs/hpo/x"
+
+
+def test_overrides_reject_bad_input():
+    with pytest.raises(ValueError):
+        apply_overrides({}, ["no_equals_sign"])
+    with pytest.raises(ValueError):
+        apply_overrides({"lora": 3}, ["lora.r=8"])
+
+
+def write(results, tag, ts, leak, over, items=100, dropped=0, outputs=50, truncated=0):
+    m = {"leakage_chars": leak / 100, "over_redaction": over / 100,
+         "llm_output": {"items": items, "dropped_items": dropped,
+                        "outputs": outputs, "truncated": truncated}}  # fmt: skip
+    (results / f"{tag}__{ts}.json").write_text(json.dumps({"metrics": m}))
+
+
+def test_lowest_leakage_wins_outside_tie_band(tmp_path):
+    write(tmp_path, "a", "g", 30.0, 40.0)
+    write(tmp_path, "b", "g", 28.5, 50.0)  # 1.5 pt better: no tie
+    cands = [load_candidate(tmp_path, t, ["g"], []) for t in "ab"]
+    w, why = choose(cands, sanity=False)
+    assert w.tag == "b" and "no other candidate" in why
+
+
+def test_tie_broken_by_over_redaction_then_in_dist(tmp_path):
+    write(tmp_path, "a", "g", 29.0, 35.0)
+    write(tmp_path, "b", "g", 29.6, 31.0)  # within 1 pt, less over-redaction -> wins
+    write(tmp_path, "c", "g", 29.9, 31.0)  # same over-redaction as b, worse in-dist
+    for t, v in (("a", 1.0), ("b", 0.8), ("c", 0.9)):
+        write(tmp_path, t, "dev", v, 0.5)
+    cands = [load_candidate(tmp_path, t, ["g"], ["dev"]) for t in "abc"]
+    w, why = choose(cands, sanity=False)
+    assert w.tag == "b" and "3 candidates" in why
+
+
+def test_primary_is_equal_weight_mean(tmp_path):
+    write(tmp_path, "a", "s1", 10.0, 5.0)
+    write(tmp_path, "a", "s2", 2.0, 1.0)
+    c = load_candidate(tmp_path, "a", ["s1", "s2"], [])
+    assert c.leak == pytest.approx(6.0) and c.over == pytest.approx(3.0)
+
+
+def test_sanity_rule_and_fallback(tmp_path):
+    write(tmp_path, "loopy", "g", 20.0, 30.0, items=100, dropped=30)  # 30% invented
+    write(tmp_path, "clean", "g", 25.0, 30.0, items=100, dropped=2, outputs=100, truncated=1)
+    cands = [load_candidate(tmp_path, t, ["g"], []) for t in ("loopy", "clean")]
+    assert choose(cands, sanity=True)[0].tag == "clean"
+    assert choose(cands, sanity=False)[0].tag == "loopy"
+    only = [load_candidate(tmp_path, "loopy", ["g"], [])]
+    w, why = choose(only, sanity=True)
+    assert w.tag == "loopy" and "flagged" in why
+
+
+def test_missing_results_and_report(tmp_path):
+    write(tmp_path, "p1_a", "g", 30.0, 40.0)
+    write(tmp_path, "p1_b", "dev", 1.0, 1.0)  # no primary result
+    w = main(["--name", "t", "--prefix", "p1_", "--primary", "g", "--in-dist", "dev",
+              "--results", str(tmp_path)])  # fmt: skip
+    assert w.tag == "p1_a"
+    md = (tmp_path / "sweeps" / "t.md").read_text()
+    assert "p1_a **(winner)**" in md
+    assert "| p1_b |" in md and md.rstrip().splitlines()[-3].endswith("| g |")  # missing primary
+
+
+def test_bootstrap_ratios_and_interval():
+    import numpy as np
+
+    from eval.bootstrap import bootstrap, ci, ratios
+
+    counts = np.array([[10, 2, 12, 4], [20, 0, 18, 0], [10, 5, 6, 1]], dtype=float)
+    leak, over, _ = ratios(counts)  # sums: gold 40, leaked 7, pred 36, over 5
+    assert leak == pytest.approx(7 / 40) and over == pytest.approx(5 / 36)
+    lo, hi = ci(bootstrap(counts, 500)[:, 0])
+    assert lo <= leak <= hi
+    same = np.array([[10, 1, 10, 0]] * 5, dtype=float)
+    assert ci(bootstrap(same, 200)[:, 0]) == pytest.approx((0.1, 0.1))
+
+
+def _write_runs(results, tag, perfect):
+    from eval.run_eval import load_testset
+
+    _, examples = load_testset("fixture", None)
+    (results / "runs").mkdir(parents=True, exist_ok=True)
+    with open(results / "runs" / f"{tag}__fixture.jsonl", "w") as f:
+        for ex in examples:
+            pred = [s.to_dict() for s in ex.spans] if perfect else []
+            f.write(json.dumps({"id": ex.id, "pred": pred}) + "\n")
+
+
+def test_bootstrap_cli_seeds_and_paired(tmp_path):
+    from eval.bootstrap import main as boot
+
+    _write_runs(tmp_path, "good", perfect=True)
+    _write_runs(tmp_path, "none", perfect=False)
+    out = boot(["--testset", "fixture", "--tags", "good", "--n", "200", "--results", str(tmp_path)])
+    assert out["leakage_pct"] == 0 and out["leakage_ci95_pct"] == [0, 0] and out["docs"] == 20
+    pair = boot(["--testset", "fixture", "--tags", "good,none", "--paired", "--n", "200",
+                 "--results", str(tmp_path)])  # fmt: skip
+    assert pair["leakage_diff_pct"] == pytest.approx(-100) and pair["a_better_share"] == 1.0
+    seeds = boot(["--testset", "fixture", "--tags", "good,none", "--n", "200",
+                  "--results", str(tmp_path)])  # fmt: skip
+    assert seeds["leakage_pct"] == pytest.approx(50) and seeds["seed_spread_pct"] == 100
+
+
+def test_phase3_matrix_verdicts():
+    from eval.select import Candidate, matrix
+
+    def cand(tag, leak, over, dropped=0.01, trunc=0.0):
+        return Candidate(tag, leak, over, 1.0, dropped, trunc, [], ["lora.r=32"])
+
+    base = cand("r16", 5.0, 10.0)
+    sig = {"leak": [-1.5, -0.4], "over": [-2.5, -0.5]}
+    insig = {"leak": [-1.5, 0.4], "over": [-2.5, 0.3]}
+    assert matrix(base, cand("a", 3.9, 10.0), sig)[0] == "A"  # 22% relative, significant
+    assert matrix(base, cand("a2", 3.9, 10.0), insig)[0] == "C"  # same gain, CI spans 0
+    assert matrix(base, cand("b", 5.1, 8.2), sig)[0] == "B"  # parity, -1.8 pt over
+    assert matrix(base, cand("b2", 5.1, 9.0), sig)[0] == "C"  # over drop only 1.0 pt
+    worse = {"leak": [0.1, 0.7], "over": [-1.0, 1.0]}
+    assert matrix(base, cand("d", 5.4, 9.0), worse)[0] == "D"  # worse beyond noise, CI > 0
+    assert matrix(base, cand("d2", 5.4, 9.0), insig)[0] == "C"  # worse point estimate, CI spans 0
+    assert matrix(base, cand("loops", 4.0, 9.0, dropped=0.05), sig)[0] == "D"  # more invented
+
+
+def test_phase3_prefers_smaller_rank(tmp_path):
+    from eval.select import Candidate, phase3
+
+    def cand(tag, leak, over, r):
+        return Candidate(tag, leak, over, 1.0, 0.0, 0.0, [], [f"lora.r={r}"])
+
+    cands = [cand("r16", 5.0, 10.0, 16), cand("r32", 3.5, 10.0, 32), cand("r64", 3.0, 10.0, 64)]
+    import eval.select as sel
+
+    orig = sel.paired_ci
+    sel.paired_ci = lambda *a, **k: {"leak": [-2.0, -0.5], "over": [-1.0, 1.0]}
+    try:
+        winner, rows, _ = phase3(tmp_path, "r16", cands, ["s"], None)
+    finally:
+        sel.paired_ci = orig
+    assert {v for _, v, _, _ in rows} == {"A"} and winner.tag == "r32"
+
+
+def test_bootstrap_doc_leakage(tmp_path):
+    from eval.bootstrap import main as boot
+
+    _write_runs(tmp_path, "good", perfect=True)
+    _write_runs(tmp_path, "none", perfect=False)
+    good = boot(
+        ["--testset", "fixture", "--tags", "good", "--n", "100", "--results", str(tmp_path)]
+    )
+    none = boot(
+        ["--testset", "fixture", "--tags", "none", "--n", "100", "--results", str(tmp_path)]
+    )
+    assert good["doc_leakage_pct"] == 0 and none["doc_leakage_pct"] == pytest.approx(100)
+    assert none["doc_leakage_ci95_pct"] == pytest.approx([100, 100])
+
+
+def test_gateway_eval_union(tmp_path):
+    from eval.gateway_eval import gateway_spans
+    from eval.gateway_eval import main as gw_main
+    from pii_gateway.detectors.validators import ValidatorDetector
+    from pii_gateway.spans import Span
+
+    text = "Ann paid with 4111 1111 1111 1111 from ann@example.com"
+    model = [Span(0, 3, "GIVENNAME", source="llm"), Span(14, 23, "CREDITCARDNUMBER", source="llm")]
+    out = gateway_spans(text, model, ValidatorDetector())
+    assert [(s.label, s.text) for s in out] == [
+        ("GIVENNAME", "Ann"), ("CREDITCARDNUMBER", "4111 1111 1111 1111"),
+        ("EMAIL", "ann@example.com")]  # fmt: skip
+    _write_runs(tmp_path, "none", perfect=False)
+    rows = gw_main(["--tags", "none", "--testsets", "fixture", "--results", str(tmp_path)])
+    assert rows[0]["gateway_leak"] <= rows[0]["model_leak"] == pytest.approx(100)
+    assert (tmp_path / "none_gw__fixture.json").exists()
+    assert (tmp_path / "runs" / "none_gl__fixture.jsonl").exists()
+
+
+def test_validators_system_registered():
+    from pii_gateway.detectors.registry import build
+
+    det = build("validators")
+    assert [s.label for s in det.detect("mail a.b@example.com")] == ["EMAIL"]

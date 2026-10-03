@@ -1,0 +1,35 @@
+file,id,channel,text_with_labels,must_keep,author_note,labels_correct (y/n),missed_or_wrong,comment
+support_desk_hard,sd-h025,chat,ok the code on my receipt is [CREDITCARDNUMBER: 4012 8888 8888 1881] is that my card number or the receipt number?,,card mistaken for receipt,,,
+support_desk_hard,sd-h013,chat,pls refund iban [IBAN: gb82 west 1234 5698 7654 32] (lowercase works?),,lowercase IBAN,,,
+support_desk_hard,sd-h039,agent_note,"Cx [GIVENNAME: Siddharth] '[GIVENNAME: Sid]' [SURNAME: Raghunathan], [SEX: M], [AGE: 47], [CITY: Bengaluru] [ZIPCODE: 560034], ph [TELEPHONENUM: +91 80 4000 1234], email [EMAIL: sid.r@example.in]",,dense agent note,,,
+support_desk_hard,sd-h086,agent_note,"Cx [GIVENNAME: Anh] [SURNAME: Nguyen-Tran] (they/them), [AGE: 22], student at Uni of Leeds, student ID 201845567, email [EMAIL: anh.nt@example.ac.uk]",201845567,student ID kept,,,
+support_desk_hard,sd-h094,chat,"the delivery address is my mums but use my number, [TELEPHONENUM: 07 700 900 999]",,odd grouping,,,
+support_desk_hard,sd-h033,chat,"tel: [TELEPHONENUM: zero two zero, seven nine four six, zero eight one two]",,landline in words,,,
+support_desk_hard,sd-h096,chat,"hey can u send the receipt to my accountant? his name is Bear Grylls lol jk its [GIVENNAME: Barry] [SURNAME: Gill], [EMAIL: barry.gill@example.co.uk]",,celebrity joke name left unlabelled,,,
+support_desk_hard,sd-h055,chat,"its for my nan, [GIVENNAME: Dorothy] '[GIVENNAME: Dot]' [SURNAME: Higgins], she turns [AGE: 100] on [DATE: 2 march 2026]!! card should say 'happy 100th [GIVENNAME: dot]'",,lowercase nickname in message text,,,
+support_desk_hard,sd-h005,chat,"im at flat 2 above the chippy on [BUILDINGNUM: 14] [STREET: high st], [CITY: wakefield]. the buzzer doesnt work",,informal address,,,
+support_desk_hard,sd-h084,chat,is your 'free returns' actually free? last time i got charged,,no PII (hard set control),,,
+support_desk_hard,sd-h019,email,"Dear team,
+
+Please send the forms to: [TITLE: ms] [GIVENNAME: ivy] [SURNAME: chen], [BUILDINGNUM: 22] [STREET: harbour view], unit 9, [CITY: vancouver] bc [ZIPCODE: v6b 1a1].
+
+Thanks",,all lowercase address block,,,
+support_desk_hard,sd-h052,email,"Hello,
+
+Customer ref 4471-2209-1188 (that's my loyalty number, not a card!). Card on file ends 0005.
+
+Regards,
+[GIVENNAME: Nadia] [SURNAME: Benali]",4471-2209-1188; ends 0005,loyalty number looks like card,,,
+support_desk_hard,sd-h099,chat,"pls don't use my real name on the gift note, just put 'from your secret santa'",,no PII (hard set control),,,
+support_desk_hard,sd-h085,chat,"my order is [TELEPHONENUM: 07700900123] lol no wait thats my number, order is 77001",77001,phone vs order number,,,
+support_desk_hard,sd-h090,chat,why do u need my date of birth to buy a phone case??,,no PII (hard set control),,,
+support_desk_hard,sd-h061,chat,dob: [DATE: 29-Feb-1996]. yes leap year. pls fix ur form,,,,,
+support_desk_hard,sd-h049,agent_note,"Fraud ring suspected: orders to [BUILDINGNUM: 12] [STREET: Elm Rd] (x3), [BUILDINGNUM: 12] [STREET: Elm Road] (x2), [BUILDINGNUM: 12] [STREET: ELM RD] (x1), all [CITY: Peterborough] [ZIPCODE: PE1 1AA], different names: [GIVENNAME: J] [SURNAME: Smith], [GIVENNAME: John] [SURNAME: Smyth], [GIVENNAME: Jon] S.",,repeated address variants,,,
+support_desk_hard,sd-h070,chat,i go by [GIVENNAME: Ash]. legally [GIVENNAME: Ashwini] [SURNAME: Subramaniam]. she/her. email [EMAIL: ash.s@example.com],,,,,
+support_desk_hard,sd-h002,chat,dob is [DATE: 4/7/88] and the postcode is [ZIPCODE: ls62an] (no space sorry),,"short date, unspaced lowercase postcode",,,
+support_desk_hard,sd-h031,email,"Hello,
+
+I am writing for my grandfather, [TITLE: Mr.] [SURNAME: Oyelaran] ([GIVENNAME: Babatunde]), [AGE: 91], who lives at [BUILDINGNUM: 6] [STREET: Cedar Close], [CITY: Ilford] [ZIPCODE: IG1 3AX]. He cannot use email.
+
+Thank you,
+[GIVENNAME: Temi]",,surname then given name in parentheses,,,

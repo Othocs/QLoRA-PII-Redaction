@@ -1,0 +1,131 @@
+file,id,channel,text_with_labels,must_keep,pattern / formats,labels_correct (y/n),missed_or_wrong,comment
+targeted_2k,tgt-0026,chat,"cust: [TITLE: Judge] [GIVENNAME: N.] [SURNAME: Quinlan]
+cb: no answer, left vmx
+ph: none on file
+verif: need dob & NOK
+order: 487-1345076-5646558
+cx: will retry tmrw",487-1345076-5646558,title / single,,,
+targeted_2k,tgt-0962,email,"----- Forwarded message -----
+From: [GIVENNAME: Kavya] [SURNAME: Fitzpatrick]
+Subject: Re: ORD-948325
+
+On the earlier thread, order ORD-948325 was raised with ref 340-5749409-5779308. Could you please check the delivery window again? The last note said it was out for dispatch, but nothing has changed since Tuesday. I've already emailed twice and not had a reply. If it's easier, call me back on the number in my account, or just reply here with a new ETA.
+
+Thanks,
+[GIVENNAME: Kavya]",ORD-948325; 340-5749409-5779308,negative / ,,,
+targeted_2k,tgt-0231,agent_note,"cust verif: [TITLE: Dame] [GIVENNAME: pankaj] [SURNAME: al-mansour], dob [DATE: 210304], [AGE: 38 y/o]. both items. cb needed.",both items,"dob_age / single, dob_ddmmyy, age_y_o",,,
+targeted_2k,tgt-1565,chat,[TITLE: mme] [GIVENNAME: Pankaj] [SURNAME: Yeboah] here. I need to change the address on S/N Y444768616. [TITLE: Dr. Ing.] [GIVENNAME: B.] [SURNAME: Ballantyne] is also on the account.,S/N Y444768616,"title / single_lower, stacked",,,
+targeted_2k,tgt-0805,email,"Forwarded message:
+From: [TITLE: Sr.] [GIVENNAME: Ottilie] [SURNAME: Dąbrowski]
+Subject: SN 667B221052
+
+As per above, details attached.",SN 667B221052,title / single,,,
+targeted_2k,tgt-0289,chat,"my tracking number is 1Z939AA16980980244 but it hasn't moved in 4 days. also order JD7409117662449094 is missing an item. btw i'm [TITLE: fr.] [GIVENNAME: aaliyah] [SURNAME: ballantyne], not sure if that matters but you can reach me here. please fix both issues.
+
+[TITLE: Fr.] [GIVENNAME: Aaliyah] [SURNAME: Ballantyne] (the one with the 1Z and JD above)",1Z939AA16980980244; JD7409117662449094,title / single,,,
+targeted_2k,tgt-1401,email,"Subject: Account Verification
+
+Dear Customer,
+
+We need to verify your recent transaction. Please confirm the credit card number used: [CREDITCARDNUMBER: 5200 8282 8282 8210] for [TITLE: Judge] [GIVENNAME: Ottilie] [SURNAME: de la Cruz]. This is required to process your order.
+
+Thank you.",,"id_card / single, spaced",,,
+targeted_2k,tgt-0089,email,"Hi, I need to update the date on my account. [GIVENNAME: Fenella] [SURNAME: O'Driscoll], born [DATE: may 12th 89]. Please confirm.",,dob_age / dob_lower_month,,,
+targeted_2k,tgt-0285,email,"Dear Support,
+
+Please update my contact details. My telephone number has changed to [TELEPHONENUM: oh one four one four nine six zero six nine seven]. 
+
+Thanks,
+[GIVENNAME: Malachy] [SURNAME: Yeboah]
+
+--
+[GIVENNAME: Malachy] [SURNAME: Yeboah]
+SN 929C690681",SN 929C690681,phone / spoken,,,
+targeted_2k,tgt-1947,email,"Hi, I've been trying to get this sorted for days. The invoice INV-2024-16343 is showing as unpaid but I paid it. Also got a notice about INC3685331 expiring. I called but no one picked up. Can you please look into this? My name is [GIVENNAME: Pankaj] [SURNAME: Brennan]. Best way to reach me is [TELEPHONENUM: 97140
+59858]. Let me know. Thanks.",INV-2024-16343; INC3685331,phone / split_lines,,,
+targeted_2k,tgt-1097,chat,"[GIVENNAME: Niamh] [SURNAME: Bishop] here, can you update my contact number? It's [TELEPHONENUM: seven one eight - five double five - oh one nine five]. Thanks!",,phone / spoken_commas,,,
+targeted_2k,tgt-0475,email,"Subject: Query regarding case 28-949540 and charge of £149.54
+
+Dear Sir/Madam,
+I am writing to dispute the charge of £149.54 on my account. I have not received the service I was promised and despite numerous calls and emails, the issue remains unresolved. I demand a refund and compensation for the inconvenience.
+
+Please see my contact details below.
+
+[TITLE: Rev.]
+[GIVENNAME: lachlan] [SURNAME: nwosu]
+
+--
+This message is intended only for the use of the individual or entity to which it is addressed.",case 28-949540; £149.54,title / single,,,
+targeted_2k,tgt-1458,email,cust has two auth contacts: [TITLE: IMAM] [GIVENNAME: Farhan] [SURNAME: Mason] and [TITLE: Det.] [GIVENNAME: Ulrike] [SURNAME: Nakagawa]. verif NOK? ph on file? cb needed re INV-2023-86393. cx wants update.,INV-2023-86393,"title / single_upper, single",,,
+targeted_2k,tgt-1552,chat,"hi, can you help me with my account? i am [GIVENNAME: rosalind] [SURNAME: takahashi] and my email is [EMAIL: rtakahashi at mail dot example dot co dot uk]. i need four units of the item with code JD7325715977331545. thanks!",four units; JD7325715977331545,negative / spelled,,,
+targeted_2k,tgt-0286,email,"cust [GIVENNAME: zbigniew] [SURNAME: macaskill]
+ph [TELEPHONENUM: nine seven nine one oh two zero two three six]
+ph [TELEPHONENUM: plus nine one, double nine two eight nine, nine double three seven six]
+verif pending
+NOK not provided
+cx ref INV-2023-48401
+cb asap",INV-2023-48401,"phone / spoken, intl_spoken",,,
+targeted_2k,tgt-0302,email,"Dear Customer Support,
+
+I am writing to request assistance with my account. My name is [TITLE: Dr. Ing.] [GIVENNAME: Esperanza] [SURNAME: Takahashi]. I believe there may be an issue with the recent transaction associated with reference JD9752564859383629. Could you please look into this and advise on the next steps?
+
+Thank you for your time and help.
+
+Sincerely,
+[TITLE: Dr. Ing.] [GIVENNAME: Esperanza] [SURNAME: Takahashi]",JD9752564859383629,title / stacked,,,
+targeted_2k,tgt-1517,email,"Hi, I’m really frustrated. I ordered something weeks ago and it still hasn’t arrived. I’ve tried tracking it but the link just spins. I called once and was told to wait, but nothing. My order number is ORD-428069. Also, my phone number is [TELEPHONENUM: six one three triple five oh one four three]. I’m [TITLE: LT.] [GIVENNAME: Ulrike] [SURNAME: Abernethy]. Can someone please sort this out? I just want my package.",ORD-428069,"phone / single_upper, spoken",,,
+targeted_2k,tgt-0068,email,"I need to correct my previous message. The booking reference is JD1165927962172486 and the amount was $884.01. The primary contact is [TITLE: Det.] [GIVENNAME: Sanjay] [SURNAME: Castellano]. Oh wait, actually it should be [TITLE: HON.] [GIVENNAME: Adaora] [SURNAME: Yeboah]. Please update the records.",JD1165927962172486; $884.01,"title / single, single_upper",,,
+targeted_2k,tgt-1357,email,"---------- Forwarded message ---------
+From: [GIVENNAME: gwendolyn] [SURNAME: kerrigan]
+Card on file: [CREDITCARDNUMBER: 2223 0031 2200 3222]
+
+Please update my details.",,id_card / spaced,,,
+targeted_2k,tgt-0125,email,cx [GIVENNAME: E.] [SURNAME: Takahashi]. ph [TELEPHONENUM: double nine three eight one eight double six double eight]. cb. verif NOK. item 570-8219.,item 570-8219,phone / spoken,,,
+targeted_2k,tgt-0280,email,I ordered a gift for my wife's birthday and it was supposed to arrive three days ago. I paid extra for express delivery. The tracking shows it's been sitting at a depot for two days. I called customer service and was on hold for 45 minutes before being cut off. I've sent two emails already and no response. This is incredibly frustrating. The order reference is #6888-3427. My name is [GIVENNAME: Ishaan] [SURNAME: King] and my date of birth is [DATE: 27th May '77] if you need to verify my account.,#6888-3427,dob_age / dob_ordinal_apos,,,
+targeted_2k,tgt-0474,email,"Dear customer service,
+
+I am writing to express my extreme dissatisfaction with the recent service I have received. It has been over two weeks since I reported the issue and I have had no resolution. I have called multiple times and each time I am told someone will get back to me but no one ever does. This is simply not good enough.
+
+I expect a full refund and a written apology. Please contact me as soon as possible.
+
+My details: [TITLE: Sra.] [GIVENNAME: Nalini] [SURNAME: Xu]
+Phone: [TELEPHONENUM: 07700900997] or [TELEPHONENUM: 07700
+900
+885]
+
+Regards,
+[GIVENNAME: Nalini]",,"phone / single, unspaced, split_lines",,,
+targeted_2k,tgt-1098,agent_note,cust [TITLE: Frau] [GIVENNAME: Jacinta] [SURNAME: Nakagawa] on INC8987401 still waiting!!! no one called back. fix it now.,INC8987401,title / single,,,
+targeted_2k,tgt-1500,agent_note,"Forwarded message:
+From: [TITLE: MRS.] [GIVENNAME: saoirse] [SURNAME: kerrigan]
+Subject: Re: ORD-276676
+
+Please call me back at [TELEPHONENUM: nine eight zero double two nine five three six eight].
+
+--- End forwarded ---
+Agent note: cx called, left vm. Ref ORD-276676.",ORD-276676,"phone / single_upper, spoken",,,
+targeted_2k,tgt-0917,chat,"Dear Sir/Madam,
+
+I am writing to request an update on invoice 9793863195725922 and INV-2025-55747. Please could you confirm when payment will be processed?
+
+On behalf of [TITLE: Brother] [GIVENNAME: Chiamaka] [SURNAME: Chukwu] and [TITLE: Lord] [GIVENNAME: Rose] [SURNAME: Mbeki].
+
+Yours sincerely,
+Billing Team",9793863195725922; INV-2025-55747,"title / single, single",,,
+targeted_2k,tgt-1078,agent_note,"Cust [GIVENNAME: Joaquín] [SURNAME: Gallagher] ph [TELEPHONENUM: 2025550152], alt [TELEPHONENUM: five one four 555 oh one seven three]. Ref 6669 4994 9218 6500 9757 96. cb req.",6669 4994 9218 6500 9757 96,"phone / unspaced, mixed",,,
+targeted_2k,tgt-0845,chat,"[TITLE: Miss] [GIVENNAME: Hamza] [SURNAME: Baker] here. wots going on with INV-2023-93529 and item 472-9068?? been waiting ages. call me on [TELEPHONENUM: zero one two one, four nine six, oh five two seven] asap. not happy.",INV-2023-93529; item 472-9068,"phone / single, spoken_commas",,,
+targeted_2k,tgt-0420,chat,"Thanks for your help today. My account number is INC6897232 and you can reach me at [TELEPHONENUM: 415
+555
+0102] if you have any questions.
+
+Best,
+[GIVENNAME: Delphine] [SURNAME: Black]",INC6897232,phone / split_lines,,,
+targeted_2k,tgt-1215,agent_note,"cust [GIVENNAME: Hope] [SURNAME: Black] – cb on [TELEPHONENUM: plus four four, double seven double oh, nine double oh, two double seven]. No, wait, that's the international one. Use [TELEPHONENUM: zero double one three four nine six oh two three nine] instead. verif dob pending.",,"phone / intl_spoken, mixed",,,
+targeted_2k,tgt-0191,email,"Dear Customer Support,
+
+I am writing regarding my recent order. Could you please update the contact number on file to [TELEPHONENUM: zero double one three four nine six 0607]? My details are [TITLE: Mx.] [GIVENNAME: Arash] [SURNAME: Pellegrini].
+
+Thank you for your assistance.
+
+Best regards,
+[TITLE: Mx.] [GIVENNAME: Arash] [SURNAME: Pellegrini]",,"phone / single, mixed",,,

@@ -1,0 +1,251 @@
+{
+  "system": "p2_m4_lr2.83e-4",
+  "detector": "lora",
+  "adapter": "outputs/hpo/p2_m4_lr2.83e-4",
+  "detector_config": {
+    "base_model": "Qwen/Qwen3-1.7B",
+    "adapter": "outputs/hpo/p2_m4_lr2.83e-4",
+    "max_new_tokens": 2048,
+    "max_chars": 1200,
+    "overlap": 150,
+    "constrained": true,
+    "fuzzy_align": true
+  },
+  "testset": "support_desk_val",
+  "n_examples": 100,
+  "limit": null,
+  "metrics": {
+    "docs": 100,
+    "n_gold_spans": 202,
+    "n_pred_spans": 215,
+    "leakage_chars": 0.024326101249178174,
+    "leakage_docs": 0.06,
+    "over_redaction": 0.15248429468874927,
+    "strict": {
+      "precision": 0.7627906976744186,
+      "recall": 0.8118811881188119,
+      "f1": 0.7865707434052759
+    },
+    "partial": {
+      "precision": 0.8372093023255814,
+      "recall": 0.9603960396039604,
+      "f1": 0.8945817855770462
+    },
+    "per_label": {
+      "AGE": {
+        "n_gold": 10,
+        "n_pred": 12,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.8333333333333334,
+          "recall": 1.0,
+          "f1": 0.9090909090909091
+        }
+      },
+      "BUILDINGNUM": {
+        "n_gold": 13,
+        "n_pred": 0,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "CITY": {
+        "n_gold": 16,
+        "n_pred": 15,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.9375,
+          "f1": 0.967741935483871
+        }
+      },
+      "CREDITCARDNUMBER": {
+        "n_gold": 1,
+        "n_pred": 3,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.3333333333333333,
+          "recall": 1.0,
+          "f1": 0.5
+        }
+      },
+      "DATE": {
+        "n_gold": 3,
+        "n_pred": 15,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.13333333333333333,
+          "recall": 0.6666666666666666,
+          "f1": 0.2222222222222222
+        }
+      },
+      "DRIVERLICENSENUM": {
+        "n_gold": 1,
+        "n_pred": 7,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.14285714285714285,
+          "recall": 1.0,
+          "f1": 0.25
+        }
+      },
+      "EMAIL": {
+        "n_gold": 13,
+        "n_pred": 13,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "GENDER": {
+        "n_gold": 0,
+        "n_pred": 2,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 1.0,
+          "f1": 0.0
+        }
+      },
+      "GIVENNAME": {
+        "n_gold": 48,
+        "n_pred": 52,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.9038461538461539,
+          "recall": 0.9791666666666666,
+          "f1": 0.9400000000000001
+        }
+      },
+      "SEX": {
+        "n_gold": 3,
+        "n_pred": 1,
+        "leakage_chars": 0.6666666666666666,
+        "partial_recall": 0.3333333333333333,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.3333333333333333,
+          "f1": 0.5
+        }
+      },
+      "SOCIALNUM": {
+        "n_gold": 2,
+        "n_pred": 2,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "STREET": {
+        "n_gold": 13,
+        "n_pred": 14,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "SURNAME": {
+        "n_gold": 41,
+        "n_pred": 41,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.975609756097561,
+          "recall": 0.975609756097561,
+          "f1": 0.975609756097561
+        }
+      },
+      "TAXNUM": {
+        "n_gold": 2,
+        "n_pred": 3,
+        "leakage_chars": 0.0,
+        "partial_recall": 1.0,
+        "strict": {
+          "precision": 0.6666666666666666,
+          "recall": 1.0,
+          "f1": 0.8
+        }
+      },
+      "TELEPHONENUM": {
+        "n_gold": 8,
+        "n_pred": 8,
+        "leakage_chars": 0.11926605504587157,
+        "partial_recall": 0.875,
+        "strict": {
+          "precision": 0.875,
+          "recall": 0.875,
+          "f1": 0.875
+        }
+      },
+      "TITLE": {
+        "n_gold": 12,
+        "n_pred": 8,
+        "leakage_chars": 0.2972972972972973,
+        "partial_recall": 0.6666666666666666,
+        "strict": {
+          "precision": 1.0,
+          "recall": 0.6666666666666666,
+          "f1": 0.8
+        }
+      },
+      "ZIPCODE": {
+        "n_gold": 16,
+        "n_pred": 19,
+        "leakage_chars": 0.04854368932038835,
+        "partial_recall": 0.9375,
+        "strict": {
+          "precision": 0.7894736842105263,
+          "recall": 0.9375,
+          "f1": 0.8571428571428572
+        }
+      }
+    },
+    "llm_output": {
+      "outputs": 100,
+      "valid_json": 100,
+      "truncated": 0,
+      "items": 217,
+      "dropped_items": 1,
+      "valid_json_rate": 1.0
+    }
+  },
+  "latency": {
+    "p50_ms_per_1k_chars": null,
+    "p95_ms_per_1k_chars": null,
+    "latency_sample": 0,
+    "chars_per_sec": 3440.2881130336423,
+    "batched": true,
+    "n_errors": 0,
+    "errors": []
+  },
+  "env": {
+    "device": "default",
+    "platform": "Linux x86_64",
+    "processor": "x86_64",
+    "python": "3.12.3",
+    "git_sha": "739a2c0",
+    "model_load_s": 137.01,
+    "peak_rss_mb": 1516.7,
+    "timestamp": "2026-10-02T04:58:56+00:00"
+  }
+}

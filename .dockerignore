@@ -1,0 +1,16 @@
+# Build context = repo root. Only pyproject/uv.lock/README, src/ and configs/ are needed.
+.git
+.venv
+.env
+**/.env
+docker/gateway.env
+data
+results
+outputs
+checkpoints
+wandb
+mlruns
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.ruff_cache

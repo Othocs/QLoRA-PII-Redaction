@@ -48,6 +48,8 @@ def load(results_dir: Path) -> dict[tuple[str, str], dict]:
     out = {}
     for p in sorted(results_dir.glob("*__*.json")):
         r = json.loads(p.read_text())
+        if "latency" not in r:  # offline rescorings (eval.gateway_eval): own tables in phase4.md
+            continue
         out[(r["system"], r["testset"])] = r
     return out
 
@@ -75,6 +77,13 @@ def summary_md(res: dict[tuple[str, str], dict]) -> str:
         )
     lines += ood_tables(res)
     lines += ablation_table(res)
+    phase4 = Path("results/phase4/phase4.md")
+    if phase4.exists():
+        lines += ["", phase4.read_text().rstrip().replace("## Phase 4", "# Phase 4", 1) + "\n"]
+    sweeps = sorted(Path("results/sweeps").glob("*.md")) if Path("results/sweeps").exists() else []
+    if sweeps:
+        lines += ["", "# Hyperparameter sweeps (eval/select.py)", ""]
+        lines += [p.read_text().rstrip() + "\n" for p in sweeps]
     return "\n".join(lines) + "\n"
 
 

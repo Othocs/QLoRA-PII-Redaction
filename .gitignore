@@ -12,6 +12,9 @@ build/
 data/raw/
 data/processed/*.jsonl
 
+# Synthetic generation: raw API responses (the accepted set is committed)
+data/synthetic/raw/
+
 # Experiment outputs
 results/runs/
 wandb/
@@ -22,3 +25,5 @@ checkpoints/
 # Misc
 .DS_Store
 .env
+docker/gateway.env
+space/dist/
