@@ -1,6 +1,6 @@
 # Hosted demo
 
-**Space:** <https://huggingface.co/spaces/Othocs/pii-gateway-demo>. It is **private for now**; see "Going public" below. Use fictional data only.
+**Space:** <https://huggingface.co/spaces/Othocs/pii-gateway-demo>. It is **private for now**, and the RunPod endpoint is **paused** (max workers = 0), so no GPU can be billed. While paused, the page shows labelled validator-only results. See "Going public" below. Use fictional data only.
 
 ## Architecture
 
@@ -54,5 +54,7 @@ make space-push                       # upload to Othocs/pii-gateway-demo (needs
 
 1. In the Space's settings, switch visibility to **public**.
 2. Check the guardrails still match the budget you want: `DEMO_DAILY_CAP` (default 300 requests a day) and `DEMO_RATE_PER_MIN` (default 10), both set as Space variables.
-3. Check that the RunPod endpoint still has **max workers = 1** and min workers = 0.
+3. Un-pause the RunPod endpoint `pii-gateway-m5`: set **max workers = 1** (min workers stays 0).
+   - Watch the first day's GPU usage on the RunPod billing page.
+   - During testing, containers sometimes stayed up for several minutes, or once for about 30 minutes, past the 60 s idle timeout. That is why the endpoint is paused while the Space is private.
 4. Open the page once to warm it up, and try an example.
