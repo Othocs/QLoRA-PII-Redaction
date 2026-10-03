@@ -2,6 +2,8 @@
 
 *Research report: PII Redaction Gateway, September–October 2026.*
 
+*Try the model: [live demo](https://huggingface.co/spaces/Othocs/pii-gateway-demo). Code: [github.com/Othocs/pii-gateway](https://github.com/Othocs/pii-gateway).*
+
 ## Abstract
 
 We fine-tune Qwen3-1.7B with QLoRA to list the personal data in English customer-support text, and build a self-hosted redaction gateway around it. The model's output is aligned to exact spans in code and combined with deterministic validators; a policy then masks, pseudonymises, hashes or keeps each value.
@@ -63,6 +65,8 @@ Licences are in [`DATASETS.md`](DATASETS.md).
 - Code aligns each value to the source left to right, with a loose fallback for spacing and punctuation.
 - A value that can't be found was invented by the model. It is dropped and counted.
 - Long inputs are split into windows of 1,200 characters (the training length) with 150 characters of overlap.
+
+![A real M5 prediction, before and after masking](figures/7_example.png)
 
 **Training.** QLoRA: a 4-bit NF4 base with bf16 compute, adapters on all 7 linear projections, loss on the answer only (TRL `SFTTrainer`), 1 epoch, effective batch 16, cosine schedule with 3% warmup, on one rented A40.
 

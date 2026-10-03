@@ -3,18 +3,21 @@
     python -m eval.figures            # or: make figures
 
 Reads results/phase4/{phase4,final_coverage}.json (seed-averaged M5 + baselines with CIs) and
-the per-run results/*.json files, and writes six PNGs:
+the per-run results/*.json files, and writes these PNGs:
   1_leak_vs_over.png     leakage vs over-redaction per test set, M5 against the baselines
   2_coverage.png         M5 vs the best baseline on every test set (in/out of distribution)
   3_data_ablation.png    M0 -> M5: what the training data changed
   4_hpo.png              phase 1 learning-rate sweep and phase 3 rank comparison
   5_m5_gate.png          milestone 1 gate: M4 vs M5 on the fresh and hard support sets
   6_per_label.png        M5 leakage by label and test set (seed mean)
+  7_example.png          one real M5 prediction, before -> after (from docs/figures/example.json)
+  banner.png             README / social-preview banner with the headline numbers
 """
 
 from __future__ import annotations
 
 import json
+import re
 import textwrap
 from pathlib import Path
 
@@ -207,6 +210,105 @@ def fig_per_label(sets: dict) -> None:
     plt.close(fig)
 
 
+GROUPS = {"TITLE": "#1f6feb", "GIVENNAME": "#1f6feb", "SURNAME": "#1f6feb", "DATE": "#bf8700",
+          "TELEPHONENUM": "#2da44e", "CREDITCARDNUMBER": "#cf222e"}  # fmt: skip
+
+
+def _flow(ax, fig, pieces, x0, y, width, line_h, size=12):
+    """Draw (text, colour|None, bold) pieces token by token, wrapping at `width` (axes coords).
+    A gap is left only where the text has whitespace, so punctuation stays attached."""
+    r = fig.canvas.get_renderer()
+    inv = ax.transAxes.inverted()
+    x, after_space = x0, False
+    for text, color, bold in pieces:
+        for tok in re.findall(r"\s+|\S+", text):
+            if tok.isspace():
+                x, after_space = x + 0.011, True
+                continue
+            kw = {"fontsize": size, "family": "DejaVu Sans Mono", "va": "baseline"}
+            if color:
+                kw["bbox"] = {"boxstyle": "round,pad=0.18", "fc": color + "26", "ec": color,
+                              "lw": 0.8}  # fmt: skip
+                kw["color"] = color if bold else "#1f2328"
+                kw["weight"] = "bold" if bold else "normal"
+            t = ax.text(x, y, tok, transform=ax.transAxes, **kw)
+            bb = inv.transform(t.get_window_extent(r))
+            w = bb[1][0] - bb[0][0]
+            if x + w > x0 + width and after_space:
+                x, y = x0, y - line_h
+                t.set_position((x, y))
+            x, after_space = x + w, False
+    return y
+
+
+def fig_example() -> None:
+    ex = json.loads((OUT / "example.json").read_text())
+    text, spans = ex["text"], sorted(ex["pred"], key=lambda s: s["start"])
+    before, after, pos = [], [], 0
+    for s in spans:
+        color = GROUPS.get(s["label"], "#8957e5")
+        gap = (text[pos : s["start"]], None, False)
+        before += [gap, (text[s["start"] : s["end"]], color, False)]
+        after += [gap, (f"[{s['label']}]", color, True)]
+        pos = s["end"]
+    before.append((text[pos:], None, False))
+    after.append((text[pos:], None, False))
+    h = 3.2  # inches; positions below are inches from the top
+    fig = plt.figure(figsize=(10, h))
+    ax = fig.add_axes((0, 0, 1, 1))
+    ax.axis("off")
+
+    def y(inch):
+        return 1 - inch / h
+
+    def label(inch, s, **kw):
+        ax.text(0.04, y(inch), s, transform=ax.transAxes, **kw)
+
+    label(0.35, "Input: a support note (fictional)", fontsize=11, weight="bold")
+    end = _flow(ax, fig, before, 0.04, y(0.75), 0.92, 0.36 / h)
+    top = (1 - end) * h  # inches from the top of the last input line
+    ax.annotate("", xy=(0.5, y(top + 0.62)), xytext=(0.5, y(top + 0.22)),
+                xycoords="axes fraction",
+                arrowprops={"arrowstyle": "-|>", "color": "#57606a", "lw": 1.5})  # fmt: skip
+    ax.text(0.52, y(top + 0.47), "M5 finds the values  ->  policy masks them", fontsize=9,
+            color="#57606a", transform=ax.transAxes)  # fmt: skip
+    label(top + 0.95, "Output: safe to log or send to an external LLM", fontsize=11,
+          weight="bold")  # fmt: skip
+    _flow(ax, fig, after, 0.04, y(top + 1.35), 0.92, 0.36 / h)
+    label(h - 0.12, f"Real M5 prediction on held-out test message {ex['id']}: all 6 values found "
+          "with exact boundaries; 'Callback after 2' correctly left alone.", fontsize=8,
+          color="#57606a")  # fmt: skip
+    fig.savefig(OUT / "7_example.png", facecolor="white")
+    plt.close(fig)
+
+
+def fig_banner(sets: dict) -> None:
+    sd = rows(sets["support_desk_300"])
+    best = min((s["leak"], SYSTEMS[k][0]) for k, s in sd.items() if k != "m5")
+    fig = plt.figure(figsize=(12.8, 6.4), dpi=100, facecolor="#0d1117")
+    ax = fig.add_axes((0, 0, 1, 1))
+    ax.axis("off")
+    ax.set_facecolor("#0d1117")
+    ax.text(0.06, 0.78, "PII Redaction Gateway", fontsize=46, weight="bold", color="white",
+            transform=ax.transAxes)  # fmt: skip
+    ax.text(0.06, 0.68, "A fine-tuned 1.7B LLM + deterministic validators that strip personal "
+            "data\nfrom customer-support text before it is logged or sent to an external LLM.",
+            fontsize=17, color="#c9d1d9", va="top", transform=ax.transAxes)  # fmt: skip
+    stats = [(f"{sd['m5']['leak']:.1f}%", "PII leaked on unseen support\n"
+              f"messages (best baseline {best[0]:.1f}%)"),
+             ("~$1", "per QLoRA training run\non one rented GPU"),
+             ("0.38 s", "median gateway latency\nper message (A40)")]  # fmt: skip
+    for i, (big, small) in enumerate(stats):
+        x = 0.06 + i * 0.31
+        ax.text(x, 0.36, big, fontsize=40, weight="bold", color="#58a6ff", transform=ax.transAxes)
+        ax.text(x, 0.3, small, fontsize=13, color="#8b949e", va="top", transform=ax.transAxes)
+    ax.text(0.06, 0.07, "Qwen3-1.7B + QLoRA  ·  vLLM  ·  FastAPI  ·  AES-256-GCM vault  ·  "
+            "benchmarked vs Presidio, GLiNER-PII, OpenMed", fontsize=12, color="#6e7681",
+            transform=ax.transAxes)  # fmt: skip
+    fig.savefig(OUT / "banner.png", facecolor=fig.get_facecolor())
+    plt.close(fig)
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     sets = load_sets()
@@ -216,6 +318,8 @@ def main() -> None:
     fig_hpo()
     fig_gate()
     fig_per_label(sets)
+    fig_example()
+    fig_banner(sets)
     print("\n".join(str(p) for p in sorted(OUT.glob("*.png"))))
 
 

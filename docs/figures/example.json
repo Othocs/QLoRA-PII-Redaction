@@ -1,0 +1,37 @@
+{
+ "source": "M5 (seed 0) on support_desk_fresh, id sd-f097; copied from the gitignored results/runs/m5_targeted__support_desk_fresh.jsonl. The prediction matches the gold spans exactly.",
+ "id": "sd-f097",
+ "text": "Mr Bartholomew Achterkamp, DOB 2/11/57, ph oh one five oh four, nine one five, oh oh seven, card 5555 5555 5555 4444 on file. Callback after 2.",
+ "pred": [
+  {
+   "start": 0,
+   "end": 2,
+   "label": "TITLE"
+  },
+  {
+   "start": 3,
+   "end": 14,
+   "label": "GIVENNAME"
+  },
+  {
+   "start": 15,
+   "end": 25,
+   "label": "SURNAME"
+  },
+  {
+   "start": 31,
+   "end": 38,
+   "label": "DATE"
+  },
+  {
+   "start": 43,
+   "end": 90,
+   "label": "TELEPHONENUM"
+  },
+  {
+   "start": 97,
+   "end": 116,
+   "label": "CREDITCARDNUMBER"
+  }
+ ]
+}

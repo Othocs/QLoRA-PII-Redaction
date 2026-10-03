@@ -1,6 +1,8 @@
 # Hosted demo
 
-**Space:** <https://huggingface.co/spaces/Othocs/pii-gateway-demo>. It is **private for now**, and the RunPod endpoint is **paused** (max workers = 0), so no GPU can be billed. While paused, the page shows labelled validator-only results. See "Going public" below. Use fictional data only.
+**Space:** <https://huggingface.co/spaces/Othocs/pii-gateway-demo>. It is **public** (since 2026-10-03). The RunPod endpoint runs with **max workers = 1** and min workers = 0, so it scales to zero when idle and at most one GPU is ever billed. Use fictional data only.
+
+![The hosted demo](assets/demo.png)
 
 ## Architecture
 
@@ -30,7 +32,7 @@ browser ──► Hugging Face Space (Gradio, free CPU, HF PRO account)
 
 - **GPU:** $0.58–1.10 per active hour, billed per second, and $0 when idle. A visit typically uses 1–2 minutes of GPU, including the 60 s warm period, so about **$0.02**.
 - **Page:** free CPU on HF PRO.
-- **Latency:** a cold start (first request after idle) took about 3 minutes on 2026-10-03. Warm requests take about 2 s per message, including RunPod's queue overhead.
+- **Latency:** a cold start (first request after idle) took 3 minutes and, in a second test, 9 minutes on 2026-10-03; most of the variance is waiting for a GPU in the shared pool. Warm requests take about 2 s per message, including RunPod's queue overhead.
 
 ## Guardrails
 
@@ -50,11 +52,11 @@ make space-push                       # upload to Othocs/pii-gateway-demo (needs
 - **New adapter:** upload it to the private model repo, then cycle the endpoint's workers.
 - **Taking the demo offline:** set the Space to private or pause it, and set the endpoint's max workers to 0.
 
-## Going public
+## Going public (done 2026-10-03)
 
-1. In the Space's settings, switch visibility to **public**.
+1. ~~In the Space's settings, switch visibility to **public**.~~ Done through the Hub API (`update_repo_settings(..., private=False)`).
 2. Check the guardrails still match the budget you want: `DEMO_DAILY_CAP` (default 300 requests a day) and `DEMO_RATE_PER_MIN` (default 10), both set as Space variables.
-3. Un-pause the RunPod endpoint `pii-gateway-m5`: set **max workers = 1** (min workers stays 0).
-   - Watch the first day's GPU usage on the RunPod billing page.
-   - During testing, containers sometimes stayed up for several minutes, or once for about 30 minutes, past the 60 s idle timeout. That is why the endpoint is paused while the Space is private.
-4. Open the page once to warm it up, and try an example.
+3. ~~Un-pause the RunPod endpoint `pii-gateway-m5`: set **max workers = 1** (min workers stays 0).~~ Done.
+   - Watch GPU usage on the RunPod billing page.
+   - During testing, containers sometimes stayed up for several minutes, or once for about 30 minutes, past the 60 s idle timeout.
+4. ~~Open the page once to warm it up, and try an example.~~ Done: 5 entities in 1.5 s once warm (screenshot above).
