@@ -119,7 +119,9 @@ def run(text: str, policy_name: str, visitor: str, model_gw, fallback_gw, limite
     except Exception as e:  # noqa: BLE001 - degrade to validators, clearly labelled
         result = fallback_gw.redact(text, policy)
         used = "validators only"
-        note = (f" ⚠️ The model is unavailable right now ({type(e).__name__}); these results "
+        code = getattr(getattr(e, "response", None), "status_code", None)  # httpx errors
+        why = f"{type(e).__name__}, HTTP {code}" if code else type(e).__name__
+        note = (f" ⚠️ The model is unavailable right now ({why}); these results "
                 "come from the deterministic validators alone, so names, addresses and dates "
                 "are **not** detected.")  # fmt: skip
     dt = time.perf_counter() - t0

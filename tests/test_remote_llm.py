@@ -81,6 +81,44 @@ def test_cold_start_retry_then_success(monkeypatch):
     assert [s.text for s in detector(handler).detect(TEXT)] == ["Priya"]
 
 
+def test_failed_job_500_is_resubmitted(monkeypatch):
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    codes = iter([500, 500])
+
+    def handler(request):
+        code = next(codes, 200)
+        return answer([{"label": "GIVENNAME", "text": "Priya"}]) if code == 200 else (
+            httpx.Response(code, text="job failed"))  # fmt: skip
+
+    assert [s.text for s in detector(handler).detect(TEXT)] == ["Priya"]
+
+
+def test_client_errors_fail_fast_without_retry(monkeypatch):
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        return httpx.Response(401, text="bad key")
+
+    with pytest.raises(httpx.HTTPStatusError):
+        detector(handler).detect(TEXT)
+    assert len(calls) == 1
+
+
+def test_persistent_5xx_gives_up_after_four_attempts(monkeypatch):
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        return httpx.Response(500, text="down")
+
+    with pytest.raises(httpx.HTTPStatusError):
+        detector(handler).detect(TEXT)
+    assert len(calls) == 4
+
+
 def test_errors_propagate_so_the_gateway_fails_closed(monkeypatch):
     monkeypatch.setattr("time.sleep", lambda s: None)
     det = detector(lambda r: httpx.Response(401, text="bad key"))

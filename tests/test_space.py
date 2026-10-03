@@ -4,6 +4,8 @@ import importlib.util
 import os
 from pathlib import Path
 
+import httpx
+
 from pii_gateway.pipeline import Gateway
 from pii_gateway.spans import Span
 from pii_gateway.vault import Vault
@@ -18,10 +20,12 @@ TEXT = "Hi, Amara Okafor here, card 4111 1111 1111 1111."
 class NameModel:
     name = "lora_remote"
 
-    def __init__(self, fail=False):
-        self.fail = fail
+    def __init__(self, fail=False, error=None):
+        self.fail, self.error = fail, error
 
     def detect(self, text):
+        if self.error is not None:
+            raise self.error
         if self.fail:
             raise TimeoutError("cold start took too long")
         i = text.find("Amara")
@@ -49,6 +53,16 @@ def test_fallback_is_labelled_and_never_unredacted():
     assert "validators only" in status and "unavailable" in status and "TimeoutError" in status
     red, _, status = app.run(TEXT, "support", "v1", None, fb, app.Limiter(10, 300))
     assert "validators only" in status  # endpoint not configured
+
+
+def test_fallback_names_the_http_status():
+    req = httpx.Request("POST", "https://api.runpod.ai/v2/x/openai/v1/chat/completions")
+    resp = httpx.Response(500, request=req)
+    err = httpx.HTTPStatusError("job failed", request=req, response=resp)
+    vault = Vault(os.urandom(32))
+    model, fb = Gateway(NameModel(error=err), vault), Gateway(None, vault)
+    red, _, status = app.run(TEXT, "support", "v1", model, fb, app.Limiter(10, 300))
+    assert "HTTP 500" in status and "validators only" in status and "4111" not in red
 
 
 def test_rate_limit_and_daily_cap():

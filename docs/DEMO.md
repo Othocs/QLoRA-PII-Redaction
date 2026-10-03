@@ -32,7 +32,7 @@ browser ──► Hugging Face Space (Gradio, free CPU, HF PRO account)
 
 - **GPU:** $0.58–1.10 per active hour, billed per second, and $0 when idle. A visit typically uses 1–2 minutes of GPU, including the 60 s warm period, so about **$0.02**.
 - **Page:** free CPU on HF PRO.
-- **Latency:** a cold start (first request after idle) took 3 minutes and, in a second test, 9 minutes on 2026-10-03; most of the variance is waiting for a GPU in the shared pool. Warm requests take about 2 s per message, including RunPod's queue overhead.
+- **Latency:** a cold start (first request after idle) took 3 minutes and, in a second test, 9 minutes on 2026-10-03; most of the variance is waiting for a GPU in the shared pool. If RunPod loses a job (a worker stopped mid-start returns a 5xx), the Space resubmits it up to 3 times; if the model still can't answer, the validators-only warning names the HTTP status. Warm requests take about 2 s per message, including RunPod's queue overhead.
 
 ## Guardrails
 
