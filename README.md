@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/figures/banner.png" alt="PII Redaction Gateway: a fine-tuned 1.7B LLM plus deterministic validators" width="100%">
+  <img src="docs/assets/banner.png" alt="PII redaction gateway: finds personal data in support text and masks or pseudonymises it before it's logged or sent to an LLM" width="100%">
 </p>
 
 <p align="center">

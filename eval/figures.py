@@ -11,7 +11,6 @@ the per-run results/*.json files, and writes these PNGs:
   5_m5_gate.png          milestone 1 gate: M4 vs M5 on the fresh and hard support sets
   6_per_label.png        M5 leakage by label and test set (seed mean)
   7_example.png          one real M5 prediction, before -> after (from docs/figures/example.json)
-  banner.png             README / social-preview banner with the headline numbers
 """
 
 from __future__ import annotations
@@ -282,33 +281,6 @@ def fig_example() -> None:
     plt.close(fig)
 
 
-def fig_banner(sets: dict) -> None:
-    sd = rows(sets["support_desk_300"])
-    best = min((s["leak"], SYSTEMS[k][0]) for k, s in sd.items() if k != "m5")
-    fig = plt.figure(figsize=(12.8, 6.4), dpi=100, facecolor="#0d1117")
-    ax = fig.add_axes((0, 0, 1, 1))
-    ax.axis("off")
-    ax.set_facecolor("#0d1117")
-    ax.text(0.06, 0.78, "PII Redaction Gateway", fontsize=46, weight="bold", color="white",
-            transform=ax.transAxes)  # fmt: skip
-    ax.text(0.06, 0.68, "A fine-tuned 1.7B LLM + deterministic validators that strip personal "
-            "data\nfrom customer-support text before it is logged or sent to an external LLM.",
-            fontsize=17, color="#c9d1d9", va="top", transform=ax.transAxes)  # fmt: skip
-    stats = [(f"{sd['m5']['leak']:.1f}%", "PII leaked on unseen support\n"
-              f"messages (best baseline {best[0]:.1f}%)"),
-             ("~$1", "per QLoRA training run\non one rented GPU"),
-             ("0.38 s", "median gateway latency\nper message (A40)")]  # fmt: skip
-    for i, (big, small) in enumerate(stats):
-        x = 0.06 + i * 0.31
-        ax.text(x, 0.36, big, fontsize=40, weight="bold", color="#58a6ff", transform=ax.transAxes)
-        ax.text(x, 0.3, small, fontsize=13, color="#8b949e", va="top", transform=ax.transAxes)
-    ax.text(0.06, 0.07, "Qwen3-1.7B + QLoRA  ·  vLLM  ·  FastAPI  ·  AES-256-GCM vault  ·  "
-            "benchmarked vs Presidio, GLiNER-PII, OpenMed", fontsize=12, color="#6e7681",
-            transform=ax.transAxes)  # fmt: skip
-    fig.savefig(OUT / "banner.png", facecolor=fig.get_facecolor())
-    plt.close(fig)
-
-
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     sets = load_sets()
@@ -319,7 +291,6 @@ def main() -> None:
     fig_gate()
     fig_per_label(sets)
     fig_example()
-    fig_banner(sets)
     print("\n".join(str(p) for p in sorted(OUT.glob("*.png"))))
 
 
