@@ -16,8 +16,10 @@ original -> recall-first union -> policy (mask / pseudonymize / hash / keep).
   GET  /health
 
 Environment:
-  PII_DETECTOR        validators (default, CPU only) | lora (vLLM on a GPU host)
+  PII_DETECTOR        validators (default, CPU only) | lora (vLLM in-process on a GPU host) |
+                      remote (M5 on an OpenAI-compatible server, e.g. RunPod Serverless)
   PII_ADAPTER         LoRA adapter path, for PII_DETECTOR=lora
+  PII_LLM_URL / PII_LLM_KEY / PII_LLM_MODEL   the remote server, for PII_DETECTOR=remote
   PII_VAULT_KEY       base64 32-byte AES-256 key (pseudonymize / restore / proxy restore)
   PII_API_KEY         required in X-API-Key for /redact and /proxy when set
   PII_RESTORE_KEY     required in X-Restore-Key for /restore; /restore is disabled if unset
@@ -35,7 +37,6 @@ from __future__ import annotations
 import hmac
 import logging
 import os
-import threading
 import uuid
 from urllib.parse import urlparse
 
@@ -46,10 +47,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from pii_gateway.detectors.base import Detector
-from pii_gateway.detectors.validators import ValidatorDetector
-from pii_gateway.merge import recall_first_union
-from pii_gateway.normalize import normalize, spans_to_original
-from pii_gateway.policy import Policy, apply
+from pii_gateway.pipeline import Gateway
+from pii_gateway.policy import Policy
 from pii_gateway.vault import Vault, VaultError
 
 log = logging.getLogger("pii_gateway")
@@ -92,10 +91,13 @@ def _env_upstream() -> httpx.Client | None:
 
 
 def _env_detector() -> Detector | None:
-    if os.environ.get("PII_DETECTOR", "validators") != "lora":
+    kind = os.environ.get("PII_DETECTOR", "validators")
+    if kind not in ("lora", "remote"):
         return None
     from pii_gateway.detectors.registry import build
 
+    if kind == "remote":
+        return build("lora_remote")
     return build("lora", adapter=os.environ["PII_ADAPTER"])
 
 
@@ -109,9 +111,7 @@ def create_app(detector: Detector | None = None, vault: Vault | None = None,
             vault = Vault.from_env()
         upstream = upstream or _env_upstream()
     upstream_model = os.environ.get("PII_UPSTREAM_MODEL", "default") if use_env else "default"
-    validators = ValidatorDetector()
-    model_lock = threading.Lock()  # sync endpoints run in a thread pool; vLLM is not thread-safe
-    hash_key = vault.subkey("policy-hash") if vault else None
+    gateway = Gateway(detector, vault)
     api_key = os.environ.get("PII_API_KEY") if use_env else None
     restore_key = os.environ.get("PII_RESTORE_KEY") if use_env else None
     app = FastAPI(title="PII redaction gateway", version="0.1.0")
@@ -126,15 +126,8 @@ def create_app(detector: Detector | None = None, vault: Vault | None = None,
         return JSONResponse({"detail": errors}, status_code=422)
 
     def redact_text(text: str, policy: Policy, tenant: str, conversation: str):
-        """The detection pipeline for one text; raises on any failure (callers fail closed)."""
-        norm = normalize(text)
-        found = validators.detect(norm.text)
-        if detector is not None:
-            with model_lock:
-                found = found + detector.detect(norm.text)
-        spans = recall_first_union(text, spans_to_original(norm, text, found))
-        return apply(text, spans, policy, vault=vault, tenant=tenant,
-                     conversation=conversation, hash_key=hash_key)  # fmt: skip
+        """The shared pipeline (pii_gateway.pipeline); raises on failure (callers fail closed)."""
+        return gateway.redact(text, policy, tenant, conversation)
 
     def load_policy(name: str) -> Policy:
         try:
@@ -156,7 +149,7 @@ def create_app(detector: Detector | None = None, vault: Vault | None = None,
 
     @app.get("/health")
     def health() -> dict:
-        return {"status": "ok", "detector": getattr(detector, "name", None) or "validators",
+        return {"status": "ok", "detector": gateway.detector_name,
                 "vault": vault is not None}  # fmt: skip
 
     @app.post("/redact", dependencies=[Depends(check_api_key)])

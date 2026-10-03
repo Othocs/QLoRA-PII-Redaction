@@ -81,6 +81,28 @@ def _llm(with_adapter: bool) -> Callable[..., Detector]:
     return build
 
 
+def _llm_remote(**kw) -> Detector:
+    """M5 served remotely by an OpenAI-compatible vLLM server (e.g. RunPod Serverless).
+    Configured from the environment: PII_LLM_URL (the /v1 base URL), PII_LLM_KEY (bearer
+    token; never logged), PII_LLM_MODEL (served LoRA name, default "m5")."""
+    from pii_gateway.detectors.llm import LLMDetector
+
+    url = kw.get("api_base") or os.environ.get("PII_LLM_URL")
+    if not url:
+        raise ValueError("system 'lora_remote' needs PII_LLM_URL")
+    return LLMDetector(
+        base_model=kw.get("base_model") or DEFAULT_BASE_MODEL,
+        adapter=kw.get("adapter") or os.environ.get("PII_LLM_MODEL", "m5"),
+        backend="openai",
+        name="lora_remote",
+        api_base=url,
+        api_key=kw.get("api_key") or os.environ.get("PII_LLM_KEY"),
+        max_chars=int(os.environ.get("PII_LLM_MAX_CHARS", "1200")),
+        max_new_tokens=int(os.environ.get("PII_LLM_MAX_NEW_TOKENS", "2048")),
+        timeout_s=float(os.environ.get("PII_LLM_TIMEOUT", "300")),
+    )
+
+
 def _validators(**kw) -> Detector:
     """The gateway's deterministic fast path alone (CPU, no model)."""
     from pii_gateway.detectors.validators import ValidatorDetector
@@ -96,6 +118,7 @@ SYSTEMS: dict[str, Callable[..., Detector]] = {
     "base_llm": _llm(with_adapter=False),
     "lora": _llm(with_adapter=True),
     "validators": _validators,
+    "lora_remote": _llm_remote,
 }
 
 

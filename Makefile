@@ -5,7 +5,7 @@ SYSTEMS ?= presidio,gliner_knowledgator,gliner_nvidia
 TESTSETS ?= dev
 EXTRAS ?= --extra data --extra presidio --extra presidio-lg --extra gliner --extra serve --extra demo
 
-.PHONY: help setup data eval-data audit audit-score eval summary support-desk test test-all lint format serve demo figures docker-cpu docker-gpu docker-smoke
+.PHONY: help setup data eval-data audit audit-score eval summary support-desk test test-all lint format serve demo figures docker-cpu docker-gpu docker-smoke space-build space-push
 
 help:
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-13s %s\n", $$1, $$2}'
@@ -65,3 +65,9 @@ docker-gpu: ## build the GPU image (vLLM + LoRA; run on an NVIDIA host)
 
 docker-smoke: docker-cpu ## run the CPU image: health, redact, restore, proxy round trip, no logged values
 	bash scripts/docker_smoke.sh
+
+space-build: ## assemble the Hugging Face Space (space/dist) and smoke-test it
+	$(UV) run bash scripts/build_space.sh
+
+space-push: space-build ## upload space/dist to the HF Space (needs `hf auth login`; SPACE=owner/name)
+	hf upload $${SPACE:-Othocs/pii-gateway-demo} space/dist . --repo-type space

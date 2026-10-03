@@ -26,3 +26,4 @@ checkpoints/
 .DS_Store
 .env
 docker/gateway.env
+space/dist/
