@@ -45,7 +45,7 @@ EXAMPLES = [
 NOTICE = (
     "**Use fake data only.** Text you submit is sent to a GPU endpoint on RunPod to run the "
     "model and is not stored or logged by this app. The first request after a quiet period "
-    "can take **1-2 minutes** while the GPU wakes up; later ones take about a second."
+    "can take **up to ~3 minutes** while the GPU wakes up; later ones take a second or two."
 )
 
 

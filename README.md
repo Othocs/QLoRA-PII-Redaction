@@ -2,6 +2,8 @@
 
 A self-hosted gateway that finds personal data in English customer-support text and masks or pseudonymises it before the text is logged, analysed or sent to an external LLM. The detector is **M5**, Qwen3-1.7B fine-tuned with QLoRA for about $1 per run, backed by deterministic validators. It is benchmarked blind against Presidio, GLiNER-PII and OpenMed's privacy filter.
 
+> **Try the model:** [huggingface.co/spaces/Othocs/pii-gateway-demo](https://huggingface.co/spaces/Othocs/pii-gateway-demo). It's a hosted demo with M5 on a serverless GPU; use fictional data, and the first request may take ~3 min ([`docs/DEMO.md`](docs/DEMO.md)).
+>
 > **Status: concluded (October 2026).**
 >
 > - **Research:** a full write-up is in [`docs/REPORT.md`](docs/REPORT.md).
@@ -105,6 +107,7 @@ The steps end to end are in [`docs/REPORT.md`](docs/REPORT.md), appendix B.
 | [`docs/EVALUATION.md`](docs/EVALUATION.md) | Metrics, statistics, test sets, how rules were set before runs, errata |
 | [`docs/DATASETS.md`](docs/DATASETS.md) | Data cards and licences for every training and test set |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Gateway design, API, security model, deployment |
+| [`docs/DEMO.md`](docs/DEMO.md) | The hosted demo: Space + RunPod Serverless setup, cost, guardrails |
 | [`MODEL_CARD.md`](MODEL_CARD.md) | M5: recipe, data, evaluation, limitations |
 | [`results/SUMMARY.md`](results/SUMMARY.md) | Every result file in one table (generated) |
 | [`results/sweeps/DECISIONS.md`](results/sweeps/DECISIONS.md) | Dated log of each phase's rules (set before running) and outcomes |

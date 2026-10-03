@@ -25,7 +25,7 @@ The page runs the gateway's redaction pipeline:
 ## Using it
 
 - **Use fictional data only.** Submitted text goes to the GPU endpoint to run the model. This app doesn't store or log it.
-- **Wait on the first request.** After a quiet period it can take 1–2 minutes while the GPU wakes up.
+- **Wait on the first request.** After a quiet period it can take up to about 3 minutes while the GPU wakes up; later requests take a second or two.
 - **Limits:**
   - inputs up to 2,000 characters;
   - a per-visitor rate limit and a daily cap on requests.

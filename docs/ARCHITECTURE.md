@@ -40,7 +40,7 @@ Configuration is all through the environment:
 
 | Variable | Purpose |
 | --- | --- |
-| `PII_DETECTOR` | `validators` (default, CPU) or `lora` (GPU) |
+| `PII_DETECTOR` | `validators` (default, CPU), `lora` (in-process vLLM on a GPU) or `remote` (M5 on an OpenAI-compatible vLLM server such as RunPod Serverless: `PII_LLM_URL`, `PII_LLM_KEY`, `PII_LLM_MODEL`) |
 | `PII_ADAPTER` | Path to the M5 adapter, for `PII_DETECTOR=lora` |
 | `PII_VAULT_KEY` | Base64, 32 bytes |
 | `PII_API_KEY` | Required in `X-API-Key` when set |
@@ -65,6 +65,9 @@ Configuration is all through the environment:
 - **Egress.** `/proxy` is the only route that makes outbound calls, and only when `PII_UPSTREAM_URL` is set.
 
 ## Deployment
+
+The **hosted demo** runs the same pipeline on a Hugging Face Space, with M5 on a RunPod Serverless endpoint that scales to zero ([`DEMO.md`](DEMO.md)).
+
 
 See [`docker/README.md`](../docker/README.md).
 
