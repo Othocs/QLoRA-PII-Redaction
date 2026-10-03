@@ -31,6 +31,7 @@ from pii_gateway.policy import Policy  # noqa: E402
 from pii_gateway.vault import Vault  # noqa: E402
 
 MAX_CHARS = 2000
+REPO = "https://github.com/Othocs/pii-gateway"
 POLICIES = ["support", "analytics", "strict"]
 EXAMPLES = [
     "Hi, this is Dr. Amara Okafor. My card 4111 1111 1111 1111 was charged twice for order "
@@ -45,7 +46,8 @@ EXAMPLES = [
 NOTICE = (
     "**Use fake data only.** Text you submit is sent to a GPU endpoint on RunPod to run the "
     "model and is not stored or logged by this app. The first request after a quiet period "
-    "can take **up to ~3 minutes** while the GPU wakes up; later ones take a second or two."
+    "usually takes **3-5 minutes** (occasionally ~10 when GPUs are busy) while a GPU is found "
+    "and the model loads; later ones take a second or two."
 )
 
 
@@ -143,7 +145,9 @@ def build_ui():
             "# PII redaction gateway\n"
             "Paste customer-support text. **M5**, a Qwen3-1.7B model fine-tuned with QLoRA, finds "
             "the personal data together with deterministic validators (Luhn, IBAN, phone, email, "
-            "IP); a policy then masks, pseudonymises or keeps each value."
+            "IP); a policy then masks, pseudonymises or keeps each value.\n\n"
+            f"[Code and report on GitHub]({REPO}) · [Model card]({REPO}/blob/main/MODEL_CARD.md)"
+            f" · [Evaluation]({REPO}/blob/main/docs/EVALUATION.md)"
         )
         gr.Markdown(NOTICE)
         with gr.Row():
@@ -161,8 +165,8 @@ def build_ui():
                 status = gr.Markdown()
         gr.Markdown(
             "Known limits: M5 is strongest on structured and synthetic text; on real chat "
-            "transcripts encoder models such as GLiNER-PII still miss less (see the project "
-            "report). English only."
+            "transcripts encoder models such as GLiNER-PII still miss less (see the "
+            f"[project report]({REPO}/blob/main/docs/REPORT.md)). English only."
         )
         go.click(handler, inputs=[text, policy], outputs=[out, spans, status])
     ui.queue(default_concurrency_limit=2, max_size=20)

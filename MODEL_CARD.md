@@ -2,7 +2,7 @@
 
 M5 is the detector behind the PII redaction gateway in this repository. It is a LoRA adapter on Qwen3-1.7B that lists every piece of personal data in English customer-support text. Code aligns the listed values back to exact character spans, and the gateway then masks, pseudonymises, hashes or keeps them according to a policy.
 
-The adapter is kept in a private Hugging Face repo and is not publicly released. It powers the [hosted demo](https://huggingface.co/spaces/Othocs/pii-gateway-demo) (private for now) through a RunPod Serverless endpoint ([`docs/DEMO.md`](docs/DEMO.md)). This card documents the model as evaluated.
+The adapter is kept in a private Hugging Face repo and is not publicly released. It powers the public [hosted demo](https://huggingface.co/spaces/Othocs/pii-gateway-demo) through a RunPod Serverless endpoint ([`docs/DEMO.md`](docs/DEMO.md)). This card documents the model as evaluated.
 
 ## Model
 
