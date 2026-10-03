@@ -6,7 +6,7 @@
 #   ssh -A root@<pod-ip> -p <port> 'bash -s' < scripts/pod_setup.sh
 set -euo pipefail
 
-REPO="${REPO:-git@github.com:Othocs/pii-gateway.git}"
+REPO="${REPO:-git@github.com:Othocs/QLoRA-PII-Redaction.git}"
 BRANCH="${BRANCH:-main}"
 WORKDIR="${WORKDIR:-/workspace}"
 

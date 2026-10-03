@@ -31,7 +31,7 @@ from pii_gateway.policy import Policy  # noqa: E402
 from pii_gateway.vault import Vault  # noqa: E402
 
 MAX_CHARS = 2000
-REPO = "https://github.com/Othocs/pii-gateway"
+REPO = "https://github.com/Othocs/QLoRA-PII-Redaction"
 POLICIES = ["support", "analytics", "strict"]
 EXAMPLES = [
     "Hi, this is Dr. Amara Okafor. My card 4111 1111 1111 1111 was charged twice for order "

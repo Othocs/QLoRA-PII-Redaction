@@ -13,7 +13,7 @@ short_description: Find and redact personal data with a fine-tuned 1.7B LLM
 
 # PII Redaction Gateway: M5 demo
 
-[![GitHub](https://img.shields.io/badge/GitHub-Othocs%2Fpii--gateway-181717?logo=github)](https://github.com/Othocs/pii-gateway)
+[![GitHub](https://img.shields.io/badge/GitHub-Othocs%2FQLoRA--PII--Redaction-181717?logo=github)](https://github.com/Othocs/QLoRA-PII-Redaction)
 
 Paste English customer-support text and see which personal data is found and how each value is masked, pseudonymised or kept.
 
@@ -37,4 +37,4 @@ The page runs the gateway's redaction pipeline:
 
 M5 is best or tied-best on synthetic support messages, an unseen OpenPII region and Gretel-style documents. On real chat transcripts, encoder models such as GLiNER-PII still miss less. M5 is English only.
 
-The code, the full evaluation and the research report are on GitHub: [Othocs/pii-gateway](https://github.com/Othocs/pii-gateway) ([report](https://github.com/Othocs/pii-gateway/blob/main/docs/REPORT.md), [model card](https://github.com/Othocs/pii-gateway/blob/main/MODEL_CARD.md)).
+The code, the full evaluation and the research report are on GitHub: [Othocs/QLoRA-PII-Redaction](https://github.com/Othocs/QLoRA-PII-Redaction) ([report](https://github.com/Othocs/QLoRA-PII-Redaction/blob/main/docs/REPORT.md), [model card](https://github.com/Othocs/QLoRA-PII-Redaction/blob/main/MODEL_CARD.md)).
