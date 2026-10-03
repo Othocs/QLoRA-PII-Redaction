@@ -335,7 +335,7 @@ class LLMDetector:
         self.served_model = self.adapter or self.base_model
         self.tokenizer = None  # chat template applied server-side
 
-    def _remote_one(self, chunk: str, retries: int = 3) -> tuple[str, bool]:
+    def _remote_one(self, chunk: str, retries: int = 4) -> tuple[str, bool]:
         import time
 
         import httpx
@@ -356,8 +356,10 @@ class LLMDetector:
         for attempt in range(retries):
             try:
                 r = self.client.post("/chat/completions", json=body)
-                if r.status_code in (429, 502, 503, 504) and attempt < retries - 1:
-                    time.sleep(5 * (attempt + 1))  # cold start / scaling: wait and retry
+                # 429 / any 5xx: cold start, scaling, or a job lost when RunPod stopped a
+                # worker mid-start; wait and resubmit. Other 4xx are config errors: fail now.
+                if (r.status_code == 429 or r.status_code >= 500) and attempt < retries - 1:
+                    time.sleep(5 * (attempt + 1))
                     continue
                 r.raise_for_status()
                 choice = r.json()["choices"][0]
