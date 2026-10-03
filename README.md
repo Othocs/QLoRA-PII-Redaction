@@ -37,7 +37,7 @@ A self-hosted gateway that finds personal data in English customer-support text 
 ## Live demo
 
 <p align="center">
-  <a href="https://huggingface.co/spaces/Othocs/pii-gateway-demo"><img src="docs/assets/demo.png" alt="The hosted demo redacting a support message: title, name, card number and a spoken phone number are masked, the order number is kept" width="90%"></a>
+  <a href="https://huggingface.co/spaces/Othocs/pii-gateway-demo"><img src="docs/assets/demo.gif" alt="Recording of the hosted demo: clicking Redact masks the title, name, card number and a spoken phone number, and keeps the order number" width="90%"></a>
 </p>
 
 **[huggingface.co/spaces/Othocs/pii-gateway-demo](https://huggingface.co/spaces/Othocs/pii-gateway-demo)**: paste a support message and see what is found and how each value is masked, pseudonymised or kept. The page runs the real pipeline: validators on the Space's CPU, and M5 on a RunPod Serverless GPU that scales to zero.
